@@ -1,0 +1,221 @@
+# Root-cause taxonomy used by the SemanticBiasAnalyst.
+#
+# Reports often describe a *symptom* ("connectors are not enabled", "pilot
+# never scaled") rather than the *underlying cause* ("security/risk teams
+# have not signed off on data egress and audit trails"). Each category lists
+# surface-level signal phrases and canonical inference chains so the agent can
+# map a stated factor to its most likely root cause(s) and explain why.
+#
+# Extend freely: the lookup tool and report pick up new categories
+# automatically.
+
+categories:
+  - id: risk_auditability
+    name: Risk & Auditability
+    description: >-
+      Inability to evidence, explain, log or reverse what an agent did; risk
+      committees withholding approval because actions are not auditable.
+    signals:
+      - connectors not enabled
+      - connector access
+      - plugins disabled
+      - tool access restricted
+      - actions not allowed
+      - read-only mode
+      - human in the loop required
+      - approval workflow
+      - audit trail
+      - explainability
+      - traceability
+      - accountability
+      - liability
+      - agent autonomy limited
+      - write access
+    inference_examples:
+      - stated: "Access to connectors not enabled"
+        inferred: >-
+          Connectors are usually disabled by admins because the organisation
+          cannot audit or constrain what the agent reads/writes through them,
+          i.e. a risk-acceptance and auditability gap rather than a technical
+          integration gap.
+      - stated: "Agents limited to read-only / suggestion mode"
+        inferred: >-
+          Autonomy is throttled because there is no accepted control framework
+          for agent-initiated actions (who approved, can it be rolled back).
+
+  - id: data_governance
+    name: Data Governance & Privacy
+    description: >-
+      Data classification, oversharing, residency, retention and permission
+      hygiene problems that block grounding agents on enterprise data.
+    signals:
+      - oversharing
+      - permissions
+      - sensitive data
+      - data classification
+      - data quality
+      - data readiness
+      - pii
+      - residency
+      - retention
+      - sharepoint sprawl
+      - labeling
+      - data silos
+    inference_examples:
+      - stated: "Copilot surfaced documents users should not see"
+        inferred: >-
+          Underlying permission hygiene and data labeling debt; the assistant
+          merely exposed it.
+
+  - id: security_identity
+    name: Security & Identity
+    description: >-
+      Prompt injection, agent identity, credential scope, least privilege and
+      threat-model concerns specific to autonomous agents.
+    signals:
+      - prompt injection
+      - security review
+      - agent identity
+      - service account
+      - credentials
+      - least privilege
+      - exfiltration
+      - shadow ai
+      - jailbreak
+      - zero trust
+    inference_examples:
+      - stated: "Security team blocked the browser agent"
+        inferred: >-
+          No identity/permission model for non-human actors and unclear
+          injection mitigations.
+
+  - id: integration_connectors
+    name: Integration & Systems Access
+    description: >-
+      Genuine technical difficulty connecting agents to legacy systems, APIs,
+      mainframes or fragmented SaaS estates.
+    signals:
+      - legacy systems
+      - api availability
+      - integration complexity
+      - mainframe
+      - interoperability
+      - mcp
+      - a2a
+      - system of record
+      - middleware
+    inference_examples:
+      - stated: "Hard to integrate with core banking platform"
+        inferred: >-
+          Real integration debt; check whether it is also a risk-approval issue
+          disguised as a technical one.
+
+  - id: cost_roi
+    name: Cost & ROI Clarity
+    description: >-
+      Licence cost, unclear productivity measurement, token/compute spend and
+      difficulty proving business value.
+    signals:
+      - roi
+      - business case
+      - licence cost
+      - license cost
+      - per seat
+      - pricing
+      - token cost
+      - productivity gains unclear
+      - value realization
+      - measurable outcomes
+    inference_examples:
+      - stated: "Hard to justify $30/user/month"
+        inferred: >-
+          Value is measured as individual time-saved rather than redesigned
+          process outcomes; a measurement and operating-model gap.
+
+  - id: skills_change
+    name: Skills, Trust & Change Management
+    description: >-
+      User habits, training, trust, fear of job loss, low active usage after
+      rollout.
+    signals:
+      - training
+      - adoption low
+      - usage drop-off
+      - user trust
+      - change management
+      - culture
+      - skills gap
+      - fear
+      - champions
+      - prompting skills
+    inference_examples:
+      - stated: "Usage fell after first month"
+        inferred: >-
+          Tool was deployed as a feature, not embedded into redesigned daily
+          workflows; lack of role-specific use cases and champions.
+
+  - id: model_quality
+    name: Model Quality & Reliability
+    description: >-
+      Hallucinations, inconsistency, latency and accuracy below the threshold
+      required for the task.
+    signals:
+      - hallucination
+      - accuracy
+      - reliability
+      - inconsistent
+      - errors
+      - latency
+      - quality
+      - evaluation
+      - non-deterministic
+    inference_examples:
+      - stated: "Outputs not reliable enough for claims decisions"
+        inferred: >-
+          Often an evaluation and guardrail gap (no golden datasets, no
+          confidence thresholds) as much as raw model quality.
+
+  - id: regulatory_compliance
+    name: Regulatory & Compliance
+    description: >-
+      External regulation (EU AI Act, model risk management, consumer duty,
+      sector rules) and compliance sign-off requirements.
+    signals:
+      - regulation
+      - regulatory
+      - eu ai act
+      - model risk
+      - sr 11-7
+      - compliance
+      - consumer duty
+      - fair lending
+      - gdpr
+      - supervisory
+    inference_examples:
+      - stated: "Waiting for regulatory clarity"
+        inferred: >-
+          Frequently an internal model-risk framework that has not been
+          extended to agents rather than a specific external prohibition.
+
+  - id: operating_model
+    name: Leadership, Ownership & Operating Model
+    description: >-
+      Executive sponsorship, ownership, funding model, process redesign and
+      platform strategy decisions.
+    signals:
+      - executive sponsorship
+      - ownership
+      - pilot purgatory
+      - centre of excellence
+      - center of excellence
+      - strategy
+      - process redesign
+      - platform
+      - fragmentation
+      - use case prioritisation
+      - use case prioritization
+    inference_examples:
+      - stated: "Too many pilots, none in production"
+        inferred: >-
+          No portfolio governance or value-based prioritisation; pilots are
+          funded as experiments without production owners.

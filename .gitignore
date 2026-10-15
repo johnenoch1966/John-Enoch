@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+
+# Secrets / local config
+.env
+*.json.key
+application_default_credentials.json
+
+# Run telemetry (large, per-machine). Reports and evidence ARE committed.
+runs/
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/

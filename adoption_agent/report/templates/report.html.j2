@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enterprise Agentic AI Adoption: Drivers &amp; Inhibitors</title>
+<style>
+  :root {
+    --bg: #f7f8fa; --card: #fff; --ink: #1f2933; --muted: #616e7c;
+    --line: #e4e7eb; --accent: #1a73e8; --good: #188038; --bad: #c5221f;
+    --warn: #b06000;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+         background: var(--bg); color: var(--ink); }
+  header { background: linear-gradient(120deg, #174ea6, #1a73e8); color: #fff; padding: 32px 24px; }
+  header h1 { margin: 0 0 6px; font-size: 28px; }
+  header p { margin: 0; opacity: .9; }
+  main { max-width: 1180px; margin: 0 auto; padding: 24px; }
+  nav { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 20px; }
+  nav a { background: #fff; border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px;
+          color: var(--accent); text-decoration: none; font-size: 13px; }
+  section { background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+            padding: 20px 24px; margin-bottom: 20px; }
+  h2 { margin-top: 0; font-size: 20px; }
+  h3 { font-size: 16px; margin: 18px 0 8px; }
+  .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .kpi { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .kpi b { display: block; font-size: 24px; }
+  .kpi span { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { background: #f1f3f4; font-weight: 600; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 860px) { .grid2 { grid-template-columns: 1fr; } }
+  .badge { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px;
+           background: #e8f0fe; color: #174ea6; white-space: nowrap; }
+  .strong { background: #e6f4ea; color: var(--good); }
+  .moderate { background: #fef7e0; color: var(--warn); }
+  .weak { background: #f1f3f4; color: var(--muted); }
+  .new { background: #fce8e6; color: var(--bad); font-weight: 600; }
+  .cite { font-size: 12px; color: var(--accent); text-decoration: none; margin-right: 3px; }
+  .muted { color: var(--muted); }
+  .hi { border-left: 4px solid var(--good); padding-left: 12px; }
+  .lo { border-left: 4px solid var(--bad); padding-left: 12px; }
+  .arrow { color: var(--muted); padding: 0 6px; }
+  details summary { cursor: pointer; font-weight: 600; }
+  .heat td.n { text-align: center; font-variant-numeric: tabular-nums; }
+  blockquote { margin: 4px 0; padding-left: 10px; border-left: 3px solid var(--line); color: var(--muted); }
+  footer { text-align: center; color: var(--muted); font-size: 12px; padding: 24px; }
+</style>
+</head>
+<body>
+{% set s = r.synthesis %}
+{% set seg_names = {"copilot": "Copilot / desktop agentic assistants", "workflow": "Workflow-specific agents"} %}
+{% macro cites(ids) -%}
+  {%- for i in ids %}<a class="cite" href="#e{{ i }}">[{{ i }}]</a>{% endfor -%}
+{%- endmacro %}
+{% macro rc(id) -%}<span class="badge">{{ r.taxonomy.get(id, id) }}</span>{%- endmacro %}
+<header>
+  <h1>Enterprise Agentic AI Adoption: Drivers &amp; Inhibitors</h1>
+  <p>Gemini, Microsoft Copilot, Claude and peers in large enterprises &middot; generated {{ r.generated_at }} &middot; run <code>{{ r.run_id }}</code></p>
+</header>
+<main>
+<nav>
+  <a href="#summary">Summary</a><a href="#changes">What changed</a>
+  {% for seg in s.segments %}<a href="#{{ seg.segment }}">{{ seg_names.get(seg.segment, seg.segment) }}</a>{% endfor %}
+  <a href="#bias">Semantic bias</a><a href="#heatmap">Root-cause heatmap</a>
+  <a href="#scope">Use-case scope</a><a href="#evidence">Evidence</a><a href="#method">Method</a>
+</nav>
+
+<div class="kpis" style="margin-bottom:20px">
+  <div class="kpi"><b>{{ r.stats.sources_total }}</b><span>Sources in evidence base</span></div>
+  <div class="kpi"><b>{{ r.stats.sources_new|default(0) }}</b><span>New sources this run</span></div>
+  <div class="kpi"><b>{{ r.stats.claims_total }}</b><span>Factor claims</span></div>
+  <div class="kpi"><b>{{ r.stats.claims_cited }}</b><span>Claims cited</span></div>
+  <div class="kpi"><b>{{ (r.stats.vendor_source_share * 100)|round|int }}%</b><span>Vendor-affiliated claims</span></div>
+  <div class="kpi"><b>{{ r.catalog.use_cases|length if r.catalog else 0 }}</b><span>Use cases in scope</span></div>
+</div>
+
+<section id="summary">
+  <h2>Executive summary</h2>
+  <p>{{ s.executive_summary }}</p>
+</section>
+
+<section id="changes">
+  <h2>What changed since the last run</h2>
+  <p>{{ s.change_since_last_run }}</p>
+  {% if not r.diff.first_run %}
+  <table>
+    <tr><th>Segment</th><th>Type</th><th>New factors</th><th>Dropped factors</th><th>Root-cause themes</th></tr>
+    {% for seg, d in r.diff.segments.items() %}{% for key, label in [("top_drivers","Drivers"),("top_inhibitors","Inhibitors")] %}
+    <tr><td>{{ seg_names.get(seg, seg) }}</td><td>{{ label }}</td>
+      <td>{% for f in d[key].new %}<span class="badge new">{{ f }}</span> {% else %}<span class="muted">none</span>{% endfor %}</td>
+      <td>{% for f in d[key].dropped %}<span class="badge weak">{{ f }}</span> {% else %}<span class="muted">none</span>{% endfor %}</td>
+      <td>{% for t in d[key].get("new_themes", []) %}<span class="badge new">+ {{ t }}</span> {% endfor %}
+        {% for t in d[key].get("dropped_themes", []) %}<span class="badge weak">&minus; {{ t }}</span> {% endfor %}
+        {% if not d[key].get("new_themes") and not d[key].get("dropped_themes") %}<span class="muted">unchanged</span>{% endif %}</td></tr>
+    {% endfor %}{% endfor %}
+  </table>
+  {% else %}<p class="muted">First run: baseline established.</p>{% endif %}
+</section>
+
+{% for seg in s.segments %}
+<section id="{{ seg.segment }}">
+  <h2>{{ seg_names.get(seg.segment, seg.segment) }}</h2>
+  <p><strong>{{ seg.headline }}</strong></p>
+  <div class="grid2">
+    {% for key, label in [("top_drivers", "Top drivers"), ("top_inhibitors", "Top inhibitors")] %}
+    <div>
+      <h3>{{ label }}</h3>
+      <table>
+        <tr><th>Factor</th><th>Root cause</th><th>Strength</th></tr>
+        {% for f in seg[key] %}
+        <tr><td><strong>{{ f.factor }}</strong>
+          {% if f.factor in r.diff.segments.get(seg.segment, {}).get(key, {}).get("new", []) %}<span class="badge new">NEW</span>{% endif %}
+          <div class="muted">{{ f.explanation }}</div>{{ cites(f.evidence_ids) }}</td>
+          <td>{{ rc(f.root_cause_id) }}</td><td><span class="badge {{ f.strength }}">{{ f.strength }}</span></td></tr>
+        {% endfor %}
+      </table>
+    </div>
+    {% endfor %}
+  </div>
+  <div class="grid2">
+    <div class="hi"><h3>Approaches associated with HIGH adoption</h3>
+      {% for a in seg.high_adoption_approaches %}<p><strong>{{ a.approach }}</strong><br><span class="muted">{{ a.rationale }}</span> {{ cites(a.evidence_ids) }}</p>{% endfor %}
+    </div>
+    <div class="lo"><h3>Patterns associated with LOW adoption</h3>
+      {% for a in seg.low_adoption_patterns %}<p><strong>{{ a.approach }}</strong><br><span class="muted">{{ a.rationale }}</span> {{ cites(a.evidence_ids) }}</p>{% endfor %}
+    </div>
+  </div>
+</section>
+{% endfor %}
+
+<section id="bias">
+  <h2>Semantic bias: stated framing vs underlying issue</h2>
+  <p class="muted">Reports often describe a symptom. This analysis maps how factors are <em>framed</em> to what they most likely <em>are</em>.</p>
+  <table>
+    <tr><th>As reported</th><th></th><th>Underlying issue</th><th>Root cause</th><th>Implication</th></tr>
+    {% for b in s.semantic_bias_insights %}
+    <tr><td>&ldquo;{{ b.stated_framing }}&rdquo;</td><td class="arrow">&rarr;</td><td>{{ b.underlying_issue }} {{ cites(b.evidence_ids) }}</td>
+      <td>{{ rc(b.root_cause_id) }}</td><td>{{ b.implication }}</td></tr>
+    {% endfor %}
+  </table>
+  {% if s.source_bias_notes %}<h3>Source bias notes</h3><ul>{% for n in s.source_bias_notes %}<li>{{ n }}</li>{% endfor %}</ul>{% endif %}
+</section>
+
+<section id="heatmap">
+  <h2>Root-cause heatmap (all mapped claims)</h2>
+  {% set mx = namespace(v=1) %}
+  {% for row in r.root_cause_matrix %}{% for k in ["copilot_driver","copilot_inhibitor","workflow_driver","workflow_inhibitor"] %}{% if row[k] > mx.v %}{% set mx.v = row[k] %}{% endif %}{% endfor %}{% endfor %}
+  <table class="heat">
+    <tr><th>Root cause</th><th>Copilot drivers</th><th>Copilot inhibitors</th><th>Workflow drivers</th><th>Workflow inhibitors</th></tr>
+    {% for row in r.root_cause_matrix %}
+    <tr><td>{{ row.name }}</td>
+      {% for k, hue in [("copilot_driver","24,128,56"),("copilot_inhibitor","197,34,31"),("workflow_driver","24,128,56"),("workflow_inhibitor","197,34,31")] %}
+      <td class="n" style="background: rgba({{ hue }}, {{ (row[k] / mx.v * 0.6)|round(2) }})">{{ row[k] }}</td>
+      {% endfor %}</tr>
+    {% endfor %}
+  </table>
+</section>
+
+<section id="scope">
+  <h2>Use-case scope</h2>
+  {% if r.catalog %}
+  <p class="muted">The {{ r.catalog.use_cases|length }} most commonly deployed enterprise agent use cases, as identified by the scoping agent{% if r.catalog.generated_at %} on {{ r.catalog.generated_at[:10] }}{% endif %}.</p>
+  {% set uc = {} %}{% for u in r.catalog.use_cases %}{% set _ = uc.update({u.id: u}) %}{% endfor %}
+  {% for c in r.catalog.clusters %}
+  <details {% if loop.first %}open{% endif %}><summary>{{ c.name }} <span class="badge">{{ c.segment }}</span> ({{ c.use_case_ids|length }})</summary>
+    <table><tr><th>Use case</th><th>Description</th><th>Industries</th></tr>
+    {% for uid in c.use_case_ids %}{% set u = uc.get(uid) %}{% if u %}
+      <tr><td><strong>{{ u.name }}</strong></td><td>{{ u.description }}</td><td class="muted">{{ u.example_industries|join(", ") }}</td></tr>
+    {% endif %}{% endfor %}</table>
+  </details>
+  {% endfor %}
+  {% else %}<p class="muted">No catalog available.</p>{% endif %}
+</section>
+
+<section id="evidence">
+  <h2>Evidence ({{ r.evidence|length }} cited claims)</h2>
+  <table>
+    <tr><th>#</th><th>Stated factor &amp; quote</th><th>Source</th><th>Root-cause analysis</th></tr>
+    {% for e in r.evidence %}
+    <tr id="e{{ e.id }}"><td>{{ e.id }}</td>
+      <td><span class="badge {{ 'strong' if e.polarity == 'driver' else 'new' }}">{{ e.polarity }}</span>
+        <span class="badge weak">{{ e.segment }}</span> <strong>{{ e.stated_factor }}</strong>
+        {% if e.statistic %}<div><em>{{ e.statistic }}</em></div>{% endif %}
+        <blockquote>{{ e.evidence_quote }}</blockquote></td>
+      <td><a href="{{ e.url }}" target="_blank" rel="noopener">{{ e.title or e.url }}</a><br>
+        <span class="muted">{{ e.publisher }} &middot; {{ e.published }} &middot; {{ e.source_type }}</span>
+        {% if e.vendor_affiliated %}<br><span class="badge moderate">vendor-affiliated</span>{% endif %}</td>
+      <td>{% for rid in e.root_cause_ids %}{{ rc(rid) }} {% endfor %}
+        {% if e.inference %}<div class="muted">{{ e.inference }}</div>{% endif %}
+        {% if e.framing_bias %}<div><em>Framing:</em> {{ e.framing_bias }}</div>{% endif %}</td></tr>
+    {% endfor %}
+  </table>
+</section>
+
+<section id="method">
+  <h2>Method, open questions &amp; run history</h2>
+  <p>Produced by a multi-agent ADK pipeline: a scoping agent builds the use-case catalog; five parallel researchers search and read public reports
+  and record cited factor claims; a semantic-bias analyst maps each stated factor to a root-cause taxonomy; a synthesizer drafts findings that a
+  critic validates (citations checked against the evidence store) in a refinement loop. Evidence accumulates across runs.</p>
+  {% if s.open_questions %}<h3>Open questions for the next cycle</h3><ul>{% for q in s.open_questions %}<li>{{ q }}</li>{% endfor %}</ul>{% endif %}
+  {% if history %}
+  <h3>Run history</h3>
+  <table><tr><th>Run</th><th>Generated</th><th>Sources (new)</th><th>Claims (new)</th></tr>
+    {% for h in history|reverse %}<tr><td><a href="history/{{ h.run_id }}.html">{{ h.run_id }}</a></td><td>{{ h.generated_at }}</td>
+      <td>{{ h.sources_total }} ({{ h.sources_new }})</td><td>{{ h.claims_total }} ({{ h.claims_new }})</td></tr>{% endfor %}
+  </table>{% endif %}
+  {% if r.run_stats %}<p class="muted">This run: {{ r.run_stats.get("model_calls", 0) }} model calls,
+  {{ r.run_stats.get("tool_calls", 0) }} tool calls, {{ r.stats.citations_dropped }} invalid citations removed. Model: {{ r.model }}.</p>{% endif %}
+</section>
+</main>
+<footer>Generated by the Agentic Adoption Research Agent &middot; public-domain sources only &middot; findings are machine-generated and should be verified against cited sources.</footer>
+</body>
+</html>

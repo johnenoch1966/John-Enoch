@@ -1,0 +1,188 @@
+# Enterprise Agentic AI Adoption Research Agent
+
+A multi-agent system built with the **Google Agent Development Kit (ADK)**. It searches the public web for reports on **what drives and what inhibits enterprise adoption of agentic AI** (Gemini, Microsoft Copilot, Claude and peers) and analyses them for **semantic bias**. It then publishes an **updatable HTML report** that improves with every run.
+
+> **Report:** [`reports/index.html`](reports/index.html) · GitHub Pages: `https://johnenoch1966.github.io/John-Enoch/`
+
+---
+
+## 1. Problem
+
+Large enterprises are rolling out two very different kinds of agentic AI:
+
+| Segment | Examples |
+|---|---|
+| **Copilot / desktop agentic assistants** | Gemini for Google Workspace, Microsoft 365 Copilot, Claude, ChatGPT Enterprise: email, meetings, documents, enterprise search |
+| **Workflow-specific agents** | KYC/onboarding, insurance claims, support/service desk, complaints handling, contact centres, AML triage, invoice processing, coding agents, ... |
+
+Adoption is uneven, and the public evidence about it is scattered across analyst reports, consultancy surveys, vendor case studies and regulators. That evidence is also **framed**. Reports often describe a *symptom* rather than the *root cause*:
+
+> *"Access to connectors not enabled"* sounds like a technical gap. It is usually a **risk and auditability** gap: admins disable connectors because the organisation cannot audit or constrain what an agent reads and writes.
+
+Leaders need a current, cited, bias-aware view of which factors really drive or block adoption, and which approaches lead to **high** versus **low** adoption.
+
+## 2. Solution
+
+The agent runs an end-to-end research cycle:
+
+1. **Scope:** it identifies the **50 most commonly deployed enterprise agent use cases** and groups them into 1 copilot cluster and 4 workflow clusters.
+2. **Research (in parallel):** five researcher agents, one per cluster, search the web, read the primary sources and record **cited factor claims** (driver/inhibitor, quote, statistic, publisher, vendor affiliation).
+3. **Semantic-bias analysis:** an analyst agent maps every *stated* factor to an *underlying* root cause using an extensible [taxonomy](adoption_agent/taxonomy.yaml), and notes framing bias from the source.
+4. **Synthesis:** it ranks drivers and inhibitors per segment and identifies high- and low-adoption approaches.
+5. **Critique loop:** a reviewer validates every citation against the evidence store and checks coverage. A refiner fixes any problems, for up to 3 rounds.
+6. **Publish:** it renders an HTML report with a "what changed since the last run" diff, a root-cause heatmap, a semantic-bias table, the use-case scope and a full evidence appendix.
+
+Evidence **accumulates across runs** in a de-duplicated SQLite store, so each refresh makes the report broader and more robust.
+
+## 3. Architecture
+
+```mermaid
+flowchart TD
+    U["CLI / adk web / scheduled GitHub Action"] --> ROOT
+    subgraph ROOT["adoption_research_pipeline (SequentialAgent)"]
+        INIT["run_initializer<br/>(custom: run id, load memory)"]
+        SCOPE["use_case_scoper<br/>(LLM + search, cached)"]
+        subgraph PAR["research_fanout (ParallelAgent)"]
+            R0["researcher_0<br/>copilot"]
+            R1["researcher_1..4<br/>workflow domains"]
+        end
+        subgraph MAP["root_cause_mapping_loop (LoopAgent)"]
+            GATE["mapping_gate<br/>(custom exit)"] --> BIAS["semantic_bias_analyst"]
+        end
+        AGG["evidence_aggregator<br/>(custom: bounded digest)"]
+        SYN["synthesizer<br/>(structured output)"]
+        subgraph REV["review_loop (LoopAgent)"]
+            CRIT["critic<br/>validate_citations / exit_loop"] --> REF["refiner"]
+        end
+        PUB["report_publisher<br/>(custom: diff, render, archive)"]
+        INIT --> SCOPE --> PAR --> MAP --> AGG --> SYN --> REV --> PUB
+    end
+    R0 & R1 -- tools --> T["google_search_agent (AgentTool)<br/>fetch_page<br/>record_evidence"]
+    BIAS -- tools --> T2["get_unmapped_claims<br/>lookup_taxonomy<br/>record_root_cause_mappings"]
+    T --> DB[("evidence.db<br/>long-term memory")]
+    T2 --> DB
+    AGG --> DB
+    PUB --> OUT["reports/index.html<br/>reports/history/*.html<br/>data/report.json"]
+    PLUG["RunTelemetryPlugin<br/>(observes every agent / model / tool)"] -.-> ROOT
+```
+
+LLMs handle judgement (search strategy, extraction, root-cause reasoning, synthesis, critique). **Deterministic custom agents** handle bookkeeping: initialisation, loop gating, aggregation and publishing. This keeps runs cheaper, testable and predictable.
+
+## 4. How the evaluation criteria are addressed
+
+### Tool & Interface Design
+- **Typed tools with Pydantic contracts** ([`schemas.py`](adoption_agent/schemas.py)). ADK generates the function schemas and validates the model's arguments before the tool runs.
+- Tools **return structured, actionable results instead of raising**. For example, `save_use_case_catalog` returns a list of problems to fix, `record_root_cause_mappings` reports rejected ids with the valid options, and `fetch_page` reports HTTP errors.
+- **Built-in Google Search isolated in its own agent and wrapped as an `AgentTool`**, so it can be combined with function tools. An `after_model_callback` adds the grounding source links to the search agent's reply, so researchers can read the real primary sources.
+- `fetch_page` blocks non-public URLs, extracts readable HTML and PDF text, and truncates output to protect the context window.
+- Interfaces: a **CLI** (`run`, `render`, `stats`), **`adk web`** (exports `app`), a container entrypoint and a JSON report contract.
+
+### Context & Memory
+- **Short-term memory:** session state passes data between stages (`use_case_catalog`, `evidence_digest`, `synthesis`, `critique`), with per-run `temp:` counters.
+- **Long-term memory:** the SQLite evidence store, the cached use-case catalog and the previous report. Researchers are told which URLs are already known, the synthesizer receives a summary of the previous report, and the publisher diffs against it.
+- **Context engineering:**
+  - Every stage uses `include_contents="none"` plus dynamic instruction providers, so each agent sees only what it needs.
+  - The evidence digest is **aggregated and capped** (at most 4 examples per segment × polarity × root-cause group), so prompt size stays bounded as evidence grows.
+  - Fetched pages are truncated.
+
+### Orchestration & Logic
+- `SequentialAgent` → `ParallelAgent` (5 researchers) → `LoopAgent` (batch mapping with a deterministic exit gate) → synthesis → `LoopAgent` (critic/refiner with an LLM-driven `exit_loop`) → publisher.
+- **Conditional execution** through `before_agent_callback`: the scoper is skipped when the catalog is cached, and synthesis is skipped when there is no evidence.
+- Catalog validation enforces structural rules: about 50 use cases, exactly 1 copilot cluster plus 4 workflow clusters, no duplicates or orphans.
+
+### Observability & Tracing
+- [`RunTelemetryPlugin`](adoption_agent/observability.py) is an ADK plugin that observes **every** agent, model call and tool call:
+  - structured JSON logs (ready for Cloud Logging)
+  - per-agent latency and token usage
+  - tool success and error counts
+  - writes `runs/<run_id>/events.jsonl` and `metrics.json`
+- **OpenTelemetry:** ADK's built-in spans are exported to a local SQLite trace store, to **Cloud Trace** (`ADOPTION_AGENT_TRACE_TO_CLOUD=true`) or to any OTLP collector. `adk web` shows the trace for each invocation.
+- Tool exceptions are caught centrally and returned to the model so it can recover.
+
+### Infrastructure & CI/CD
+- **CI** ([`ci.yml`](.github/workflows/ci.yml)): ruff lint and format checks, then pytest on Python 3.11 and 3.12, including an **offline end-to-end test of the whole agent graph** driven by a scripted fake LLM. The image is then built with Docker.
+- **Scheduled refresh** ([`refresh-report.yml`](.github/workflows/refresh-report.yml)): runs weekly with Workload Identity Federation (no keys in the repo), commits the updated evidence and report, and uploads run telemetry as an artifact.
+- **Publishing** ([`pages.yml`](.github/workflows/pages.yml)): publishes the HTML report to GitHub Pages.
+- **Deployment** ([`deploy.yml`](.github/workflows/deploy.yml)): deploys the container as a Cloud Run Job.
+- `Dockerfile` (non-root user), `pyproject.toml`, and `.env.example`, with secrets kept out of git.
+
+## 5. Quick start
+
+```bash
+git clone https://github.com/johnenoch1966/John-Enoch.git && cd John-Enoch
+python3 -m venv .venv && source .venv/bin/activate
+pip install -e ".[dev]"
+
+# Model access through Vertex AI + Application Default Credentials
+gcloud auth application-default login
+cp .env.example .env    # set GOOGLE_CLOUD_PROJECT
+
+# Run a research cycle (about 10-20 min)
+python -m adoption_agent.cli run                  # uses the cached use-case catalog if present
+python -m adoption_agent.cli run --refresh-scope  # rebuild the top-50 list
+open reports/index.html
+
+# Or explore interactively, with traces, in the ADK dev UI
+adk web .        # choose "adoption_agent", send "run"
+```
+
+Other commands: `python -m adoption_agent.cli stats` shows the evidence-base size, and `python -m adoption_agent.cli render` re-renders the HTML.
+
+**Resilience:** all model calls retry rate-limit (429) and server (5xx) errors with increasing waits and random jitter. Every source and claim is saved the moment it is recorded, so an interrupted run loses no research. `python -m adoption_agent.cli run --resume` skips the web research and continues from root-cause mapping using the stored evidence.
+
+## 6. Tests
+
+```bash
+pytest -v
+```
+
+| Test | Covers |
+|---|---|
+| `test_store.py` | URL normalisation, de-duplication, mapping state, bounded digest |
+| `test_tools.py` | taxonomy lookup (including the *connectors → risk & auditability* case), evidence/mapping validation, citation checks, catalog rules |
+| `test_web.py` | HTML extraction, truncation, HTTP errors, blocking of non-public URLs (mocked HTTP) |
+| `test_report.py` | citation sanitising, run-to-run diff, HTML rendering, XSS escaping |
+| `test_observability.py` | telemetry plugin handles the nested runs created by `AgentTool` without resetting metrics |
+| `test_pipeline.py` | **full agent graph offline**: all stages run in order, loops end, the report is published, telemetry is written, and a second run accumulates evidence and produces a diff |
+
+## 7. Project structure
+
+```
+adoption_agent/
+  agent.py            agent graph + App (root_agent, app)
+  nodes.py            deterministic custom agents
+  prompts.py          prompt templates
+  schemas.py          Pydantic contracts (tools, structured output, storage)
+  store.py            SQLite evidence store (long-term memory)
+  observability.py    telemetry plugin, logging, OpenTelemetry setup
+  taxonomy.yaml       root-cause taxonomy for semantic-bias analysis
+  tools/              web, evidence, taxonomy, scope tools
+  report/             report builder + Jinja2 HTML template
+  cli.py              command-line entry point
+data/                 persistent evidence + latest report JSON
+reports/              index.html (latest) + history/
+tests/                unit + offline end-to-end tests
+.github/workflows/    CI, scheduled refresh, Pages, Cloud Run deploy
+```
+
+## 8. Configuration
+
+| Variable | Default | Purpose |
+|---|---|---|
+| `GOOGLE_GENAI_USE_VERTEXAI` | `TRUE` | Use Vertex AI (ADC) rather than an API key |
+| `GOOGLE_CLOUD_PROJECT` / `GOOGLE_CLOUD_LOCATION` | none / `global` | Vertex AI project and location |
+| `ADOPTION_AGENT_MODEL` | `gemini-3.8-flash` | Search, research and extraction agents |
+| `ADOPTION_AGENT_REASONING_MODEL` | same as above | Bias analyst, synthesizer, critic, refiner |
+| `ADOPTION_AGENT_USE_CASES` | `50` | Size of the use-case scope |
+| `ADOPTION_AGENT_MIN_SOURCES` / `MAX_SOURCES` | `5` / `10` | Sources per researcher per run |
+| `ADOPTION_AGENT_TRACE_TO_CLOUD` | off | Export OpenTelemetry spans to Cloud Trace |
+
+## 9. Limitations and responsible use
+
+- Findings are machine-generated from public sources. Check important claims against the linked evidence before relying on them.
+- Source availability varies; some reports are paywalled and only their public summaries can be used.
+- Vendor-published material is flagged but not excluded. The report shows the vendor-affiliated share so readers can weigh it.
+
+## License
+
+Apache-2.0
