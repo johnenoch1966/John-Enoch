@@ -22,7 +22,12 @@ from google.adk.tools.agent_tool import AgentTool
 from google.genai import types
 
 from adoption_agent import config
-from tests.samples import sample_catalog, sample_synthesis
+from tests.samples import (
+    sample_catalog,
+    sample_industry_synthesis,
+    sample_segment_synthesis,
+    sample_synthesis,
+)
 
 
 def _si_text(req: LlmRequest) -> str:
@@ -66,8 +71,12 @@ class ScriptedLlm(BaseLlm):
 
         if "research analyst investigating" in si:
             if fr is None:
-                cluster = re.search(r"Cluster: (.+?)\s+\(segment: (\w+)\)", si)
-                name, segment = cluster.group(1), cluster.group(2)
+                industry = re.search(r"Industry: (.+?)\s+\(id: (\w+)\)", si)
+                if industry:  # industry researcher
+                    name, segment, industries = industry.group(1), "workflow", [industry.group(2)]
+                else:  # use-case cluster researcher
+                    cluster = re.search(r"Cluster: (.+?)\s+\(segment: (\w+)\)", si)
+                    name, segment, industries = cluster.group(1), cluster.group(2), []
                 slug = re.sub(r"\W+", "-", name.lower())
                 return _call(
                     "record_evidence",
@@ -86,12 +95,16 @@ class ScriptedLlm(BaseLlm):
                                 "stated_factor": "Access to connectors not enabled",
                                 "polarity": "inhibitor",
                                 "segment": segment,
+                                "use_case_ids": ["uc-0"],
+                                "industries": industries,
                                 "evidence_quote": "Admins have not enabled connectors.",
                             },
                             {
                                 "stated_factor": "Executive sponsorship",
                                 "polarity": "driver",
                                 "segment": segment,
+                                "use_case_ids": ["uc-10"],
+                                "industries": industries,
                                 "evidence_quote": "Sponsored programmes scaled faster.",
                             },
                         ],
@@ -113,14 +126,20 @@ class ScriptedLlm(BaseLlm):
                         ],
                         "inference": "scripted",
                         "confidence": "high",
+                        "industries": json.loads(c["researcher_industries"] or "[]")
+                        or ["cross_industry"],
                     }
                     for c in fr.response["claims"]
                 ]
                 return _call("record_root_cause_mappings", {"mappings": mappings})
             return _text("Mapped batch.")
 
-        if "principal analyst" in si or "revising your research brief" in si:
-            ids = sorted({int(i) for i in re.findall(r'"claim_id": (\d+)', si)})[:3]
+        ids = sorted({int(i) for i in re.findall(r'"claim_id": (\d+)', si)})[:3]
+        if "principal analyst producing" in si:
+            return _text(sample_segment_synthesis(ids).model_dump_json())
+        if "industry practice lead" in si:
+            return _text(sample_industry_synthesis(ids).model_dump_json())
+        if "revising the research brief" in si:
             return _text(sample_synthesis(ids).model_dump_json())
 
         if "demanding research reviewer" in si:
@@ -192,34 +211,44 @@ async def test_full_pipeline_offline(tmp_home):
         "use_case_scoper",
         "researcher_0",
         "researcher_4",
+        "industry_researcher_fsi",
+        "industry_researcher_energy_utilities",
         "mapping_gate",
         "semantic_bias_analyst",
         "evidence_aggregator",
-        "synthesizer",
+        "segment_analyst",
+        "industry_analyst",
+        "synthesis_merger",
         "critic",
         "report_publisher",
     ]:
         assert name in authors, name
     assert "refiner" not in authors  # critic approved on the first pass
 
+    n_sources = config.NUM_CLUSTERS + len(config.INDUSTRIES)
     report = json.loads(config.REPORT_JSON.read_text())
     assert report["run_id"] == "test-run"
-    assert report["stats"]["sources_total"] == config.NUM_CLUSTERS
-    assert report["stats"]["claims_total"] == 2 * config.NUM_CLUSTERS
-    assert report["stats"]["mapped_total"] == 2 * config.NUM_CLUSTERS
+    assert report["stats"]["sources_total"] == n_sources
+    assert report["stats"]["claims_total"] == 2 * n_sources
+    assert report["stats"]["mapped_total"] == 2 * n_sources
     assert report["stats"]["citations_dropped"] == 0
-    assert (config.REPORTS_DIR / "index.html").exists()
+    assert "executive_summary" not in report["synthesis"]
+    assert report["segment_views"]["copilot"]["ranked"][0]["impact_score"] == 5
+    fsi = next(v for v in report["industry_views"] if v["id"] == "fsi")
+    assert fsi["claim_count"] == 2 and len(fsi["profile"]["drivers"]) == 5
+    html = (config.REPORTS_DIR / "index.html").read_text()
+    assert "Industry deep-dive" in html and "Top AI use cases by industry" in html
 
     metrics = json.loads((config.RUNS_DIR / "test-run" / "metrics.json").read_text())
     assert metrics["totals"]["model_calls"] > 10
-    assert metrics["tools"]["record_evidence"]["calls"] == config.NUM_CLUSTERS
+    assert metrics["tools"]["record_evidence"]["calls"] == n_sources
     assert (config.RUNS_DIR / "test-run" / "events.jsonl").exists()
 
     # Second run: evidence accumulates (deduplicated), diff is computed.
     authors2 = await _run(app)
     assert "report_publisher" in authors2
     report2 = json.loads(config.REPORT_JSON.read_text())
-    assert report2["stats"]["sources_total"] == config.NUM_CLUSTERS  # deduped
+    assert report2["stats"]["sources_total"] == n_sources  # deduped
     assert report2["diff"]["first_run"] is False
     history = (config.DATA_DIR / "history.jsonl").read_text().splitlines()
     assert len(history) == 2

@@ -20,7 +20,7 @@ from google.genai import types
 
 from . import config
 from .report import build_report, load_previous, publish
-from .schemas import Synthesis
+from .schemas import IndustrySynthesis, SegmentSynthesis, Synthesis
 from .tools.evidence import get_store
 
 logger = logging.getLogger(__name__)
@@ -54,11 +54,11 @@ def previous_summary(previous: dict[str, Any] | None) -> str:
         return ""
     syn = previous.get("synthesis", {})
     lines = [f"Previous run {previous.get('run_id')} ({previous.get('generated_at')}):"]
-    lines.append(syn.get("executive_summary", "")[:1200])
     for seg in syn.get("segments", []):
         drivers = ", ".join(f["factor"] for f in seg.get("top_drivers", []))
         inhib = ", ".join(f["factor"] for f in seg.get("top_inhibitors", []))
-        lines.append(f"[{seg['segment']}] drivers: {drivers} | inhibitors: {inhib}")
+        lines.append(f"[{seg['segment']}] {seg.get('headline', '')}")
+        lines.append(f"  drivers: {drivers} | inhibitors: {inhib}")
     return "\n".join(lines)
 
 
@@ -75,6 +75,8 @@ class RunInitializer(BaseAgent):
             "run_id": run_id,
             "requested_run_id": None,
             "synthesis": None,
+            "synthesis_segments": None,
+            "synthesis_industries": None,
             "critique": "",
         }
 
@@ -117,19 +119,58 @@ class EvidenceAggregator(BaseAgent):
     """Builds the bounded evidence digest that the synthesizer reasons over."""
 
     async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
-        digest = get_store().digest()
+        store = get_store()
+        digest = store.digest()
+        industry_digest = store.industry_digest(list(config.INDUSTRIES))
         totals = digest["totals"]
+        per_industry = ", ".join(f"{k}={v['claim_count']}" for k, v in industry_digest.items())
         yield _event(
             self,
             ctx,
             text=(
                 f"Digest built: {totals['claims_total']} claims from "
-                f"{totals['sources_total']} sources in {len(digest['groups'])} groups."
+                f"{totals['sources_total']} sources in {len(digest['groups'])} groups. "
+                f"Claims per industry: {per_industry}."
             ),
             state_delta={
                 "evidence_digest": json.dumps(digest, ensure_ascii=False),
+                "industry_digest": json.dumps(industry_digest, ensure_ascii=False),
                 "evidence_totals": totals,
             },
+        )
+
+
+def _load(raw: Any, model: type) -> Any:
+    if raw is None:
+        return None
+    return model.model_validate_json(raw) if isinstance(raw, str) else model.model_validate(raw)
+
+
+class SynthesisMerger(BaseAgent):
+    """Merges the parallel segment and industry analyses into one brief."""
+
+    async def _run_async_impl(self, ctx: InvocationContext) -> AsyncGenerator[Event, None]:
+        state = ctx.session.state
+        try:
+            seg = _load(state.get("synthesis_segments"), SegmentSynthesis)
+            ind = _load(state.get("synthesis_industries"), IndustrySynthesis)
+        except Exception as e:
+            logger.exception("Analyst output failed validation")
+            yield _event(self, ctx, text=f"Analyst output failed validation: {e}")
+            return
+        if seg is None:
+            yield _event(self, ctx, text="No segment analysis produced.")
+            return
+        merged = Synthesis(**seg.model_dump(), industries=ind.industries if ind is not None else [])
+        yield _event(
+            self,
+            ctx,
+            text=(
+                f"Merged brief: {len(merged.segments)} segments, "
+                f"{sum(len(s.use_case_impact) for s in merged.segments)} use cases ranked, "
+                f"{len(merged.industries)} industry profiles."
+            ),
+            state_delta={"synthesis": json.loads(merged.model_dump_json())},
         )
 
 
@@ -143,11 +184,7 @@ class ReportPublisher(BaseAgent):
             yield _event(self, ctx, text="No synthesis produced; report not updated.")
             return
         try:
-            synthesis = (
-                Synthesis.model_validate_json(raw)
-                if isinstance(raw, str)
-                else Synthesis.model_validate(raw)
-            )
+            synthesis = _load(raw, Synthesis)
         except Exception as e:
             logger.exception("Synthesis failed validation")
             yield _event(self, ctx, text=f"Synthesis failed validation: {e}")
@@ -162,6 +199,7 @@ class ReportPublisher(BaseAgent):
         )
         paths = publish(report)
         st = report["stats"]
+        headlines = "\n".join(f"- {s.segment}: {s.headline}" for s in synthesis.segments)
         yield _event(
             self,
             ctx,
@@ -169,8 +207,7 @@ class ReportPublisher(BaseAgent):
                 f"Report published: {paths['index']}\n"
                 f"Sources: {st['sources_total']} ({st.get('sources_new', 0)} new) | "
                 f"claims cited: {st['claims_cited']} | "
-                f"invalid citations removed: {st['citations_dropped']}\n\n"
-                f"{synthesis.executive_summary}"
+                f"invalid citations removed: {st['citations_dropped']}\n{headlines}"
             ),
             state_delta={"report_path": paths["index"]},
         )

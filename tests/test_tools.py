@@ -58,9 +58,14 @@ def test_mapping_validation_rejects_unknown_ids(tmp_home, tool_context):
 
     out = record_root_cause_mappings(
         [
-            RootCauseMappingInput(claim_id=cid, root_cause_ids=["not_a_category"], inference="x"),
             RootCauseMappingInput(
-                claim_id=999, root_cause_ids=["risk_auditability"], inference="x"
+                claim_id=cid, root_cause_ids=["not_a_category"], inference="x", industries=["fsi"]
+            ),
+            RootCauseMappingInput(
+                claim_id=999,
+                root_cause_ids=["risk_auditability"],
+                inference="x",
+                industries=["fsi"],
             ),
         ],
         tool_context,
@@ -68,7 +73,14 @@ def test_mapping_validation_rejects_unknown_ids(tmp_home, tool_context):
     assert out["saved"] == 0 and len(out["rejected"]) == 2 and out["remaining"] == 1
 
     ok = record_root_cause_mappings(
-        [RootCauseMappingInput(claim_id=cid, root_cause_ids=["risk_auditability"], inference="x")],
+        [
+            RootCauseMappingInput(
+                claim_id=cid,
+                root_cause_ids=["risk_auditability"],
+                inference="x",
+                industries=["fsi"],
+            )
+        ],
         tool_context,
     )
     assert ok["status"] == "ok" and ok["remaining"] == 0
@@ -104,3 +116,30 @@ def test_save_catalog_returns_problems_for_too_few(tmp_home, tool_context):
     res = save_use_case_catalog(cat.use_cases, cat.clusters, tool_context)
     assert res["status"] == "error" and any("Expected" in p for p in res["problems"])
     assert get_store().stats()["claims_total"] == 0
+
+
+# -------------------------------------------------------------- industries
+def test_industry_ids_in_sync_with_schema():
+    from typing import get_args
+
+    from adoption_agent.schemas import IndustryId, IndustryTag
+
+    assert list(get_args(IndustryId)) == list(config.INDUSTRIES)
+    assert set(get_args(IndustryTag)) == set(config.INDUSTRIES) | {"cross_industry"}
+
+
+def test_canonical_industries_maps_free_text():
+    from adoption_agent.industries import canonical_industries, use_case_industries
+
+    assert canonical_industries(["Retail Banking", "Pharma", "Telecommunications"]) == [
+        "fsi",
+        "hcls",
+        "tmt",
+    ]
+    assert use_case_industries({"industries": ["hcls"], "example_industries": ["Banking"]}) == [
+        "hcls"
+    ]
+    assert use_case_industries({"example_industries": ["Automotive", "Utilities"]}) == [
+        "manufacturing",
+        "energy_utilities",
+    ]

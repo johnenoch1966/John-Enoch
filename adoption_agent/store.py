@@ -88,6 +88,20 @@ class EvidenceStore:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with self._conn() as c:
             c.executescript(_SCHEMA)
+            self._migrate(c)
+
+    @staticmethod
+    def _migrate(c: sqlite3.Connection) -> None:
+        """Additive schema migrations so existing evidence is never lost.
+
+        v2: industry tags on claims (from researchers) and on mappings (from
+        the bias analyst). Mappings with NULL industries are treated as
+        unmapped, so the analyst back-fills industry tags on the next run.
+        """
+        for table in ("claims", "mappings"):
+            cols = {r["name"] for r in c.execute(f"PRAGMA table_info({table})")}
+            if "industries" not in cols:
+                c.execute(f"ALTER TABLE {table} ADD COLUMN industries TEXT")
 
     @contextmanager
     def _conn(self) -> Iterator[sqlite3.Connection]:
@@ -136,8 +150,8 @@ class EvidenceStore:
                 return int(row["id"]), False
             cur = c.execute(
                 "INSERT INTO claims (claim_hash,source_id,stated_factor,polarity,"
-                "segment,use_case_ids,evidence_quote,statistic,run_id,created_at) "
-                "VALUES (?,?,?,?,?,?,?,?,?,?)",
+                "segment,use_case_ids,evidence_quote,statistic,run_id,created_at,industries) "
+                "VALUES (?,?,?,?,?,?,?,?,?,?,?)",
                 (
                     h,
                     source_id,
@@ -149,6 +163,7 @@ class EvidenceStore:
                     claim.statistic,
                     run_id,
                     _now(),
+                    json.dumps(claim.industries),
                 ),
             )
             return int(cur.lastrowid), True
@@ -157,7 +172,8 @@ class EvidenceStore:
         with self._conn() as c:
             c.execute(
                 "INSERT OR REPLACE INTO mappings (claim_id,root_cause_ids,inference,"
-                "confidence,framing_bias,run_id,created_at) VALUES (?,?,?,?,?,?,?)",
+                "confidence,framing_bias,run_id,created_at,industries)"
+                " VALUES (?,?,?,?,?,?,?,?)",
                 (
                     m.claim_id,
                     json.dumps(m.root_cause_ids),
@@ -166,6 +182,7 @@ class EvidenceStore:
                     m.framing_bias,
                     run_id,
                     _now(),
+                    json.dumps(m.industries),
                 ),
             )
 
@@ -178,14 +195,19 @@ class EvidenceStore:
             rows = c.execute(f"SELECT id FROM claims WHERE id IN ({q})", ids).fetchall()
         return {int(r["id"]) for r in rows}
 
+    # A claim needs (re-)mapping if it has no mapping yet, or its mapping
+    # predates industry tagging.
+    _UNMAPPED = "m.claim_id IS NULL OR m.industries IS NULL"
+
     def unmapped_claims(self, limit: int = 25) -> list[dict[str, Any]]:
         with self._conn() as c:
             rows = c.execute(
                 "SELECT c.id, c.stated_factor, c.polarity, c.segment, c.evidence_quote,"
-                " s.publisher, s.source_type, s.vendor_affiliated"
+                " c.use_case_ids, c.industries AS researcher_industries,"
+                " s.title, s.publisher, s.source_type, s.vendor_affiliated"
                 " FROM claims c JOIN sources s ON s.id=c.source_id"
                 " LEFT JOIN mappings m ON m.claim_id=c.id"
-                " WHERE m.claim_id IS NULL ORDER BY c.id LIMIT ?",
+                f" WHERE {self._UNMAPPED} ORDER BY c.id LIMIT ?",
                 (limit,),
             ).fetchall()
         return [dict(r) for r in rows]
@@ -195,7 +217,7 @@ class EvidenceStore:
             return int(
                 c.execute(
                     "SELECT COUNT(*) FROM claims c LEFT JOIN mappings m"
-                    " ON m.claim_id=c.id WHERE m.claim_id IS NULL"
+                    f" ON m.claim_id=c.id WHERE {self._UNMAPPED}"
                 ).fetchone()[0]
             )
 
@@ -204,10 +226,11 @@ class EvidenceStore:
         with self._conn() as c:
             rows = c.execute(
                 "SELECT c.id, c.stated_factor, c.polarity, c.segment, c.use_case_ids,"
-                " c.evidence_quote, c.statistic, c.run_id,"
+                " c.evidence_quote, c.statistic, c.run_id, c.industries AS claim_industries,"
                 " s.id AS source_id, s.url, s.title, s.publisher, s.published,"
                 " s.source_type, s.vendor_affiliated, s.methodology,"
-                " m.root_cause_ids, m.inference, m.confidence, m.framing_bias"
+                " m.root_cause_ids, m.inference, m.confidence, m.framing_bias,"
+                " m.industries AS mapped_industries"
                 " FROM claims c JOIN sources s ON s.id=c.source_id"
                 " LEFT JOIN mappings m ON m.claim_id=c.id ORDER BY c.id"
             ).fetchall()
@@ -217,6 +240,10 @@ class EvidenceStore:
             d["use_case_ids"] = json.loads(d["use_case_ids"] or "[]")
             d["root_cause_ids"] = json.loads(d["root_cause_ids"] or "[]")
             d["vendor_affiliated"] = bool(d["vendor_affiliated"])
+            inds = set(json.loads(d.pop("claim_industries") or "[]"))
+            inds |= set(json.loads(d.pop("mapped_industries") or "[]"))
+            specific = sorted(inds - {"cross_industry"})
+            d["industries"] = specific or ["cross_industry"]
             out.append(d)
         return out
 
@@ -229,7 +256,7 @@ class EvidenceStore:
             s = {
                 "sources_total": one("SELECT COUNT(*) FROM sources"),
                 "claims_total": one("SELECT COUNT(*) FROM claims"),
-                "mapped_total": one("SELECT COUNT(*) FROM mappings"),
+                "mapped_total": one("SELECT COUNT(*) FROM mappings WHERE industries IS NOT NULL"),
             }
             if run_id:
                 s["sources_new"] = one("SELECT COUNT(*) FROM sources WHERE run_id=?", run_id)
@@ -279,4 +306,67 @@ class EvidenceStore:
             "totals": self.stats(),
             "source_type_mix": dict(Counter(t for (_, t) in source_types)),
             "groups": groups,
+            "use_case_evidence": self.use_case_evidence(claims),
         }
+
+    @staticmethod
+    def use_case_evidence(claims: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+        """Per use case: how much evidence, and how positive vs negative."""
+        out: dict[str, dict[str, Any]] = {}
+        for cl in claims:
+            for uid in cl["use_case_ids"]:
+                e = out.setdefault(uid, {"drivers": 0, "inhibitors": 0, "claim_ids": []})
+                e["drivers" if cl["polarity"] == "driver" else "inhibitors"] += 1
+                if len(e["claim_ids"]) < 4:
+                    e["claim_ids"].append(cl["id"])
+        return out
+
+    def industry_digest(
+        self, industries: list[str], max_groups: int = 8, max_examples: int = 3
+    ) -> dict[str, Any]:
+        """Evidence aggregated per industry for the industry analyst.
+
+        Cross-industry evidence is summarised separately so the analyst can
+        fall back to it (and say so) where industry-specific evidence is thin.
+        """
+        claims = self.all_claims()
+
+        def summarise(items: list[dict[str, Any]]) -> list[dict[str, Any]]:
+            by_key: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+            for cl in items:
+                root = cl["root_cause_ids"][0] if cl["root_cause_ids"] else "unmapped"
+                by_key[(cl["polarity"], root)].append(cl)
+            ranked = sorted(by_key.items(), key=lambda kv: -len(kv[1]))[:max_groups]
+            return [
+                {
+                    "polarity": pol,
+                    "root_cause_id": root,
+                    "claim_count": len(its),
+                    "distinct_sources": len({i["source_id"] for i in its}),
+                    "examples": [
+                        {
+                            "claim_id": i["id"],
+                            "stated_factor": i["stated_factor"],
+                            "statistic": i["statistic"],
+                            "publisher": i["publisher"],
+                        }
+                        for i in its[:max_examples]
+                    ],
+                }
+                for (pol, root), its in ranked
+            ]
+
+        out: dict[str, Any] = {}
+        for ind in industries:
+            items = [c for c in claims if ind in c["industries"]]
+            out[ind] = {
+                "claim_count": len(items),
+                "distinct_sources": len({i["source_id"] for i in items}),
+                "groups": summarise(items),
+                "use_case_mentions": dict(
+                    Counter(u for c in items for u in c["use_case_ids"]).most_common(12)
+                ),
+            }
+        cross = [c for c in claims if c["industries"] == ["cross_industry"]]
+        out["cross_industry"] = {"claim_count": len(cross), "groups": summarise(cross)}
+        return out

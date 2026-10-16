@@ -25,12 +25,18 @@ Leaders need a current, cited, bias-aware view of which factors really drive or 
 
 The agent runs an end-to-end research cycle:
 
-1. **Scope:** it identifies the **50 most commonly deployed enterprise agent use cases** and groups them into 1 copilot cluster and 4 workflow clusters.
-2. **Research (in parallel):** five researcher agents, one per cluster, search the web, read the primary sources and record **cited factor claims** (driver/inhibitor, quote, statistic, publisher, vendor affiliation).
-3. **Semantic-bias analysis:** an analyst agent maps every *stated* factor to an *underlying* root cause using an extensible [taxonomy](adoption_agent/taxonomy.yaml), and notes framing bias from the source.
-4. **Synthesis:** it ranks drivers and inhibitors per segment and identifies high- and low-adoption approaches.
+1. **Scope:** it identifies the **50 most commonly deployed enterprise agent use cases**, tags each one as copilot or workflow and with the industries it applies to, and groups them into 1 copilot cluster and 4 workflow clusters.
+2. **Research (in parallel):** **5 use-case researchers** (one per cluster) and **7 industry researchers** (FSI, HCLS, Manufacturing, Retail & CPG, TMT, Public Sector, Energy & Utilities) search the web, read the primary sources and record **cited claims**. Each claim records the factor (driver or blocker), a quote, any statistic, the publisher, vendor affiliation, use cases and industry.
+3. **Semantic-bias analysis:** an analyst agent maps every *stated* factor to an *underlying* root cause using an extensible [taxonomy](adoption_agent/taxonomy.yaml), notes framing bias from the source, and tags the industries the claim applies to.
+4. **Synthesis (in parallel):** a **segment analyst** ranks every copilot and workflow use case by realised business impact. At the same time, an **industry analyst** builds each industry's top 5 drivers, top 5 blockers and 5 actions for success.
 5. **Critique loop:** a reviewer validates every citation against the evidence store and checks coverage. A refiner fixes any problems, for up to 3 rounds.
-6. **Publish:** it renders an HTML report with a "what changed since the last run" diff, a root-cause heatmap, a semantic-bias table, the use-case scope and a full evidence appendix.
+6. **Publish:** it renders a visual HTML report with these sections:
+   - **Top AI use cases by industry**, each tagged Copilot or Workflow
+   - **Copilot assistants ranked by impact**, showing impact score, adoption stage, main value, main blocker and evidence count
+   - **Workflow agents ranked by impact**, in the same format
+   - **Industry deep-dive**: pick an industry to see its top 5 drivers, top 5 blockers and 5 actions for success
+   - **Semantic bias**: what reports say compared with what is really going on
+   - **What changed** since the last run, with a full evidence appendix
 
 Evidence **accumulates across runs** in a de-duplicated SQLite store, so each refresh makes the report broader and more robust.
 
@@ -46,18 +52,25 @@ flowchart TD
             R0["researcher_0<br/>copilot"]
             R1["researcher_1..4<br/>workflow domains"]
         end
-        subgraph MAP["root_cause_mapping_loop (LoopAgent)"]
-            GATE["mapping_gate<br/>(custom exit)"] --> BIAS["semantic_bias_analyst"]
+        subgraph IND["industry_research_fanout (ParallelAgent)"]
+            I1["7 industry researchers<br/>FSI, HCLS, Mfg, Retail, TMT, Public, Energy"]
         end
-        AGG["evidence_aggregator<br/>(custom: bounded digest)"]
-        SYN["synthesizer<br/>(structured output)"]
+        subgraph MAP["root_cause_mapping_loop (LoopAgent)"]
+            GATE["mapping_gate<br/>(custom exit)"] --> BIAS["semantic_bias_analyst<br/>root cause + industry"]
+        end
+        AGG["evidence_aggregator<br/>(custom: segment + industry digests)"]
+        subgraph SYN["synthesis_fanout (ParallelAgent)"]
+            SA["segment_analyst<br/>use cases ranked by impact"]
+            IA["industry_analyst<br/>top-5 drivers / blockers / advice"]
+        end
+        MERGE["synthesis_merger (custom)"]
         subgraph REV["review_loop (LoopAgent)"]
             CRIT["critic<br/>validate_citations / exit_loop"] --> REF["refiner"]
         end
         PUB["report_publisher<br/>(custom: diff, render, archive)"]
-        INIT --> SCOPE --> PAR --> MAP --> AGG --> SYN --> REV --> PUB
+        INIT --> SCOPE --> PAR --> IND --> MAP --> AGG --> SYN --> MERGE --> REV --> PUB
     end
-    R0 & R1 -- tools --> T["google_search_agent (AgentTool)<br/>fetch_page<br/>record_evidence"]
+    R0 & R1 & I1 -- tools --> T["google_search_agent (AgentTool)<br/>fetch_page<br/>record_evidence"]
     BIAS -- tools --> T2["get_unmapped_claims<br/>lookup_taxonomy<br/>record_root_cause_mappings"]
     T --> DB[("evidence.db<br/>long-term memory")]
     T2 --> DB
@@ -128,7 +141,9 @@ adk web .        # choose "adoption_agent", send "run"
 
 Other commands: `python -m adoption_agent.cli stats` shows the evidence-base size, and `python -m adoption_agent.cli render` re-renders the HTML.
 
-**Resilience:** all model calls retry rate-limit (429) and server (5xx) errors with increasing waits and random jitter. Every source and claim is saved the moment it is recorded, so an interrupted run loses no research. `python -m adoption_agent.cli run --resume` skips the web research and continues from root-cause mapping using the stored evidence.
+**Resilience:** all model calls retry rate-limit (429) and server (5xx) errors with increasing waits and random jitter. Every source and claim is saved the moment it is recorded, so an interrupted run loses no research. `python -m adoption_agent.cli run --resume` skips the web research and continues from root-cause mapping using the stored evidence. `--research clusters|industries|none` runs only one of the two research fan-outs.
+
+**Schema migrations:** when the evidence store gains new fields, such as industry tags, existing data is migrated in place. Older claims are automatically re-tagged on the next run.
 
 ## 6. Tests
 
@@ -138,10 +153,10 @@ pytest -v
 
 | Test | Covers |
 |---|---|
-| `test_store.py` | URL normalisation, de-duplication, mapping state, bounded digest |
-| `test_tools.py` | taxonomy lookup (including the *connectors → risk & auditability* case), evidence/mapping validation, citation checks, catalog rules |
+| `test_store.py` | URL normalisation, de-duplication, mapping state, bounded digests, industry tagging, **migration of older databases** |
+| `test_tools.py` | taxonomy lookup (including the *connectors → risk & auditability* case), evidence/mapping validation, citation checks, catalog rules, industry normalisation |
 | `test_web.py` | HTML extraction, truncation, HTTP errors, blocking of non-public URLs (mocked HTTP) |
-| `test_report.py` | citation sanitising, run-to-run diff, HTML rendering, XSS escaping |
+| `test_report.py` | citation sanitising, impact ranking, industry views, run-to-run diff, HTML rendering, XSS escaping |
 | `test_observability.py` | telemetry plugin handles the nested runs created by `AgentTool` without resetting metrics |
 | `test_pipeline.py` | **full agent graph offline**: all stages run in order, loops end, the report is published, telemetry is written, and a second run accumulates evidence and produces a diff |
 

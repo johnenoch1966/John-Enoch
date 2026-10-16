@@ -24,12 +24,15 @@ logger = logging.getLogger("adoption_agent.cli")
 
 
 async def run_pipeline(
-    refresh_scope: bool = False, run_id: str | None = None, resume: bool = False
+    refresh_scope: bool = False,
+    run_id: str | None = None,
+    resume: bool = False,
+    research: str = "all",
 ) -> int:
     from .agent import app  # import after logging/tracing are configured
 
     runner = Runner(app=app, session_service=InMemorySessionService())
-    state = {"refresh_scope": refresh_scope, "resume": resume}
+    state = {"refresh_scope": refresh_scope, "resume": resume, "research": research}
     if run_id:
         state["requested_run_id"] = run_id
     session = await runner.session_service.create_session(
@@ -82,6 +85,12 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Skip web research; map, synthesise and publish from stored evidence",
     )
+    p_run.add_argument(
+        "--research",
+        choices=["all", "clusters", "industries", "none"],
+        default="all",
+        help="Which research fan-outs to run (default: all)",
+    )
     sub.add_parser("render", help="Re-render HTML from data/report.json")
     sub.add_parser("stats", help="Show evidence-base statistics")
     args = parser.parse_args(argv)
@@ -90,7 +99,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "run":
         exporters = setup_tracing()
         logger.info("Tracing exporters: %s | model: %s", exporters, config.MODEL)
-        return asyncio.run(run_pipeline(args.refresh_scope, args.run_id, args.resume))
+        return asyncio.run(
+            run_pipeline(args.refresh_scope, args.run_id, args.resume, args.research)
+        )
     if args.cmd == "render":
         return render()
     return stats()

@@ -34,6 +34,18 @@ TAXONOMY_FILE: Path = Path(__file__).resolve().parent / "taxonomy.yaml"
 
 # --- Research scope -------------------------------------------------------
 TARGET_USE_CASES: int = int(os.getenv("ADOPTION_AGENT_USE_CASES", "50"))
+# Canonical industries used for tagging evidence, the industry research
+# fan-out and the industry selector in the report.
+INDUSTRIES: dict[str, str] = {
+    "fsi": "Financial Services & Insurance (FSI)",
+    "hcls": "Healthcare & Life Sciences (HCLS)",
+    "manufacturing": "Manufacturing & Automotive",
+    "retail_cpg": "Retail & Consumer Goods",
+    "tmt": "Telecom, Media & Technology (TMT)",
+    "public_sector": "Public Sector & Government",
+    "energy_utilities": "Energy & Utilities",
+}
+TOP_N_PER_INDUSTRY: int = 5
 # Cluster 0 is always the copilot / desktop-assistant segment; the rest are
 # workflow-agent domains. This fixes the width of the parallel research fan-out.
 NUM_WORKFLOW_CLUSTERS: int = 4
@@ -44,10 +56,10 @@ MAX_SOURCES_PER_CLUSTER: int = int(os.getenv("ADOPTION_AGENT_MAX_SOURCES", "10")
 # --- Tool limits (context-window hygiene) -----------------------------------
 MAX_PAGE_CHARS: int = int(os.getenv("ADOPTION_AGENT_MAX_PAGE_CHARS", "8000"))
 FETCH_TIMEOUT_S: float = float(os.getenv("ADOPTION_AGENT_FETCH_TIMEOUT", "20"))
-MAPPING_BATCH_SIZE: int = 25
+MAPPING_BATCH_SIZE: int = 30
 
 # --- Loop limits ------------------------------------------------------------
-MAX_MAPPING_ITERATIONS: int = 8
+MAX_MAPPING_ITERATIONS: int = 30
 MAX_REVIEW_ITERATIONS: int = 3
 
 

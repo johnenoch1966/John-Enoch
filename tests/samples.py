@@ -4,17 +4,25 @@ from __future__ import annotations
 
 from adoption_agent import config
 from adoption_agent.schemas import (
+    AdvicePoint,
     Approach,
     BiasInsight,
     ClaimInput,
+    IndustryProfile,
+    IndustrySynthesis,
     RankedFactor,
+    RankedPoint,
     SegmentFindings,
+    SegmentSynthesis,
     SourceInput,
     Synthesis,
     UseCase,
     UseCaseCatalog,
     UseCaseCluster,
+    UseCaseImpact,
 )
+
+INDUSTRY_CYCLE = ["fsi", "hcls", "manufacturing", "retail_cpg", "tmt"]
 
 
 def sample_source(n: int = 1, vendor: bool = False) -> SourceInput:
@@ -30,15 +38,20 @@ def sample_source(n: int = 1, vendor: bool = False) -> SourceInput:
 
 
 def sample_claim(
-    factor: str = "Connectors not enabled", polarity: str = "inhibitor", segment: str = "copilot"
+    factor: str = "Connectors not enabled",
+    polarity: str = "inhibitor",
+    segment: str = "copilot",
+    industries: list[str] | None = None,
+    use_case_ids: list[str] | None = None,
 ) -> ClaimInput:
     return ClaimInput(
         stated_factor=factor,
         polarity=polarity,
         segment=segment,
-        use_case_ids=["email-drafting"],
+        use_case_ids=use_case_ids if use_case_ids is not None else ["uc-0"],
         evidence_quote=f"Many firms report: {factor}.",
         statistic="41% of respondents",
+        industries=industries or [],
     )
 
 
@@ -62,6 +75,7 @@ def sample_catalog(n_use_cases: int | None = None) -> UseCaseCatalog:
                     domain=cname,
                     description="desc",
                     example_industries=["Banking"],
+                    industries=[INDUSTRY_CYCLE[idx % len(INDUSTRY_CYCLE)]],
                     prevalence_evidence="common",
                 )
             )
@@ -73,11 +87,32 @@ def sample_catalog(n_use_cases: int | None = None) -> UseCaseCatalog:
     )
 
 
-def sample_synthesis(ids: list[int], driver: str = "Executive sponsorship") -> Synthesis:
+def sample_segment_synthesis(
+    ids: list[int], driver: str = "Executive sponsorship"
+) -> SegmentSynthesis:
     def seg(name: str) -> SegmentFindings:
+        first = 0 if name == "copilot" else 10
         return SegmentFindings(
             segment=name,
             headline=f"{name} headline",
+            use_case_impact=[
+                UseCaseImpact(
+                    use_case_id=f"uc-{first}",
+                    impact_score=3,
+                    adoption_stage="piloting",
+                    value_lever="Faster drafting",
+                    key_blocker="Data oversharing",
+                    evidence_ids=ids,
+                ),
+                UseCaseImpact(
+                    use_case_id=f"uc-{first + 1}",
+                    impact_score=5,
+                    adoption_stage="scaling",
+                    value_lever="Cycle time cut",
+                    key_blocker="Audit trail gaps",
+                    evidence_ids=ids,
+                ),
+            ],
             top_drivers=[
                 RankedFactor(
                     factor=driver,
@@ -104,8 +139,7 @@ def sample_synthesis(ids: list[int], driver: str = "Executive sponsorship") -> S
             ],
         )
 
-    return Synthesis(
-        executive_summary="Summary.",
+    return SegmentSynthesis(
         segments=[seg("copilot"), seg("workflow")],
         semantic_bias_insights=[
             BiasInsight(
@@ -120,3 +154,38 @@ def sample_synthesis(ids: list[int], driver: str = "Executive sponsorship") -> S
         change_since_last_run="First run.",
         open_questions=["How is ROI measured?"],
     )
+
+
+def sample_industry_synthesis(ids: list[int]) -> IndustrySynthesis:
+    def pts(prefix: str) -> list[RankedPoint]:
+        return [
+            RankedPoint(
+                point=f"{prefix} {i}",
+                detail="d",
+                root_cause_id="regulatory_compliance",
+                evidence_ids=ids,
+            )
+            for i in range(1, 6)
+        ]
+
+    return IndustrySynthesis(
+        industries=[
+            IndustryProfile(
+                industry_id="fsi",
+                headline="FSI headline",
+                evidence_strength="strong",
+                top_use_case_ids=["uc-10", "uc-0", "not-a-use-case"],
+                drivers=pts("FSI driver"),
+                blockers=pts("FSI blocker"),
+                advice=[
+                    AdvicePoint(action=f"FSI action {i}", rationale="r", evidence_ids=ids)
+                    for i in range(1, 6)
+                ],
+            )
+        ]
+    )
+
+
+def sample_synthesis(ids: list[int], driver: str = "Executive sponsorship") -> Synthesis:
+    seg = sample_segment_synthesis(ids, driver)
+    return Synthesis(**seg.model_dump(), industries=sample_industry_synthesis(ids).industries)

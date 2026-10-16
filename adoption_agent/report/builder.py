@@ -17,6 +17,7 @@ from typing import Any
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from .. import config
+from ..industries import use_case_industries
 from ..schemas import Synthesis
 from ..store import EvidenceStore
 from ..tools.taxonomy import taxonomy_names
@@ -48,23 +49,26 @@ def _same_factor(a: dict[str, Any], b: dict[str, Any], threshold: float = 0.3) -
     return a.get("root_cause_id") == b.get("root_cause_id") and jaccard >= threshold
 
 
+def _evidence_lists(synthesis: Synthesis) -> list[Any]:
+    """Every object in the synthesis that carries `evidence_ids`."""
+    items: list[Any] = []
+    for seg in synthesis.segments:
+        items += seg.top_drivers + seg.top_inhibitors
+        items += seg.high_adoption_approaches + seg.low_adoption_patterns
+        items += seg.use_case_impact
+    items += synthesis.semantic_bias_insights
+    for ind in synthesis.industries:
+        items += ind.drivers + ind.blockers + ind.advice
+    return items
+
+
 def sanitize_citations(synthesis: Synthesis, valid_ids: set[int]) -> tuple[Synthesis, int]:
     """Drop any evidence id that does not exist. Returns (synthesis, n_dropped)."""
     dropped = 0
-
-    def clean(ids: list[int]) -> list[int]:
-        nonlocal dropped
-        keep = [i for i in ids if i in valid_ids]
-        dropped += len(ids) - len(keep)
-        return keep
-
-    for seg in synthesis.segments:
-        for f in seg.top_drivers + seg.top_inhibitors:
-            f.evidence_ids = clean(f.evidence_ids)
-        for a in seg.high_adoption_approaches + seg.low_adoption_patterns:
-            a.evidence_ids = clean(a.evidence_ids)
-    for b in synthesis.semantic_bias_insights:
-        b.evidence_ids = clean(b.evidence_ids)
+    for item in _evidence_lists(synthesis):
+        keep = [i for i in item.evidence_ids if i in valid_ids]
+        dropped += len(item.evidence_ids) - len(keep)
+        item.evidence_ids = keep
     return synthesis, dropped
 
 
@@ -130,6 +134,73 @@ def root_cause_matrix(claims: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return rows
 
 
+def segment_views(
+    synthesis: Synthesis, catalog: dict[str, Any] | None, claims: list[dict[str, Any]]
+) -> dict[str, dict[str, Any]]:
+    """Use cases per segment ranked by impact, enriched with names and evidence."""
+    use_cases = {u["id"]: u for u in (catalog or {}).get("use_cases", [])}
+    rank_of = {uid: i + 1 for i, uid in enumerate(use_cases)}
+    ev = EvidenceStore.use_case_evidence(claims)
+    out: dict[str, dict[str, Any]] = {}
+    for seg in synthesis.segments:
+        rows, seen = [], set()
+        for u in seg.use_case_impact:
+            if u.use_case_id in seen:
+                continue
+            seen.add(u.use_case_id)
+            meta = use_cases.get(u.use_case_id, {})
+            e = ev.get(u.use_case_id, {"drivers": 0, "inhibitors": 0})
+            rows.append(
+                {
+                    **u.model_dump(),
+                    "name": meta.get("name", u.use_case_id.replace("-", " ").title()),
+                    "prevalence_rank": rank_of.get(u.use_case_id),
+                    "evidence_count": e["drivers"] + e["inhibitors"],
+                }
+            )
+        rows.sort(key=lambda r: (-r["impact_score"], -r["evidence_count"]))
+        not_assessed = [
+            u["name"]
+            for uid, u in use_cases.items()
+            if u.get("segment") == seg.segment and uid not in seen
+        ]
+        out[seg.segment] = {"ranked": rows, "not_assessed": not_assessed}
+    return out
+
+
+def industry_views(
+    synthesis: Synthesis, catalog: dict[str, Any] | None, claims: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    """One entry per canonical industry: top use cases + drivers/blockers/advice."""
+    use_cases = (catalog or {}).get("use_cases", [])
+    by_id = {u["id"]: u for u in use_cases}
+    profiles = {p.industry_id: p for p in synthesis.industries}
+    views = []
+    for ind_id, ind_name in config.INDUSTRIES.items():
+        p = profiles.get(ind_id)
+        top_ids = [i for i in (p.top_use_case_ids if p else []) if i in by_id]
+        if len(top_ids) < 5:  # fall back to catalog prevalence order
+            top_ids += [
+                u["id"]
+                for u in use_cases
+                if ind_id in use_case_industries(u) and u["id"] not in top_ids
+            ]
+        top = [
+            {"id": i, "name": by_id[i]["name"], "segment": by_id[i]["segment"]}
+            for i in dict.fromkeys(top_ids)
+        ][:8]
+        views.append(
+            {
+                "id": ind_id,
+                "name": ind_name,
+                "claim_count": sum(1 for c in claims if ind_id in c["industries"]),
+                "top_use_cases": top,
+                "profile": json.loads(p.model_dump_json()) if p else None,
+            }
+        )
+    return views
+
+
 def build_report(
     synthesis: Synthesis,
     store: EvidenceStore,
@@ -144,13 +215,8 @@ def build_report(
     synthesis, dropped = sanitize_citations(synthesis, set(by_id))
 
     cited: set[int] = set()
-    for seg in synthesis.segments:
-        for f in seg.top_drivers + seg.top_inhibitors:
-            cited.update(f.evidence_ids)
-        for a in seg.high_adoption_approaches + seg.low_adoption_patterns:
-            cited.update(a.evidence_ids)
-    for b in synthesis.semantic_bias_insights:
-        cited.update(b.evidence_ids)
+    for item in _evidence_lists(synthesis):
+        cited.update(item.evidence_ids)
 
     sources = {c["source_id"] for c in claims}
     return {
@@ -158,6 +224,8 @@ def build_report(
         "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
         "model": config.REASONING_MODEL,
         "synthesis": json.loads(synthesis.model_dump_json()),
+        "segment_views": segment_views(synthesis, catalog, claims),
+        "industry_views": industry_views(synthesis, catalog, claims),
         "diff": diff_findings(synthesis, previous),
         "root_cause_matrix": root_cause_matrix(claims),
         "taxonomy": taxonomy_names(),
