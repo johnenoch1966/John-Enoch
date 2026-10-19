@@ -13,6 +13,7 @@ import json
 import logging
 import sys
 
+from google.adk.agents import RunConfig
 from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai import types
@@ -43,7 +44,13 @@ async def run_pipeline(
         parts=[types.Part(text="Run the enterprise agentic AI adoption research cycle.")],
     )
     final_text = ""
-    async for event in runner.run_async(user_id="cli", session_id=session.id, new_message=message):
+    # ADK caps model calls per invocation at 500 by default. A full cycle
+    # (12 researchers with nested search calls + batched mapping + analysts)
+    # legitimately needs more, so raise the ceiling while keeping a guard rail.
+    run_config = RunConfig(max_llm_calls=config.MAX_LLM_CALLS)
+    async for event in runner.run_async(
+        user_id="cli", session_id=session.id, new_message=message, run_config=run_config
+    ):
         if event.content and event.content.parts and not event.partial:
             text = "".join(p.text or "" for p in event.content.parts if not p.thought)
             if text.strip():
