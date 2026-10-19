@@ -54,9 +54,13 @@ def test_segment_views_rank_by_impact(tmp_home):
         previous=None,
     )
     copilot = report["segment_views"]["copilot"]
-    assert [u["use_case_id"] for u in copilot["ranked"]] == ["uc-1", "uc-0"]  # 5/5 before 3/5
-    assert copilot["ranked"][0]["name"] == "Use case 1"
-    assert copilot["ranked"][1]["evidence_count"] == 3  # seeded claims cite uc-0
+    # uc-1 was scored 5/5 by the model but has no direct evidence -> capped at 3,
+    # so the evidenced uc-0 (3/5, 3 claims) ranks first.
+    assert [u["use_case_id"] for u in copilot["ranked"]] == ["uc-0", "uc-1"]
+    capped = copilot["ranked"][1]
+    assert capped["impact_score"] == 3 and capped["model_score"] == 5
+    assert capped["low_evidence"] is True and capped["name"] == "Use case 1"
+    assert copilot["ranked"][0]["evidence_count"] == 3  # seeded claims cite uc-0
     assert "Use case 2" in copilot["not_assessed"]
 
 

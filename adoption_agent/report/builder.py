@@ -23,6 +23,7 @@ from ..store import EvidenceStore
 from ..tools.taxonomy import taxonomy_names
 
 _TEMPLATES = Path(__file__).resolve().parent / "templates"
+MAX_SCORE_WITHOUT_EVIDENCE = 3
 
 
 def _norm(s: str) -> str:
@@ -150,14 +151,20 @@ def segment_views(
             seen.add(u.use_case_id)
             meta = use_cases.get(u.use_case_id, {})
             e = ev.get(u.use_case_id, {"drivers": 0, "inhibitors": 0})
-            rows.append(
-                {
-                    **u.model_dump(),
-                    "name": meta.get("name", u.use_case_id.replace("-", " ").title()),
-                    "prevalence_rank": rank_of.get(u.use_case_id),
-                    "evidence_count": e["drivers"] + e["inhibitors"],
-                }
-            )
+            n_ev = e["drivers"] + e["inhibitors"]
+            row = {
+                **u.model_dump(),
+                "name": meta.get("name", u.use_case_id.replace("-", " ").title()),
+                "prevalence_rank": rank_of.get(u.use_case_id),
+                "evidence_count": n_ev,
+                "low_evidence": n_ev == 0,
+            }
+            # Guard against unsupported optimism: without any direct evidence a
+            # use case cannot be scored above the midpoint.
+            if n_ev == 0 and row["impact_score"] > MAX_SCORE_WITHOUT_EVIDENCE:
+                row["model_score"] = row["impact_score"]
+                row["impact_score"] = MAX_SCORE_WITHOUT_EVIDENCE
+            rows.append(row)
         rows.sort(key=lambda r: (-r["impact_score"], -r["evidence_count"]))
         not_assessed = [
             u["name"]

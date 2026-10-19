@@ -233,7 +233,7 @@ async def test_full_pipeline_offline(tmp_home):
     assert report["stats"]["mapped_total"] == 2 * n_sources
     assert report["stats"]["citations_dropped"] == 0
     assert "executive_summary" not in report["synthesis"]
-    assert report["segment_views"]["copilot"]["ranked"][0]["impact_score"] == 5
+    assert report["segment_views"]["copilot"]["ranked"][0]["use_case_id"] == "uc-0"
     fsi = next(v for v in report["industry_views"] if v["id"] == "fsi")
     assert fsi["claim_count"] == 2 and len(fsi["profile"]["drivers"]) == 5
     html = (config.REPORTS_DIR / "index.html").read_text()

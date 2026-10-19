@@ -65,11 +65,32 @@ async def run_pipeline(
 
 
 def render() -> int:
-    from .report.builder import load_history, render_html
+    """Rebuild report views from the stored synthesis and re-render HTML.
 
-    report = json.loads(config.REPORT_JSON.read_text(encoding="utf-8"))
+    No model calls: useful after changing report logic or the template.
+    The run id, timestamp and run-to-run diff of the stored report are kept.
+    """
+    from .report.builder import build_report, load_history, render_html
+    from .schemas import Synthesis
+    from .tools.evidence import get_store
+
+    old = json.loads(config.REPORT_JSON.read_text(encoding="utf-8"))
+    report = build_report(
+        Synthesis.model_validate(old["synthesis"]),
+        get_store(),
+        run_id=old["run_id"],
+        catalog=old.get("catalog"),
+        previous=None,
+    )
+    for key in ("generated_at", "diff"):
+        report[key] = old.get(key, report[key])
+    for key in ("sources_new", "claims_new"):
+        report["stats"][key] = old.get("stats", {}).get(key, 0)
+    config.REPORT_JSON.write_text(json.dumps(report, indent=2, default=str), encoding="utf-8")
+    html = render_html(report, load_history())
     out = config.REPORTS_DIR / "index.html"
-    out.write_text(render_html(report, load_history()), encoding="utf-8")
+    out.write_text(html, encoding="utf-8")
+    (config.REPORTS_DIR / "history" / f"{report['run_id']}.html").write_text(html, encoding="utf-8")
     print(out)
     return 0
 

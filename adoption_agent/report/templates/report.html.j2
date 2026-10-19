@@ -154,7 +154,7 @@
       <td><span class="badge st-{{ u.adoption_stage }}">{{ u.adoption_stage }}</span></td>
       <td>{{ u.value_lever }}</td>
       <td class="muted">{{ u.key_blocker }}</td>
-      <td class="small">{{ u.evidence_count }} {{ cites(u.evidence_ids) }}</td>
+      <td class="small">{% if u.low_evidence %}<span class="badge moderate" title="No direct evidence for this use case; score capped at 3">low evidence</span>{% else %}{{ u.evidence_count }} {{ cites(u.evidence_ids) }}{% endif %}</td>
     </tr>
     {% endfor %}
   </table>{% if view.ranked|length > 12 %}</details>{% endif %}
