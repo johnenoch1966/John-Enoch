@@ -1,0 +1,8 @@
+# Gitleaks configuration: default rules plus a narrow allowlist for the
+# synthetic PII fixtures used to test masking (they are fake by design).
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Synthetic test fixtures for PII masking"
+paths = ['''tests/test_privacy\.py''']

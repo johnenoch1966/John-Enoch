@@ -31,6 +31,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # full history for the secret scan
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -41,10 +43,10 @@ jobs:
       - name: Dependency vulnerability audit (pip-audit)
         run: pip-audit -r requirements.lock --progress-spinner off
         continue-on-error: true # reported, not blocking: upstream fixes may lag
-      - name: Secret scan (no credentials committed)
-        uses: gitleaks/gitleaks-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Secret scan of full git history (gitleaks)
+        run: |
+          docker run --rm -v "$PWD:/repo" ghcr.io/gitleaks/gitleaks:v8.21.2 \
+            detect --source /repo --config /repo/.gitleaks.toml --redact --verbose
 
   test:
     runs-on: ubuntu-latest

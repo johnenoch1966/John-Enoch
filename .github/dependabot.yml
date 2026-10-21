@@ -7,10 +7,17 @@ updates:
     groups:
       python-deps:
         patterns: ["*"]
+    ignore:
+      # ADK is pinned to the minor version the offline end-to-end test covers;
+      # upgrades are done deliberately (bump pyproject + `make lock` + tests).
+      - dependency-name: "google-adk"
   - package-ecosystem: github-actions
     directory: "/"
     schedule:
-      interval: weekly
+      interval: monthly
+    groups:
+      github-actions:
+        patterns: ["*"]
   - package-ecosystem: docker
     directory: "/"
     schedule:
@@ -19,3 +26,6 @@ updates:
     directory: "/deployment/terraform"
     schedule:
       interval: monthly
+    ignore:
+      - dependency-name: "hashicorp/google"
+        update-types: ["version-update:semver-major"]
