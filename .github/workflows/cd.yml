@@ -37,7 +37,7 @@ jobs:
         with:
           workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
           service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
-      - uses: google-github-actions/setup-gcloud@v2
+      - uses: google-github-actions/setup-gcloud@v3
       - run: gcloud auth configure-docker "$REGION-docker.pkg.dev" --quiet
       - id: push
         name: Build, smoke test and push
@@ -57,7 +57,7 @@ jobs:
         with:
           workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
           service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
-      - uses: google-github-actions/setup-gcloud@v2
+      - uses: google-github-actions/setup-gcloud@v3
       - name: Deploy Cloud Run Job (staging)
         run: gcloud run jobs update adoption-agent-staging --region "$REGION" --image "${{ needs.build.outputs.image }}"
       - name: Verify rollout
@@ -74,6 +74,6 @@ jobs:
         with:
           workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
           service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
-      - uses: google-github-actions/setup-gcloud@v2
+      - uses: google-github-actions/setup-gcloud@v3
       - name: Promote the same digest to production
         run: gcloud run jobs update adoption-agent-prod --region "$REGION" --image "${{ needs.build.outputs.image }}"
