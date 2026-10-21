@@ -53,7 +53,7 @@ jobs:
         run: python -m adoption_agent.cli run --research "${{ inputs.research || 'all' }}"
       - name: Upload run telemetry + privacy audit
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: run-telemetry-${{ github.run_id }}
           path: runs/
