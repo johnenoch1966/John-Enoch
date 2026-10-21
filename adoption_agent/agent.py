@@ -38,6 +38,7 @@ from google.adk.tools.exit_loop_tool import exit_loop
 from google.genai import types
 
 from . import config, prompts
+from .guardrails import PiiRedactionPlugin
 from .industries import industries_brief, use_case_industries
 from .nodes import (
     EvidenceAggregator,
@@ -446,4 +447,10 @@ root_agent = SequentialAgent(
     ],
 )
 
-app = App(name="adoption_agent", root_agent=root_agent, plugins=[RunTelemetryPlugin()])
+# Telemetry first (observes raw timings), then PII redaction (masks results
+# before the model sees them; telemetry logs are masked separately).
+app = App(
+    name="adoption_agent",
+    root_agent=root_agent,
+    plugins=[RunTelemetryPlugin(), PiiRedactionPlugin()],
+)

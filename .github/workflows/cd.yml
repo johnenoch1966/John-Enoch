@@ -1,0 +1,79 @@
+name: CD
+
+# Continuous delivery: build once, deploy to staging automatically, promote the
+# same image digest to production after manual approval (GitHub Environment
+# "production" with required reviewers).
+#
+# One-time setup (values come from `terraform output`), as repository VARIABLES:
+#   GCP_PROJECT_ID, GCP_REGION, GCP_WIF_PROVIDER, GCP_SERVICE_ACCOUNT
+# The workflow is skipped until GCP_PROJECT_ID is set.
+
+on:
+  push:
+    branches: [main]
+    paths: ["adoption_agent/**", "Dockerfile", "requirements.lock", "pyproject.toml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write # keyless auth via Workload Identity Federation
+
+concurrency:
+  group: cd
+  cancel-in-progress: false
+
+env:
+  REGION: ${{ vars.GCP_REGION || 'us-central1' }}
+
+jobs:
+  build:
+    if: vars.GCP_PROJECT_ID != ''
+    runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.push.outputs.image }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - run: gcloud auth configure-docker "$REGION-docker.pkg.dev" --quiet
+      - id: push
+        name: Build, smoke test and push
+        run: |
+          IMAGE="$REGION-docker.pkg.dev/${{ vars.GCP_PROJECT_ID }}/adoption-agent-staging/agent:${GITHUB_SHA::12}"
+          docker build -t "$IMAGE" .
+          docker run --rm -e GOOGLE_CLOUD_PROJECT=ci "$IMAGE" python -c "from adoption_agent.agent import app"
+          docker push "$IMAGE"
+          echo "image=$(docker inspect --format='{{index .RepoDigests 0}}' "$IMAGE")" >> "$GITHUB_OUTPUT"
+
+  deploy-staging:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: staging
+    steps:
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: Deploy Cloud Run Job (staging)
+        run: gcloud run jobs update adoption-agent-staging --region "$REGION" --image "${{ needs.build.outputs.image }}"
+      - name: Verify rollout
+        run: |
+          gcloud run jobs describe adoption-agent-staging --region "$REGION" \
+            --format='value(template.template.containers[0].image)' | grep -F "${{ needs.build.outputs.image }}"
+
+  deploy-production:
+    needs: [build, deploy-staging]
+    runs-on: ubuntu-latest
+    environment: production # requires reviewer approval
+    steps:
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+      - uses: google-github-actions/setup-gcloud@v2
+      - name: Promote the same digest to production
+        run: gcloud run jobs update adoption-agent-prod --region "$REGION" --image "${{ needs.build.outputs.image }}"

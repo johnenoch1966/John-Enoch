@@ -119,6 +119,7 @@
   <div class="kpi"><b>{{ r.stats.claims_total }}</b><span>Evidence claims</span></div>
   <div class="kpi"><b>{{ r.industry_views|length }}</b><span>Industries profiled</span></div>
   <div class="kpi"><b>{{ (r.stats.vendor_source_share * 100)|round|int }}%</b><span>Vendor-affiliated evidence</span></div>
+  <div class="kpi"><b>{{ r.stats.get("pii_masked_total", 0) }}</b><span>PII items masked</span></div>
 </div>
 
 <!-- (ii) Use cases by industry -->
@@ -252,6 +253,10 @@
   <p class="sub">A multi-agent ADK pipeline: a scoping agent selects the top {{ r.catalog.use_cases|length if r.catalog else 50 }} deployed use cases; parallel researchers
   (per use-case cluster and per industry) read public reports and record cited claims; a semantic-bias analyst maps each claim to a root cause and
   industry; segment and industry analysts rank findings; a critic validates every citation. Evidence accumulates across runs.</p>
+  <p class="small"><strong>Privacy:</strong> personal data (emails, phone numbers, payment cards, IBANs, national ID numbers, IP addresses,
+  credentials in URLs) is masked before content reaches the model, before evidence is stored and before anything is logged.
+  {% if r.stats.get("pii_masked_by_type") %}Masked in the current evidence base:
+  {% for t, n in r.stats.pii_masked_by_type.items() %}<span class="badge">{{ t }} &times; {{ n }}</span> {% endfor %}{% else %}No PII found in the current evidence base.{% endif %}</p>
   <details><summary>All cited evidence ({{ r.evidence|length }} claims)</summary>
   <table>
     <tr><th>#</th><th>Claim</th><th>Source</th><th>Root cause / industries</th></tr>

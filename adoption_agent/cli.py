@@ -30,6 +30,21 @@ async def run_pipeline(
     resume: bool = False,
     research: str = "all",
 ) -> int:
+    """Run one research cycle, syncing long-term memory with GCS if configured."""
+    from .state_sync import download_state, state_bucket, upload_state
+
+    bucket = state_bucket()
+    if bucket:
+        download_state(bucket)
+    try:
+        return await _run_cycle(refresh_scope, run_id, resume, research)
+    finally:
+        # Always persist: evidence gathered before a failure is still valuable.
+        if bucket:
+            upload_state(bucket)
+
+
+async def _run_cycle(refresh_scope: bool, run_id: str | None, resume: bool, research: str) -> int:
     from .agent import app  # import after logging/tracing are configured
 
     runner = Runner(app=app, session_service=InMemorySessionService())

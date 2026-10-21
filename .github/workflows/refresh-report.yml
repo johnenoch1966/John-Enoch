@@ -4,20 +4,21 @@ name: Refresh report
 # Evidence accumulates in data/evidence.db; the updated report is committed
 # back to the repo and published to GitHub Pages by pages.yml.
 #
-# Required repository secrets (Settings > Secrets and variables > Actions):
-#   GCP_PROJECT_ID           - project with Vertex AI enabled
-#   GCP_WIF_PROVIDER         - Workload Identity Federation provider resource name
-#   GCP_SERVICE_ACCOUNT      - service account with roles/aiplatform.user
+# Skipped until the repository VARIABLES below are set (from `terraform output`):
+#   GCP_PROJECT_ID, GCP_WIF_PROVIDER, GCP_SERVICE_ACCOUNT
+# (In production the Cloud Run Job + Cloud Scheduler defined in Terraform do
+# the same job inside Google Cloud.)
 
 on:
   schedule:
     - cron: "0 6 * * 1" # Mondays 06:00 UTC
   workflow_dispatch:
     inputs:
-      refresh_scope:
-        description: "Rebuild the top-50 use-case list"
-        type: boolean
-        default: false
+      research:
+        description: "Research scope"
+        type: choice
+        options: [all, clusters, industries, none]
+        default: all
 
 permissions:
   contents: write
@@ -29,28 +30,28 @@ concurrency:
 
 jobs:
   refresh:
+    if: vars.GCP_PROJECT_ID != ''
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 300
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
-      - run: pip install .
+      - run: pip install -r requirements.lock .
       - uses: google-github-actions/auth@v2
         with:
-          workload_identity_provider: ${{ secrets.GCP_WIF_PROVIDER }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
       - name: Run research cycle
         env:
           GOOGLE_GENAI_USE_VERTEXAI: "TRUE"
-          GOOGLE_CLOUD_PROJECT: ${{ secrets.GCP_PROJECT_ID }}
+          GOOGLE_CLOUD_PROJECT: ${{ vars.GCP_PROJECT_ID }}
           GOOGLE_CLOUD_LOCATION: global
           ADOPTION_AGENT_TRACE_TO_CLOUD: "true"
-        run: |
-          python -m adoption_agent.cli run ${{ inputs.refresh_scope && '--refresh-scope' || '' }}
-      - name: Upload run telemetry
+        run: python -m adoption_agent.cli run --research "${{ inputs.research || 'all' }}"
+      - name: Upload run telemetry + privacy audit
         if: always()
         uses: actions/upload-artifact@v4
         with:

@@ -1,0 +1,44 @@
+# Cloud Build: promote a tested staging image to PRODUCTION.
+# Trigger: manual (with approval required on the trigger). Promotes the exact
+# image digest that passed staging; nothing is rebuilt.
+substitutions:
+  _REGION: us-central1
+  _STAGING_REPO: adoption-agent-staging
+  _PROD_REPO: adoption-agent-prod
+  _JOB: adoption-agent-prod
+  _TAG: staging # or a specific commit SHA
+
+steps:
+  - id: resolve-digest
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        gcloud artifacts docker images describe \
+          ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_STAGING_REPO}/agent:${_TAG} \
+          --format='value(image_summary.digest)' > /workspace/digest
+        echo "Promoting digest $(cat /workspace/digest)"
+
+  - id: copy-to-prod-registry
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        gcloud artifacts docker tags add \
+          ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_STAGING_REPO}/agent@$(cat /workspace/digest) \
+          ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_STAGING_REPO}/agent:prod-$BUILD_ID
+
+  - id: deploy-prod
+    name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        gcloud run jobs update ${_JOB} --region=${_REGION} \
+          --image=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_STAGING_REPO}/agent@$(cat /workspace/digest)
+
+options:
+  logging: CLOUD_LOGGING_ONLY
+timeout: 900s

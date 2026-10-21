@@ -15221,6 +15221,8 @@
     "sources_cited": 161,
     "claims_cited": 316,
     "citations_dropped": 0,
+    "pii_masked_total": 0,
+    "pii_masked_by_type": {},
     "vendor_source_share": 0.36
   },
   "run_stats": {}

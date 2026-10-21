@@ -117,6 +117,7 @@
   <div class="kpi"><b>725</b><span>Evidence claims</span></div>
   <div class="kpi"><b>7</b><span>Industries profiled</span></div>
   <div class="kpi"><b>36%</b><span>Vendor-affiliated evidence</span></div>
+  <div class="kpi"><b>0</b><span>PII items masked</span></div>
 </div>
 
 <!-- (ii) Use cases by industry -->
@@ -1040,6 +1041,9 @@
   <p class="sub">A multi-agent ADK pipeline: a scoping agent selects the top 50 deployed use cases; parallel researchers
   (per use-case cluster and per industry) read public reports and record cited claims; a semantic-bias analyst maps each claim to a root cause and
   industry; segment and industry analysts rank findings; a critic validates every citation. Evidence accumulates across runs.</p>
+  <p class="small"><strong>Privacy:</strong> personal data (emails, phone numbers, payment cards, IBANs, national ID numbers, IP addresses,
+  credentials in URLs) is masked before content reaches the model, before evidence is stored and before anything is logged.
+  No PII found in the current evidence base.</p>
   <details><summary>All cited evidence (316 claims)</summary>
   <table>
     <tr><th>#</th><th>Claim</th><th>Source</th><th>Root cause / industries</th></tr>

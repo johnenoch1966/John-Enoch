@@ -18,6 +18,7 @@ from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 from .. import config
 from ..industries import use_case_industries
+from ..privacy import count_placeholders
 from ..schemas import Synthesis
 from ..store import EvidenceStore
 from ..tools.taxonomy import taxonomy_names
@@ -226,6 +227,10 @@ def build_report(
         cited.update(item.evidence_ids)
 
     sources = {c["source_id"] for c in claims}
+    pii = Counter()
+    for c in claims:
+        for field in ("stated_factor", "evidence_quote", "statistic", "title", "url"):
+            pii.update(count_placeholders(c.get(field) or ""))
     return {
         "run_id": run_id,
         "generated_at": datetime.now(UTC).isoformat(timespec="seconds"),
@@ -243,6 +248,8 @@ def build_report(
             "sources_cited": len({by_id[i]["source_id"] for i in cited}),
             "claims_cited": len(cited),
             "citations_dropped": dropped,
+            "pii_masked_total": int(sum(pii.values())),
+            "pii_masked_by_type": dict(pii),
             "sources_total": len(sources),
             "vendor_source_share": round(
                 sum(1 for c in claims if c["vendor_affiliated"]) / len(claims), 2

@@ -99,9 +99,9 @@ class EvidenceStore:
         unmapped, so the analyst back-fills industry tags on the next run.
         """
         for table in ("claims", "mappings"):
-            cols = {r["name"] for r in c.execute(f"PRAGMA table_info({table})")}
+            cols = {r["name"] for r in c.execute(f"PRAGMA table_info({table})")}  # nosec B608 - table from constant tuple
             if "industries" not in cols:
-                c.execute(f"ALTER TABLE {table} ADD COLUMN industries TEXT")
+                c.execute(f"ALTER TABLE {table} ADD COLUMN industries TEXT")  # nosec B608 - constant
 
     @contextmanager
     def _conn(self) -> Iterator[sqlite3.Connection]:
@@ -192,7 +192,7 @@ class EvidenceStore:
             return set()
         q = ",".join("?" * len(ids))
         with self._conn() as c:
-            rows = c.execute(f"SELECT id FROM claims WHERE id IN ({q})", ids).fetchall()
+            rows = c.execute(f"SELECT id FROM claims WHERE id IN ({q})", ids).fetchall()  # nosec B608 - only "?" placeholders interpolated
         return {int(r["id"]) for r in rows}
 
     # A claim needs (re-)mapping if it has no mapping yet, or its mapping
@@ -207,7 +207,7 @@ class EvidenceStore:
                 " s.title, s.publisher, s.source_type, s.vendor_affiliated"
                 " FROM claims c JOIN sources s ON s.id=c.source_id"
                 " LEFT JOIN mappings m ON m.claim_id=c.id"
-                f" WHERE {self._UNMAPPED} ORDER BY c.id LIMIT ?",
+                f" WHERE {self._UNMAPPED} ORDER BY c.id LIMIT ?",  # nosec B608 - class constant
                 (limit,),
             ).fetchall()
         return [dict(r) for r in rows]
@@ -217,7 +217,7 @@ class EvidenceStore:
             return int(
                 c.execute(
                     "SELECT COUNT(*) FROM claims c LEFT JOIN mappings m"
-                    f" ON m.claim_id=c.id WHERE {self._UNMAPPED}"
+                    f" ON m.claim_id=c.id WHERE {self._UNMAPPED}"  # nosec B608 - class constant
                 ).fetchone()[0]
             )
 
@@ -246,6 +246,37 @@ class EvidenceStore:
             d["industries"] = specific or ["cross_industry"]
             out.append(d)
         return out
+
+    # ---------------------------------------------------------------- privacy
+    _MASKED_FIELDS = {
+        "claims": ("stated_factor", "evidence_quote", "statistic"),
+        "sources": ("url", "title", "methodology"),
+    }
+
+    def apply_masking(self, redact_fn: Any) -> int:
+        """Re-mask stored text in place (back-fills data saved before masking).
+
+        `redact_fn(text) -> (masked_text, counts)`. Idempotent: already-masked
+        placeholders are left untouched. Returns the number of items masked.
+        """
+        total = 0
+        with self._conn() as c:
+            for table, fields in self._MASKED_FIELDS.items():
+                cols = ", ".join(fields)
+                for row in c.execute(f"SELECT id, {cols} FROM {table}").fetchall():  # nosec B608 - constants
+                    updates = {}
+                    for f in fields:
+                        masked, counts = redact_fn(row[f] or "")
+                        if counts:
+                            updates[f] = masked
+                            total += sum(counts.values())
+                    if updates:
+                        sets = ", ".join(f"{k}=?" for k in updates)
+                        c.execute(
+                            f"UPDATE {table} SET {sets} WHERE id=?",  # nosec B608 - constant table/column names
+                            (*updates.values(), row["id"]),
+                        )
+        return total
 
     def stats(self, run_id: str | None = None) -> dict[str, int]:
         with self._conn() as c:

@@ -19,6 +19,7 @@ from google.adk.events import Event, EventActions
 from google.genai import types
 
 from . import config
+from .privacy import redact_regex
 from .report import build_report, load_previous, publish
 from .schemas import IndustrySynthesis, SegmentSynthesis, Synthesis
 from .tools.evidence import get_store
@@ -91,14 +92,18 @@ class RunInitializer(BaseAgent):
 
         previous = load_previous()
         delta["previous_summary"] = previous_summary(previous)
-        stats = get_store().stats()
+        store = get_store()
+        # Privacy back-fill: mask any PII in evidence stored by older versions.
+        backfilled = store.apply_masking(redact_regex)
+        stats = store.stats()
         delta["evidence_before_run"] = stats
         yield _event(
             self,
             ctx,
             text=(
                 f"Run {run_id} started. Scope: {scope_msg}. Evidence base: "
-                f"{stats['sources_total']} sources / {stats['claims_total']} claims."
+                f"{stats['sources_total']} sources / {stats['claims_total']} claims. "
+                f"PII back-fill masked {backfilled} item(s)."
             ),
             state_delta=delta,
         )

@@ -1,0 +1,9 @@
+# Copy to <env>.tfvars (e.g. staging.tfvars) and adjust.
+project_id        = "your-gcp-project-id"
+region            = "us-central1"
+environment       = "staging"
+github_repository = "johnenoch1966/John-Enoch"
+model             = "gemini-3.8-flash"
+schedule          = "0 6 * * 1" # Mondays 06:00 UTC; "" to disable
+alert_email       = ""
+pii_backend       = "dlp"

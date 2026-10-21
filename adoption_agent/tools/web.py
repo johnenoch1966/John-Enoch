@@ -17,6 +17,7 @@ import httpx
 from bs4 import BeautifulSoup
 
 from .. import config
+from ..privacy import mask, redact
 
 logger = logging.getLogger(__name__)
 
@@ -108,12 +109,15 @@ async def fetch_page(url: str) -> dict:
             title, text = _html_to_text(resp.text)
         text = _clean(text)
         limit = config.MAX_PAGE_CHARS
+        # Mask PII before third-party content can enter the model context.
+        masked_text, pii = redact(text[:limit])
         result = {
             "status": "ok",
             "final_url": str(resp.url),
-            "title": title[:300],
-            "text": text[:limit],
+            "title": mask(title[:300]),
+            "text": masked_text,
             "truncated": len(text) > limit,
+            "pii_masked": int(sum(pii.values())),
         }
         _cache[url] = result
         return result

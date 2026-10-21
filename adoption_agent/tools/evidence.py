@@ -11,6 +11,7 @@ from __future__ import annotations
 from google.adk.tools import ToolContext
 
 from .. import config
+from ..privacy import redact
 from ..schemas import ClaimInput, RootCauseMappingInput, SourceInput
 from ..store import EvidenceStore
 from .taxonomy import taxonomy_ids
@@ -18,6 +19,38 @@ from .taxonomy import taxonomy_ids
 
 def get_store() -> EvidenceStore:
     return EvidenceStore(config.EVIDENCE_DB)
+
+
+def mask_evidence(
+    source: SourceInput, claims: list[ClaimInput]
+) -> tuple[SourceInput, list[ClaimInput], int]:
+    """Return copies of source/claims with PII masked, plus the number masked."""
+    total = 0
+
+    def m(text: str) -> str:
+        nonlocal total
+        masked, counts = redact(text)
+        total += sum(counts.values())
+        return masked
+
+    src = source.model_copy(
+        update={
+            "url": m(source.url),
+            "title": m(source.title),
+            "methodology": m(source.methodology),
+        }
+    )
+    masked_claims = [
+        c.model_copy(
+            update={
+                "stated_factor": m(c.stated_factor),
+                "evidence_quote": m(c.evidence_quote),
+                "statistic": m(c.statistic),
+            }
+        )
+        for c in claims
+    ]
+    return src, masked_claims, total
 
 
 def _run_id(tool_context: ToolContext | None) -> str:
@@ -47,6 +80,8 @@ def record_evidence(
         return {"status": "error", "error_message": "Provide at least one claim."}
     if not source.url.startswith(("http://", "https://")):
         return {"status": "error", "error_message": "source.url must be an http(s) URL."}
+    # Privacy: mask PII before anything is persisted (storage-layer guardrail).
+    source, claims, pii_masked = mask_evidence(source, claims)
     store = get_store()
     run_id = _run_id(tool_context)
     source_id, source_new = store.add_source(source, run_id)
@@ -70,6 +105,7 @@ def record_evidence(
         "claim_ids": ids,
         "new_claims": new,
         "duplicate_claims": len(ids) - new,
+        "pii_masked": pii_masked,
         "sources_recorded_by_you_this_run": (
             tool_context.state.get(key) if tool_context is not None else None
         ),

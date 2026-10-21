@@ -24,13 +24,15 @@ from typing import Any
 from google.adk.plugins.base_plugin import BasePlugin
 
 from . import config
+from .privacy import redact_regex
 
 logger = logging.getLogger("adoption_agent.telemetry")
 
 
 def _safe(obj: Any, limit: int = 300) -> Any:
-    """Truncate large values so logs stay readable."""
+    """Mask PII and truncate large values so logs stay safe and readable."""
     s = obj if isinstance(obj, str) else json.dumps(obj, default=str)
+    s = redact_regex(s)[0]
     return s if len(s) <= limit else s[:limit] + f"...(+{len(s) - limit} chars)"
 
 

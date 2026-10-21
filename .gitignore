@@ -21,3 +21,13 @@ runs/
 .DS_Store
 .idea/
 .vscode/
+
+# Terraform
+deployment/terraform/.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example
+tfplan
+coverage.xml
+.coverage

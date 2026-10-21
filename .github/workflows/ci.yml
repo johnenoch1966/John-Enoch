@@ -8,7 +8,44 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.lock -e ".[dev]"
+      - name: Ruff lint + format check
+        run: |
+          ruff check adoption_agent tests
+          ruff format --check adoption_agent tests
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.lock -e ".[dev]" bandit pip-audit
+      - name: Static security analysis (bandit)
+        run: bandit -q -ll -r adoption_agent
+      - name: Dependency vulnerability audit (pip-audit)
+        run: pip-audit -r requirements.lock --progress-spinner off
+        continue-on-error: true # reported, not blocking: upstream fixes may lag
+      - name: Secret scan (no credentials committed)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   test:
     runs-on: ubuntu-latest
     strategy:
@@ -20,24 +57,41 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
           cache: pip
-      - name: Install
-        run: pip install -e ".[dev]"
-      - name: Lint
-        run: |
-          ruff check adoption_agent tests
-          ruff format --check adoption_agent tests
-      - name: Unit + offline end-to-end tests
-        run: pytest -v
-      - name: Agent graph loads
+      - run: pip install -r requirements.lock -e ".[dev]"
+      - name: Unit, privacy and offline end-to-end tests (coverage gate 80%)
         env:
           GOOGLE_GENAI_USE_VERTEXAI: "TRUE"
           GOOGLE_CLOUD_PROJECT: ci
-        run: python -c "from adoption_agent.agent import root_agent; print(root_agent.name, len(root_agent.sub_agents), 'stages')"
+        run: pytest -v --cov=adoption_agent --cov-report=term --cov-report=xml --cov-fail-under=80
+      - name: Upload coverage report
+        if: matrix.python-version == '3.12'
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-xml
+          path: coverage.xml
+
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: deployment/terraform
+    steps:
+      - uses: actions/checkout@v4
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+      - run: terraform fmt -check -recursive
+      - run: terraform init -backend=false -input=false
+      - run: terraform validate
 
   docker:
     runs-on: ubuntu-latest
-    needs: test
+    needs: [lint, test]
     steps:
       - uses: actions/checkout@v4
       - name: Build image
         run: docker build -t adoption-agent:${{ github.sha }} .
+      - name: Container smoke test
+        run: |
+          docker run --rm -e GOOGLE_CLOUD_PROJECT=ci adoption-agent:${{ github.sha }} \
+            python -c "from adoption_agent.agent import app; print(app.name, len(app.plugins), 'plugins ok')"

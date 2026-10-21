@@ -113,11 +113,35 @@ LLMs handle judgement (search strategy, extraction, root-cause reasoning, synthe
 - Tool exceptions are caught centrally and returned to the model so it can recover.
 
 ### Infrastructure & CI/CD
-- **CI** ([`ci.yml`](.github/workflows/ci.yml)): ruff lint and format checks, then pytest on Python 3.11 and 3.12, including an **offline end-to-end test of the whole agent graph** driven by a scripted fake LLM. The image is then built with Docker.
-- **Scheduled refresh** ([`refresh-report.yml`](.github/workflows/refresh-report.yml)): runs weekly with Workload Identity Federation (no keys in the repo), commits the updated evidence and report, and uploads run telemetry as an artifact.
-- **Publishing** ([`pages.yml`](.github/workflows/pages.yml)): publishes the HTML report to GitHub Pages.
-- **Deployment** ([`deploy.yml`](.github/workflows/deploy.yml)): deploys the container as a Cloud Run Job.
-- `Dockerfile` (non-root user), `pyproject.toml`, and `.env.example`, with secrets kept out of git.
+Full details are in **[`deployment/README.md`](deployment/README.md)**.
+
+| Layer | Implementation |
+|---|---|
+| **Infrastructure as Code** | [`deployment/terraform/`](deployment/terraform) provisions APIs, least-privilege service accounts, **keyless Workload Identity Federation** for GitHub, Artifact Registry, a versioned GCS bucket for long-term memory, a **Cloud Run Job**, a weekly **Cloud Scheduler** trigger, and a **Monitoring alert** on failed runs. It supports separate `staging` and `prod` states, and is validated in CI with `terraform validate`. |
+| **CI** | [`ci.yml`](.github/workflows/ci.yml) and [`.cloudbuild/pr_checks.yaml`](.cloudbuild/pr_checks.yaml) run ruff, a **bandit** security scan, a **pip-audit** dependency audit, a **gitleaks** secret scan, and pytest on 3.11 and 3.12 with an **80% coverage gate**. That includes an offline end-to-end test of the whole agent graph. CI also runs Terraform fmt/validate, and a Docker build with a container smoke test. |
+| **CD** | [`cd.yml`](.github/workflows/cd.yml) and [`.cloudbuild/staging.yaml`](.cloudbuild/staging.yaml) build the image once and push an immutable digest. They deploy to **staging** and verify the rollout. After **manual approval**, the same digest is promoted to **production** ([`deploy-to-prod.yaml`](.cloudbuild/deploy-to-prod.yaml)). |
+| **Infrastructure pipeline** | [`infra.yml`](.github/workflows/infra.yml) runs `terraform plan` on PRs and `apply` after approval. |
+| **Operations** | Scheduled refreshes, GCS state sync so Cloud Run Jobs keep memory between runs, rollback by digest, `--resume` recovery, and an alert policy. [`pages.yml`](.github/workflows/pages.yml) publishes the report. |
+| **Supply chain** | `requirements.lock` (pinned with uv), a multi-stage non-root Dockerfile, [Dependabot](.github/dependabot.yml) for pip, Actions, Docker and Terraform, and [pre-commit](.pre-commit-config.yaml) hooks. |
+| **Developer experience** | A [`Makefile`](Makefile) covering `make check`, `test`, `playground`, `docker-build`, `tf-plan`, `deploy-job`, `run-job` and `deploy-agent-engine`. |
+
+### Privacy: PII masking
+Personal data is masked at **every boundary** where third-party content enters or leaves the system ([`privacy.py`](adoption_agent/privacy.py), [`guardrails.py`](adoption_agent/guardrails.py)):
+
+| Boundary | Control |
+|---|---|
+| Web content → model | `fetch_page` masks PII before returning page text |
+| Any agent → model | **`PiiRedactionPlugin`** (an ADK plugin) masks every text and function-response part of **every model request**, for all agents including nested search agents |
+| Any tool → model | the same plugin masks every **tool result** |
+| Model → storage | `record_evidence` masks claims and source fields before persisting |
+| Existing data | an idempotent back-fill re-masks the evidence store at the start of each run |
+| Logs | telemetry masks tool arguments and results before logging |
+
+- **Detected types:** email, phone (international and US), payment card (with a Luhn check), IBAN, US SSN, UK National Insurance number, IPv4 address, and credentials in URLs. Each value is replaced with a typed placeholder such as `[REDACTED_EMAIL]`.
+- **False-positive guards** keep research statistics intact: percentages, years, prices and version numbers.
+- **Cloud DLP backend** (`ADOPTION_AGENT_PII_BACKEND=dlp`, enabled in the Terraform deployment) adds PERSON_NAME, street address and date of birth. If DLP is unavailable it falls back to regex, so masking **never fails open**.
+- **Auditable:** every run writes `runs/<run_id>/privacy.json` with counts by type and agent, and the report shows the total masked.
+- **Tested:** [`tests/test_privacy.py`](tests/test_privacy.py) has 23 tests covering detection, false positives, idempotency, the DLP fallback and each enforcement point.
 
 ## 5. Quick start
 
@@ -157,6 +181,8 @@ pytest -v
 | `test_tools.py` | taxonomy lookup (including the *connectors → risk & auditability* case), evidence/mapping validation, citation checks, catalog rules, industry normalisation |
 | `test_web.py` | HTML extraction, truncation, HTTP errors, blocking of non-public URLs (mocked HTTP) |
 | `test_report.py` | citation sanitising, impact ranking, industry views, run-to-run diff, HTML rendering, XSS escaping |
+| `test_privacy.py` | PII detection for 9 types, false-positive guards, idempotency, DLP fail-safe, and masking at every enforcement point (fetch, plugin, storage, back-fill) |
+| `test_state_sync.py` | GCS round-trip of long-term memory for Cloud Run Jobs |
 | `test_observability.py` | telemetry plugin handles the nested runs created by `AgentTool` without resetting metrics |
 | `test_pipeline.py` | **full agent graph offline**: all stages run in order, loops end, the report is published, telemetry is written, and a second run accumulates evidence and produces a diff |
 
@@ -174,10 +200,17 @@ adoption_agent/
   tools/              web, evidence, taxonomy, scope tools
   report/             report builder + Jinja2 HTML template
   cli.py              command-line entry point
+  privacy.py          PII detection and masking (regex + optional Cloud DLP)
+  guardrails.py       PiiRedactionPlugin (masks every model request and tool result)
+  state_sync.py       GCS sync of long-term memory for Cloud Run Jobs
 data/                 persistent evidence + latest report JSON
 reports/              index.html (latest) + history/
 tests/                unit + offline end-to-end tests
-.github/workflows/    CI, scheduled refresh, Pages, Cloud Run deploy
+.github/workflows/    CI, CD (staging -> approval -> prod), infra, refresh, Pages
+.cloudbuild/          Cloud Build PR checks, staging delivery, prod promotion
+deployment/           Terraform (IaC) + deployment and operations guide
+Makefile              one-command dev and ops workflows
+requirements.lock     pinned dependencies
 ```
 
 ## 8. Configuration

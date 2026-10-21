@@ -1,0 +1,53 @@
+name: Infrastructure (Terraform)
+
+# Plan on every PR touching infrastructure; apply on manual dispatch with
+# approval (GitHub Environment "production"). Skipped until GCP vars exist.
+
+on:
+  pull_request:
+    paths: ["deployment/terraform/**"]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment"
+        type: choice
+        options: [staging, prod]
+        default: staging
+      apply:
+        description: "Apply the plan (otherwise plan only)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write
+  pull-requests: write
+
+jobs:
+  plan:
+    if: vars.GCP_PROJECT_ID != ''
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.apply && 'production' || 'staging' }}
+    defaults:
+      run:
+        working-directory: deployment/terraform
+    env:
+      TF_VAR_project_id: ${{ vars.GCP_PROJECT_ID }}
+      TF_VAR_environment: ${{ inputs.environment || 'staging' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.9.8
+      - name: Init (remote state in GCS)
+        run: |
+          terraform init -input=false \
+            -backend-config="bucket=${{ vars.GCP_PROJECT_ID }}-tfstate" \
+            -backend-config="prefix=adoption-agent/${TF_VAR_environment}"
+      - run: terraform plan -input=false -out=tfplan
+      - if: inputs.apply
+        run: terraform apply -input=false tfplan
