@@ -1,0 +1,21 @@
+name: Research data updated
+
+# Signals that new research output landed on this branch. The Pages workflow
+# on `main` listens for this (workflow_run) and deploys reports/ from here.
+on:
+  push:
+    branches: [research-data]
+    paths: ["reports/**", "data/**"]
+
+permissions:
+  contents: read
+
+jobs:
+  signal:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate report artifacts
+        run: |
+          test -s reports/index.html
+          python3 -c "import json; r=json.load(open('data/report.json')); print('run', r['run_id'], 'sources', r['stats']['sources_total'])"
