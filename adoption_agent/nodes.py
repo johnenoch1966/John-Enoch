@@ -20,7 +20,7 @@ from google.genai import types
 
 from . import config
 from .privacy import redact_regex
-from .report import build_report, load_previous, publish
+from .report import build_report, load_previous, publish, save_draft
 from .schemas import IndustrySynthesis, SegmentSynthesis, Synthesis
 from .tools.evidence import get_store
 
@@ -78,6 +78,9 @@ class RunInitializer(BaseAgent):
             "synthesis": None,
             "synthesis_segments": None,
             "synthesis_industries": None,
+            "publication_approved": False,
+            "approval_summary": None,
+            "approval_decided_by": None,
             "critique": "",
         }
 
@@ -202,6 +205,25 @@ class ReportPublisher(BaseAgent):
             catalog=state.get("use_case_catalog"),
             previous=load_previous(),
         )
+        report["approval"] = {
+            "approved": bool(state.get("publication_approved")),
+            "decided_by": state.get("approval_decided_by") or "human",
+            "summary": state.get("approval_summary") or "",
+        }
+        if not state.get("publication_approved"):
+            # Human-in-the-loop: rejected or not yet approved -> keep a draft only.
+            draft = save_draft(report)
+            yield _event(
+                self,
+                ctx,
+                text=(
+                    f"Publication NOT approved; public report unchanged. Draft saved to "
+                    f"{draft['html']} (review it, then `python -m adoption_agent.cli "
+                    f"publish-draft`)."
+                ),
+                state_delta={"report_path": draft["html"]},
+            )
+            return
         paths = publish(report)
         st = report["stats"]
         headlines = "\n".join(f"- {s.segment}: {s.headline}" for s in synthesis.segments)

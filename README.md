@@ -2,7 +2,9 @@
 
 A multi-agent system built with the **Google Agent Development Kit (ADK)**. It searches the public web for reports on **what drives and what inhibits enterprise adoption of agentic AI** (Gemini, Microsoft Copilot, Claude and peers) and analyses them for **semantic bias**. It then publishes an **updatable HTML report** that improves with every run.
 
-> **Report:** [`reports/index.html`](reports/index.html) · GitHub Pages: `https://johnenoch1966.github.io/John-Enoch/`
+> **Live report:** https://johnenoch1966.github.io/John-Enoch/ · try the industry picker, e.g. [FSI](https://johnenoch1966.github.io/John-Enoch/#industry-fsi)
+>
+> Generated output (evidence database, reports, history) lives on the [`research-data`](https://github.com/johnenoch1966/John-Enoch/tree/research-data) branch, so `main` contains only code, tests and infrastructure.
 
 ---
 
@@ -30,7 +32,8 @@ The agent runs an end-to-end research cycle:
 3. **Semantic-bias analysis:** an analyst agent maps every *stated* factor to an *underlying* root cause using an extensible [taxonomy](adoption_agent/taxonomy.yaml), notes framing bias from the source, and tags the industries the claim applies to.
 4. **Synthesis (in parallel):** a **segment analyst** ranks every copilot and workflow use case by realised business impact. At the same time, an **industry analyst** builds each industry's top 5 drivers, top 5 blockers and 5 actions for success.
 5. **Critique loop:** a reviewer validates every citation against the evidence store and checks coverage. A refiner fixes any problems, for up to 3 rounds.
-6. **Publish:** it renders a visual HTML report with these sections:
+6. **Human approval (human-in-the-loop):** before the public report is replaced, the run **pauses** and asks a person to approve a short summary. ADK tool confirmation drives this in `adk web`, and the CLI prompts in the terminal. If the person rejects it, only a draft is saved.
+7. **Publish:** it renders a visual HTML report with these sections:
    - **Top AI use cases by industry**, each tagged Copilot or Workflow
    - **Copilot assistants ranked by impact**, showing impact score, adoption stage, main value, main blocker and evidence count
    - **Workflow agents ranked by impact**, in the same format
@@ -67,8 +70,9 @@ flowchart TD
         subgraph REV["review_loop (LoopAgent)"]
             CRIT["critic<br/>validate_citations / exit_loop"] --> REF["refiner"]
         end
-        PUB["report_publisher<br/>(custom: diff, render, archive)"]
-        INIT --> SCOPE --> PAR --> IND --> MAP --> AGG --> SYN --> MERGE --> REV --> PUB
+        GATE2["publication_gate<br/>HUMAN APPROVAL (tool confirmation, run pauses)"]
+        PUB["report_publisher<br/>(publish if approved, else save draft)"]
+        INIT --> SCOPE --> PAR --> IND --> MAP --> AGG --> SYN --> MERGE --> REV --> GATE2 --> PUB
     end
     R0 & R1 & I1 -- tools --> T["google_search_agent (AgentTool)<br/>fetch_page<br/>record_evidence"]
     BIAS -- tools --> T2["get_unmapped_claims<br/>lookup_taxonomy<br/>record_root_cause_mappings"]
@@ -102,6 +106,10 @@ LLMs handle judgement (search strategy, extraction, root-cause reasoning, synthe
 - `SequentialAgent` → `ParallelAgent` (5 researchers) → `LoopAgent` (batch mapping with a deterministic exit gate) → synthesis → `LoopAgent` (critic/refiner with an LLM-driven `exit_loop`) → publisher.
 - **Conditional execution** through `before_agent_callback`: the scoper is skipped when the catalog is cached, and synthesis is skipped when there is no evidence.
 - Catalog validation enforces structural rules: about 50 use cases, exactly 1 copilot cluster plus 4 workflow clusters, no duplicates or orphans.
+- **Human-in-the-loop stop** ([`hitl.py`](adoption_agent/hitl.py)): publishing replaces the *public* report, so it's gated by an ADK **tool confirmation** (`FunctionTool(require_confirmation=...)`) in a **resumable** app (`ResumabilityConfig`). The run pauses, a person approves or rejects the summary, and the same invocation resumes. Rejection keeps the public report unchanged and saves a draft, which `cli publish-draft` can promote after review.
+  - The policy is set with `--approval prompt|auto|reject`. Unattended scheduled runs use `auto`, and the refresh workflow then opens a **pull request** that a person must merge before anything goes live.
+  - The approval decision and summary are recorded in the report.
+  - Tested end to end: approve, reject and publish-draft.
 
 ### Observability & Tracing
 - [`RunTelemetryPlugin`](adoption_agent/observability.py) is an ADK plugin that observes **every** agent, model call and tool call:
@@ -157,7 +165,7 @@ cp .env.example .env    # set GOOGLE_CLOUD_PROJECT
 # Run a research cycle (about 10-20 min)
 python -m adoption_agent.cli run                  # uses the cached use-case catalog if present
 python -m adoption_agent.cli run --refresh-scope  # rebuild the top-50 list
-open reports/index.html
+open reports/index.html   # you are asked to approve publication first; `make publish-data` pushes it live
 
 # Or explore interactively, with traces, in the ADK dev UI
 adk web .        # choose "adoption_agent", send "run"
@@ -203,8 +211,7 @@ adoption_agent/
   privacy.py          PII detection and masking (regex + optional Cloud DLP)
   guardrails.py       PiiRedactionPlugin (masks every model request and tool result)
   state_sync.py       GCS sync of long-term memory for Cloud Run Jobs
-data/                 persistent evidence + latest report JSON
-reports/              index.html (latest) + history/
+data/, reports/       generated at runtime; published on the `research-data` branch
 tests/                unit + offline end-to-end tests
 .github/workflows/    CI, CD (staging -> approval -> prod), infra, refresh, Pages
 .cloudbuild/          Cloud Build PR checks, staging delivery, prod promotion

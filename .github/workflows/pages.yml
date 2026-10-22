@@ -1,12 +1,20 @@
 name: Publish report to GitHub Pages
 
+# Generated reports live on the `research-data` branch (keeps `main` lean).
+# This workflow runs in the context of `main` (allowed by the github-pages
+# environment) and deploys reports/ from `research-data`.
+#
+# Triggers:
+#   - a push to research-data (signalled by its "Research data updated" workflow)
+#   - manual dispatch, or a call from another workflow
 # Enable once: Settings > Pages > Build and deployment > Source = "GitHub Actions".
 
 on:
-  push:
-    branches: [main]
-    paths: ["reports/**"]
+  workflow_run:
+    workflows: ["Research data updated"]
+    types: [completed]
   workflow_dispatch:
+  workflow_call:
 
 permissions:
   contents: read
@@ -19,12 +27,15 @@ concurrency:
 
 jobs:
   deploy:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: research-data
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

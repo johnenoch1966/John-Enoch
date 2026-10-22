@@ -53,8 +53,8 @@ Until those variables exist, the CD, infrastructure and refresh workflows **skip
 | CI | `.github/workflows/ci.yml`, `.cloudbuild/pr_checks.yaml` | push / PR | ruff, bandit, pip-audit, gitleaks, pytest on 3.11 and 3.12 with an **80% coverage gate**, `terraform validate`, docker build + container smoke test |
 | CD | `.github/workflows/cd.yml`, `.cloudbuild/staging.yaml` | push to `main` (code paths) | build once → push digest → deploy **staging** → verify → **approval** → promote the same digest to **prod** (`.cloudbuild/deploy-to-prod.yaml`) |
 | Infrastructure | `.github/workflows/infra.yml` | PR touching Terraform / manual | `terraform plan`, or `apply` after approval |
-| Report refresh | Cloud Scheduler → Cloud Run Job (prod); `.github/workflows/refresh-report.yml` (alternative) | weekly | runs a research cycle, persists memory, publishes the report |
-| Pages | `.github/workflows/pages.yml` | report changes | publishes `reports/` to GitHub Pages |
+| Report refresh | Cloud Scheduler → Cloud Run Job (prod); `.github/workflows/refresh-report.yml` (alternative) | weekly | runs a research cycle and persists memory; the GitHub variant opens a **PR for human approval** before publishing |
+| Pages | `.github/workflows/pages.yml` | `research-data` updated | deploys `reports/` from the `research-data` branch to GitHub Pages |
 | Dependencies | `.github/dependabot.yml` | weekly / monthly | pip, Actions, Docker and Terraform updates |
 
 ## Operating it

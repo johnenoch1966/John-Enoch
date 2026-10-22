@@ -308,3 +308,32 @@ def publish(report: dict[str, Any]) -> dict[str, str]:
     index.write_text(html, encoding="utf-8")
     archived.write_text(html, encoding="utf-8")
     return {"index": str(index), "archived": str(archived), "json": str(config.REPORT_JSON)}
+
+
+# ---------------------------------------------------------------------------
+# Human-in-the-loop drafts
+# ---------------------------------------------------------------------------
+def _draft_paths() -> tuple[Path, Path]:
+    return config.DATA_DIR / "draft_report.json", config.REPORTS_DIR / "draft.html"
+
+
+def save_draft(report: dict[str, Any]) -> dict[str, str]:
+    """Save an unapproved report for review without touching the public one."""
+    config.ensure_dirs()
+    js, html = _draft_paths()
+    js.write_text(json.dumps(report, indent=2, default=str), encoding="utf-8")
+    html.write_text(render_html(report, load_history()), encoding="utf-8")
+    return {"json": str(js), "html": str(html)}
+
+
+def publish_draft(approver: str = "human (publish-draft)") -> dict[str, str]:
+    """Promote a reviewed draft to the public report (explicit human action)."""
+    js, html = _draft_paths()
+    if not js.exists():
+        raise FileNotFoundError("No draft report to publish.")
+    report = json.loads(js.read_text(encoding="utf-8"))
+    report["approval"] = {**report.get("approval", {}), "approved": True, "decided_by": approver}
+    paths = publish(report)
+    js.unlink()
+    html.unlink(missing_ok=True)
+    return paths

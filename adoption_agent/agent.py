@@ -16,6 +16,7 @@
     ├── review_loop                LoopAgent
     │     ├── critic               LLM + validate_citations + exit_loop
     │     └── refiner              LLM, structured output (Synthesis)
+    ├── publication_gate           HUMAN-IN-THE-LOOP: tool confirmation pauses the run
     └── report_publisher           custom: validate, diff, render HTML, archive
 
 `adk web` / `adk run` pick up `app` (with the telemetry plugin) from here.
@@ -29,7 +30,7 @@ from typing import Any
 from google.adk.agents import LlmAgent, LoopAgent, ParallelAgent, SequentialAgent
 from google.adk.agents.callback_context import CallbackContext
 from google.adk.agents.readonly_context import ReadonlyContext
-from google.adk.apps import App
+from google.adk.apps import App, ResumabilityConfig
 from google.adk.models.google_llm import Gemini
 from google.adk.models.llm_response import LlmResponse
 from google.adk.tools import google_search
@@ -39,6 +40,7 @@ from google.genai import types
 
 from . import config, prompts
 from .guardrails import PiiRedactionPlugin
+from .hitl import publication_approval_tool
 from .industries import industries_brief, use_case_industries
 from .nodes import (
     EvidenceAggregator,
@@ -423,6 +425,45 @@ review_loop = LoopAgent(
 
 
 # --------------------------------------------------------------------------
+# Stage 5: human-in-the-loop approval before the public report is replaced
+# --------------------------------------------------------------------------
+def publication_gate_instruction(ctx: ReadonlyContext) -> str:
+    syn = ctx.state.get("synthesis") or {}
+    if isinstance(syn, str):
+        syn = json.loads(syn)
+    totals = ctx.state.get("evidence_totals") or {}
+    headlines = "\n".join(
+        f"- {s.get('segment')}: {s.get('headline')}" for s in syn.get("segments", [])
+    )
+    return prompts.PUBLICATION_GATE.format(
+        headlines=headlines or "(none)",
+        change=syn.get("change_since_last_run", ""),
+        industries=len(syn.get("industries", [])),
+        sources=totals.get("sources_total", 0),
+        claims=totals.get("claims_total", 0),
+        critique=str(ctx.state.get("critique", ""))[:300],
+    )
+
+
+def skip_gate_without_synthesis(callback_context: CallbackContext) -> types.Content | None:
+    if not callback_context.state.get("synthesis"):
+        return _skip("Nothing to approve: no brief was produced.")
+    return None
+
+
+publication_gate = LlmAgent(
+    name="publication_gate",
+    model=FAST_LLM,
+    description="Asks a human to approve publishing the brief (tool confirmation).",
+    instruction=publication_gate_instruction,
+    tools=[publication_approval_tool],
+    include_contents="none",
+    before_agent_callback=skip_gate_without_synthesis,
+    generate_content_config=_LOW_TEMP,
+)
+
+
+# --------------------------------------------------------------------------
 # Root
 # --------------------------------------------------------------------------
 root_agent = SequentialAgent(
@@ -443,6 +484,7 @@ root_agent = SequentialAgent(
         synthesis_fanout,
         SynthesisMerger(name="synthesis_merger"),
         review_loop,
+        publication_gate,
         ReportPublisher(name="report_publisher"),
     ],
 )
@@ -453,4 +495,6 @@ app = App(
     name="adoption_agent",
     root_agent=root_agent,
     plugins=[RunTelemetryPlugin(), PiiRedactionPlugin()],
+    # Resumable so a run can pause for human approval and continue afterwards.
+    resumability_config=ResumabilityConfig(is_resumable=True),
 )

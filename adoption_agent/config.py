@@ -61,6 +61,8 @@ MAPPING_BATCH_SIZE: int = 30
 # --- Loop limits ------------------------------------------------------------
 MAX_MAPPING_ITERATIONS: int = 30
 MAX_REVIEW_ITERATIONS: int = 3
+# Human-in-the-loop policy for publishing: prompt | auto | reject (see hitl.py).
+APPROVAL_MODE: str = os.getenv("ADOPTION_AGENT_APPROVAL", "prompt")
 # Guard rail on total model calls per run (ADK default is 500).
 MAX_LLM_CALLS: int = int(os.getenv("ADOPTION_AGENT_MAX_LLM_CALLS", "4000"))
 

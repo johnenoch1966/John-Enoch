@@ -12,6 +12,7 @@ import json
 import re
 from collections.abc import AsyncGenerator
 
+import pytest
 from google.adk.agents import LlmAgent
 from google.adk.models.base_llm import BaseLlm
 from google.adk.models.llm_request import LlmRequest
@@ -22,6 +23,7 @@ from google.adk.tools.agent_tool import AgentTool
 from google.genai import types
 
 from adoption_agent import config
+from adoption_agent.hitl import drive_with_approvals
 from tests.samples import (
     sample_catalog,
     sample_industry_synthesis,
@@ -157,6 +159,14 @@ class ScriptedLlm(BaseLlm):
                 return _call("exit_loop", {})
             return _text("APPROVED")
 
+        if "release manager" in si:  # human-in-the-loop publication gate
+            if fr is None:
+                return _call(
+                    "request_publication_approval",
+                    {"summary": "- copilot: headline\n- workflow: headline\n- 24 claims"},
+                )
+            return _text("Publication approved." if "approved" in str(fr.response) else "Rejected.")
+
         return _text("ok")
 
     async def generate_content_async(
@@ -180,30 +190,40 @@ def _patch_models(agent, fake: BaseLlm) -> None:
         _patch_models(sub, fake)
 
 
-async def _run(app) -> list[str]:
+async def _run(app, approval: str = "auto", decide=None) -> list[str]:
+    """Drive the app like the CLI does, answering human-approval requests."""
     runner = Runner(app=app, session_service=InMemorySessionService())
     session = await runner.session_service.create_session(
-        app_name=app.name, user_id="t", state={"requested_run_id": "test-run"}
+        app_name=app.name,
+        user_id="t",
+        state={"requested_run_id": "test-run", "approval_mode": approval},
     )
-    authors = []
-    async for ev in runner.run_async(
+    authors: list[str] = []
+    await drive_with_approvals(
+        runner,
         user_id="t",
         session_id=session.id,
         new_message=types.Content(role="user", parts=[types.Part(text="go")]),
-    ):
-        authors.append(ev.author)
+        decide=decide or (lambda _args: pytest.fail("unexpected approval request")),
+        on_event=lambda ev: authors.append(ev.author),
+    )
     await runner.close()
     return authors
+
+
+def _app_with_fake_model():
+    from adoption_agent.agent import app, root_agent
+
+    _patch_models(root_agent, ScriptedLlm())
+    return app
 
 
 async def test_full_pipeline_offline(tmp_home):
     # Cached scope -> scoper is skipped via its before_agent_callback.
     config.USE_CASE_CATALOG.write_text(sample_catalog().model_dump_json())
 
-    from adoption_agent.agent import app, root_agent
-
-    _patch_models(root_agent, ScriptedLlm())
-    authors = await _run(app)
+    app = _app_with_fake_model()
+    authors = await _run(app)  # approval policy "auto": no human prompt
 
     # Every stage ran, in order.
     for name in [
@@ -220,6 +240,7 @@ async def test_full_pipeline_offline(tmp_home):
         "industry_analyst",
         "synthesis_merger",
         "critic",
+        "publication_gate",
         "report_publisher",
     ]:
         assert name in authors, name
@@ -232,6 +253,7 @@ async def test_full_pipeline_offline(tmp_home):
     assert report["stats"]["claims_total"] == 2 * n_sources
     assert report["stats"]["mapped_total"] == 2 * n_sources
     assert report["stats"]["citations_dropped"] == 0
+    assert report["approval"]["approved"] and "auto" in report["approval"]["decided_by"]
     assert "executive_summary" not in report["synthesis"]
     assert report["segment_views"]["copilot"]["ranked"][0]["use_case_id"] == "uc-0"
     fsi = next(v for v in report["industry_views"] if v["id"] == "fsi")
@@ -252,3 +274,41 @@ async def test_full_pipeline_offline(tmp_home):
     assert report2["diff"]["first_run"] is False
     history = (config.DATA_DIR / "history.jsonl").read_text().splitlines()
     assert len(history) == 2
+
+
+async def test_human_approval_pauses_run_then_publishes(tmp_home):
+    """Human-in-the-loop: the run pauses at the gate and resumes on approval."""
+    config.USE_CASE_CATALOG.write_text(sample_catalog().model_dump_json())
+    seen: list[dict] = []
+
+    def human_approves(args: dict) -> bool:
+        seen.append(args)
+        return True
+
+    authors = await _run(_app_with_fake_model(), approval="prompt", decide=human_approves)
+    assert len(seen) == 1  # exactly one approval request
+    summary = seen[0]["originalFunctionCall"]["args"]["summary"]
+    assert "copilot" in summary
+    assert "report_publisher" in authors
+    report = json.loads(config.REPORT_JSON.read_text())
+    assert report["approval"] == {
+        "approved": True,
+        "decided_by": "human",
+        "summary": summary,
+    }
+
+
+async def test_human_rejection_keeps_public_report_and_saves_draft(tmp_home):
+    config.USE_CASE_CATALOG.write_text(sample_catalog().model_dump_json())
+    await _run(_app_with_fake_model(), approval="prompt", decide=lambda _a: False)
+
+    assert not config.REPORT_JSON.exists()  # public report untouched
+    assert not (config.REPORTS_DIR / "index.html").exists()
+    assert (config.REPORTS_DIR / "draft.html").exists()
+
+    from adoption_agent.report import publish_draft
+
+    publish_draft()  # explicit human promotion after review
+    report = json.loads(config.REPORT_JSON.read_text())
+    assert report["approval"]["approved"] and (config.REPORTS_DIR / "index.html").exists()
+    assert not (config.REPORTS_DIR / "draft.html").exists()

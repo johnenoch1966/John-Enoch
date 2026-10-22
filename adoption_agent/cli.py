@@ -29,6 +29,7 @@ async def run_pipeline(
     run_id: str | None = None,
     resume: bool = False,
     research: str = "all",
+    approval: str | None = None,
 ) -> int:
     """Run one research cycle, syncing long-term memory with GCS if configured."""
     from .state_sync import download_state, state_bucket, upload_state
@@ -37,18 +38,28 @@ async def run_pipeline(
     if bucket:
         download_state(bucket)
     try:
-        return await _run_cycle(refresh_scope, run_id, resume, research)
+        return await _run_cycle(
+            refresh_scope, run_id, resume, research, approval or config.APPROVAL_MODE
+        )
     finally:
         # Always persist: evidence gathered before a failure is still valuable.
         if bucket:
             upload_state(bucket)
 
 
-async def _run_cycle(refresh_scope: bool, run_id: str | None, resume: bool, research: str) -> int:
+async def _run_cycle(
+    refresh_scope: bool, run_id: str | None, resume: bool, research: str, approval: str
+) -> int:
     from .agent import app  # import after logging/tracing are configured
+    from .hitl import drive_with_approvals, terminal_decider
 
     runner = Runner(app=app, session_service=InMemorySessionService())
-    state = {"refresh_scope": refresh_scope, "resume": resume, "research": research}
+    state = {
+        "refresh_scope": refresh_scope,
+        "resume": resume,
+        "research": research,
+        "approval_mode": approval,
+    }
     if run_id:
         state["requested_run_id"] = run_id
     session = await runner.session_service.create_session(
@@ -59,20 +70,31 @@ async def _run_cycle(refresh_scope: bool, run_id: str | None, resume: bool, rese
         parts=[types.Part(text="Run the enterprise agentic AI adoption research cycle.")],
     )
     final_text = ""
-    # ADK caps model calls per invocation at 500 by default. A full cycle
-    # (12 researchers with nested search calls + batched mapping + analysts)
-    # legitimately needs more, so raise the ceiling while keeping a guard rail.
-    run_config = RunConfig(max_llm_calls=config.MAX_LLM_CALLS)
-    async for event in runner.run_async(
-        user_id="cli", session_id=session.id, new_message=message, run_config=run_config
-    ):
+
+    def on_event(event) -> None:
+        nonlocal final_text
         if event.content and event.content.parts and not event.partial:
             text = "".join(p.text or "" for p in event.content.parts if not p.thought)
             if text.strip():
                 print(f"[{event.author}] {text.strip()[:400]}", flush=True)
                 if event.author == "report_publisher":
                     final_text = text
+
+    # ADK caps model calls per invocation at 500 by default. A full cycle
+    # (12 researchers with nested search calls + batched mapping + analysts)
+    # legitimately needs more, so raise the ceiling while keeping a guard rail.
+    await drive_with_approvals(
+        runner,
+        user_id="cli",
+        session_id=session.id,
+        new_message=message,
+        decide=terminal_decider(approval),
+        run_config=RunConfig(max_llm_calls=config.MAX_LLM_CALLS),
+        on_event=on_event,
+    )
     await runner.close()
+    if final_text.startswith("Publication NOT approved"):
+        return 0  # a human decision, not a failure
     if not final_text.startswith("Report published"):
         logger.error("Pipeline finished without publishing a report.")
         return 1
@@ -134,8 +156,16 @@ def main(argv: list[str] | None = None) -> int:
         default="all",
         help="Which research fan-outs to run (default: all)",
     )
+    p_run.add_argument(
+        "--approval",
+        choices=["prompt", "auto", "reject"],
+        default=None,
+        help="Human-in-the-loop policy before publishing (default: prompt, or "
+        "$ADOPTION_AGENT_APPROVAL). 'auto' is for unattended scheduled runs.",
+    )
     sub.add_parser("render", help="Re-render HTML from data/report.json")
     sub.add_parser("stats", help="Show evidence-base statistics")
+    sub.add_parser("publish-draft", help="Publish a reviewed draft (human approval)")
     args = parser.parse_args(argv)
 
     configure_logging()
@@ -143,10 +173,15 @@ def main(argv: list[str] | None = None) -> int:
         exporters = setup_tracing()
         logger.info("Tracing exporters: %s | model: %s", exporters, config.MODEL)
         return asyncio.run(
-            run_pipeline(args.refresh_scope, args.run_id, args.resume, args.research)
+            run_pipeline(args.refresh_scope, args.run_id, args.resume, args.research, args.approval)
         )
     if args.cmd == "render":
         return render()
+    if args.cmd == "publish-draft":
+        from .report import publish_draft
+
+        print(publish_draft()["index"])
+        return 0
     return stats()
 
 

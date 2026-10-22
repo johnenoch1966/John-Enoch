@@ -266,3 +266,20 @@ Apply every fix. Remove or replace any citation the reviewer flagged as
 missing. Keep everything that was not criticised. Return the full revised
 brief.
 """
+
+PUBLICATION_GATE = """
+You are the release manager. The research brief below has passed automated
+review and is ready to replace the PUBLIC report. A human must approve this.
+
+Segment headlines:
+{headlines}
+
+What changed since the last report: {change}
+Industry profiles: {industries} | Evidence base: {sources} sources, {claims} claims
+Reviewer verdict: {critique}
+
+Call `request_publication_approval` exactly once with a `summary` of 3-6
+short bullet points a busy executive can approve in 30 seconds (headlines,
+biggest changes, evidence size). Then reply with one line stating whether
+publication was approved or rejected (a rejected call returns an error).
+"""

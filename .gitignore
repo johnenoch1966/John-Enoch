@@ -14,8 +14,13 @@ dist/
 *.json.key
 application_default_credentials.json
 
-# Run telemetry (large, per-machine). Reports and evidence ARE committed.
+# Run telemetry (large, per-machine).
 runs/
+
+# Generated research output lives on the `research-data` branch, not `main`.
+data/*
+!data/README.md
+reports/
 
 # OS / editors
 .DS_Store

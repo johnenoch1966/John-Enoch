@@ -1,13 +1,13 @@
 name: Refresh report
 
-# Re-runs the research cycle on a schedule so the report stays current.
-# Evidence accumulates in data/evidence.db; the updated report is committed
-# back to the repo and published to GitHub Pages by pages.yml.
+# Scheduled research cycle with a HUMAN-IN-THE-LOOP release:
+#   1. restore long-term memory from the `research-data` branch
+#   2. run the agent (unattended, approval policy "auto")
+#   3. open a pull request against `research-data` with the new report
+#   4. a human reviews and merges -> GitHub Pages deploys (pages.yml)
 #
 # Skipped until the repository VARIABLES below are set (from `terraform output`):
 #   GCP_PROJECT_ID, GCP_WIF_PROVIDER, GCP_SERVICE_ACCOUNT
-# (In production the Cloud Run Job + Cloud Scheduler defined in Terraform do
-# the same job inside Google Cloud.)
 
 on:
   schedule:
@@ -22,6 +22,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
   id-token: write
 
 concurrency:
@@ -35,6 +36,12 @@ jobs:
     timeout-minutes: 300
     steps:
       - uses: actions/checkout@v4
+      - name: Restore long-term memory
+        uses: actions/checkout@v4
+        with:
+          ref: research-data
+          path: _state
+      - run: cp -r _state/data/. data/ && mkdir -p reports && cp -r _state/reports/. reports/
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -50,17 +57,26 @@ jobs:
           GOOGLE_CLOUD_PROJECT: ${{ vars.GCP_PROJECT_ID }}
           GOOGLE_CLOUD_LOCATION: global
           ADOPTION_AGENT_TRACE_TO_CLOUD: "true"
-        run: python -m adoption_agent.cli run --research "${{ inputs.research || 'all' }}"
+        run: python -m adoption_agent.cli run --approval auto --research "${{ inputs.research || 'all' }}"
       - name: Upload run telemetry + privacy audit
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: run-telemetry-${{ github.run_id }}
           path: runs/
-      - name: Commit updated report
+      - name: Stage results for review
         run: |
-          git config user.name "adoption-agent-bot"
-          git config user.email "actions@users.noreply.github.com"
-          git add data reports
-          git diff --cached --quiet || git commit -m "chore(report): automated refresh $(date -u +%Y-%m-%d)"
-          git push
+          rsync -a --delete --exclude README.md data/ _state/data/
+          rsync -a --delete reports/ _state/reports/
+      - name: Open pull request for human approval
+        uses: peter-evans/create-pull-request@v7
+        with:
+          path: _state
+          base: research-data
+          branch: refresh/${{ github.run_id }}
+          title: "Research refresh ${{ github.run_id }}: review before publishing"
+          commit-message: "chore(report): automated research refresh"
+          body: |
+            Automated research cycle. **Merging publishes the report to GitHub Pages.**
+            Review `reports/index.html` (download the artifact or check out the branch)
+            and the run telemetry / privacy audit artifact before approving.

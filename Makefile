@@ -4,8 +4,9 @@ REGION     ?= us-central1
 ENV        ?= staging
 IMAGE      ?= $(REGION)-docker.pkg.dev/$(PROJECT_ID)/adoption-agent-$(ENV)/agent:$(shell git rev-parse --short=12 HEAD)
 TF_DIR     := deployment/terraform
+DATA_WT    ?= ../research-data-wt
 
-.PHONY: help install lint format security test coverage check run resume render playground \
+.PHONY: help install lint format security test coverage check run resume render playground publish-data \
         docker-build docker-run push deploy-job run-job deploy-agent-engine tf-init tf-plan tf-apply lock
 
 help: ## Show this help
@@ -48,8 +49,16 @@ resume: ## Continue from stored evidence (no web research)
 render: ## Re-render the HTML report (no model calls)
 	python -m adoption_agent.cli render
 
-playground: ## ADK dev UI with traces at http://localhost:8000
+playground: ## ADK dev UI with traces at http://localhost:8000 (approve publication in the UI)
 	adk web --port 8000 .
+
+publish-data: ## Push approved report + memory to the research-data branch (deploys Pages)
+	@test -d $(DATA_WT) || git worktree add $(DATA_WT) research-data
+	rsync -a --delete --exclude README.md --exclude draft_report.json data/ $(DATA_WT)/data/
+	rsync -a --delete --exclude draft.html reports/ $(DATA_WT)/reports/
+	cd $(DATA_WT) && git add -A data reports && \
+	  (git diff --cached --quiet || git commit -m "chore(report): publish $$(date -u +%Y-%m-%d)") && \
+	  git push origin research-data
 
 # ------------------------------------------------------------ containers
 docker-build: ## Build the container image
