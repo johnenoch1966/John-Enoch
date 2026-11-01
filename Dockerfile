@@ -6,7 +6,7 @@
 # synced with GCS via ADOPTION_AGENT_STATE_BUCKET.
 
 # ---- builder: resolve pinned dependencies into a virtualenv -----------------
-FROM python:3.12-slim AS builder
+FROM python:3.15-slim AS builder
 ENV PIP_NO_CACHE_DIR=1 PIP_DISABLE_PIP_VERSION_CHECK=1
 WORKDIR /build
 RUN python -m venv /opt/venv
@@ -18,7 +18,7 @@ COPY adoption_agent ./adoption_agent
 RUN pip install --no-deps .
 
 # ---- runtime: minimal image, non-root ---------------------------------------
-FROM python:3.12-slim AS runtime
+FROM python:3.15-slim AS runtime
 LABEL org.opencontainers.image.title="adoption-research-agent" \
       org.opencontainers.image.source="https://github.com/johnenoch1966/John-Enoch" \
       org.opencontainers.image.licenses="Apache-2.0"
