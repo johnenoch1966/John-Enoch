@@ -7,7 +7,8 @@ and how it's operated once it's there.
 flowchart LR
     DEV["Developer<br/>pre-commit: ruff, bandit,<br/>terraform fmt, gitleaks"] --> PR["Pull request"]
     PR --> CI["CI (GitHub Actions / Cloud Build pr_checks)<br/>lint · security scan · tests + 80% coverage gate<br/>terraform validate · docker build + smoke test"]
-    CI --> MAIN["merge to main"]
+    CI --> EVAL["Agent evals<br/>golden datasets · thresholds · regression baseline"]
+    EVAL --> MAIN["merge to main"]
     MAIN --> BUILD["CD: build image once<br/>push to Artifact Registry (immutable digest)"]
     BUILD --> STG["Deploy Cloud Run Job<br/>STAGING + rollout verification"]
     STG --> GATE{"Manual approval<br/>(GitHub Environment: production)"}
@@ -51,6 +52,7 @@ Until those variables exist, the CD, infrastructure and refresh workflows **skip
 | Pipeline | Where | Trigger | What it does |
 |---|---|---|---|
 | CI | `.github/workflows/ci.yml`, `.cloudbuild/pr_checks.yaml` | push / PR | ruff, bandit, pip-audit, gitleaks, pytest on 3.11 and 3.12 with an **80% coverage gate**, `terraform validate`, docker build + container smoke test |
+| Agent evals | `.github/workflows/evals.yml`, `ci.yml` (`evals` job) | every push (offline); prompt/agent PRs, nightly, pre-staging (live) | golden-dataset evaluation of the generative agents with thresholds and a regression baseline ([evals/README.md](../evals/README.md)) |
 | CD | `.github/workflows/cd.yml`, `.cloudbuild/staging.yaml` | push to `main` (code paths) | build once → push digest → deploy **staging** → verify → **approval** → promote the same digest to **prod** (`.cloudbuild/deploy-to-prod.yaml`) |
 | Infrastructure | `.github/workflows/infra.yml` | PR touching Terraform / manual | `terraform plan`, or `apply` after approval |
 | Report refresh | Cloud Scheduler → Cloud Run Job (prod); `.github/workflows/refresh-report.yml` (alternative) | weekly | runs a research cycle and persists memory; the GitHub variant opens a **PR for human approval** before publishing |

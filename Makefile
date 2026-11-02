@@ -6,7 +6,7 @@ IMAGE      ?= $(REGION)-docker.pkg.dev/$(PROJECT_ID)/adoption-agent-$(ENV)/agent
 TF_DIR     := deployment/terraform
 DATA_WT    ?= ../research-data-wt
 
-.PHONY: help install lint format security test coverage check run resume render playground publish-data \
+.PHONY: help install lint format security test coverage check eval eval-live eval-baseline eval-fixtures run resume render playground publish-data \
         docker-build docker-run push deploy-job run-job deploy-agent-engine tf-init tf-plan tf-apply lock
 
 help: ## Show this help
@@ -18,8 +18,8 @@ install: ## Install pinned deps + dev tools into the active venv
 	pre-commit install
 
 lint: ## Ruff lint + format check
-	ruff check adoption_agent tests
-	ruff format --check adoption_agent tests
+	ruff check adoption_agent tests evals
+	ruff format --check adoption_agent tests evals
 
 format: ## Auto-fix lint and formatting
 	ruff check --fix adoption_agent tests
@@ -34,7 +34,19 @@ test: ## Unit, privacy and offline end-to-end tests
 coverage: ## Tests with coverage gate (80%)
 	pytest -q --cov=adoption_agent --cov-report=term-missing --cov-fail-under=80
 
-check: lint security coverage ## Everything CI runs locally
+check: lint security coverage eval ## Everything CI runs locally
+
+eval: ## Offline golden-dataset evals vs thresholds + baseline
+	python -m evals.run --suite offline --check
+
+eval-live: ## Live generative-agent evals (real model calls, needs ADC)
+	python -m evals.run --suite live --check
+
+eval-baseline: ## Re-run all evals and accept results as the new baseline
+	python -m evals.run --suite all --update-baseline
+
+eval-fixtures: ## Re-freeze eval fixtures from the current evidence base
+	python -m evals.build_fixtures
 
 lock: ## Regenerate requirements.lock
 	uv pip compile pyproject.toml --universal --python-version 3.11 -o requirements.lock

@@ -36,3 +36,6 @@ deployment/terraform/.terraform/
 tfplan
 coverage.xml
 .coverage
+
+# Eval run outputs (baseline.json IS committed)
+evals/results/

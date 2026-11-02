@@ -1,0 +1,1771 @@
+{
+ "fsi": {
+  "claim_count": 132,
+  "distinct_sources": 41,
+  "groups": [
+   {
+    "polarity": "driver",
+    "root_cause_id": "cost_roi",
+    "claim_count": 34,
+    "distinct_sources": 24,
+    "examples": [
+     {
+      "claim_id": 41,
+      "stated_factor": "Cycle time reduction and accuracy improvement in underwriting submissions",
+      "statistic": "decision time dropped from 3-5 days to 12 minutes with 99.3% accuracy; complex case time reduced by 31%",
+      "publisher": "arXiv"
+     },
+     {
+      "claim_id": 47,
+      "stated_factor": "Administrative task time reduction",
+      "statistic": "51% cite time saved on admin as biggest contribution",
+      "publisher": "hyperexponential"
+     },
+     {
+      "claim_id": 60,
+      "stated_factor": "High straight-through chat resolution volume replacing manual agent capacity",
+      "statistic": "Handles 2/3 of customer chats (2.3 million chats), equivalent to 700 FTEs",
+      "publisher": "Klarna Bank AB"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "regulatory_compliance",
+    "claim_count": 25,
+    "distinct_sources": 18,
+    "examples": [
+     {
+      "claim_id": 52,
+      "stated_factor": "Regulatory compliance and legal liability risks under consumer protection statutes for inaccurate automated customer service and dispute handling",
+      "statistic": "",
+      "publisher": "Consumer Financial Protection Bureau (CFPB)"
+     },
+     {
+      "claim_id": 53,
+      "stated_factor": "Enforcement scrutiny over automated payment arrangements, debt collection, and financial hardship servicing",
+      "statistic": "",
+      "publisher": "Consumer Financial Protection Bureau (CFPB)"
+     },
+     {
+      "claim_id": 58,
+      "stated_factor": "Mandatory supervisory system governance and model risk management",
+      "statistic": "",
+      "publisher": "Financial Industry Regulatory Authority (FINRA)"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "risk_auditability",
+    "claim_count": 11,
+    "distinct_sources": 9,
+    "examples": [
+     {
+      "claim_id": 13,
+      "stated_factor": "Lack of trust and governance in high-stakes autonomous decisions",
+      "statistic": "28% lack trust in agentic execution",
+      "publisher": "PwC"
+     },
+     {
+      "claim_id": 83,
+      "stated_factor": "Boundary governance, algorithmic transparency gaps, and operational dependencies",
+      "statistic": "",
+      "publisher": "Oliver Wyman"
+     },
+     {
+      "claim_id": 89,
+      "stated_factor": "Strict accountability mandates and distrust of full autonomy",
+      "statistic": "only 4.5% trust AI to act fully autonomously; 47% require AI to only recommend with humans deciding",
+      "publisher": "Moody's Analytics"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "operating_model",
+    "claim_count": 11,
+    "distinct_sources": 10,
+    "examples": [
+     {
+      "claim_id": 51,
+      "stated_factor": "Straight-through processing for standard, low-complexity risks",
+      "statistic": "quoting and binding in under 5 minutes with no human involvement for risks under $50,000",
+      "publisher": "hyperexponential"
+     },
+     {
+      "claim_id": 184,
+      "stated_factor": "Autonomous task execution and submission processing in underwriting workflows",
+      "statistic": "34% exploring agentic AI; 20% experimenting with autonomous task execution",
+      "publisher": "Send Technology & Intelligent Insurer"
+     },
+     {
+      "claim_id": 193,
+      "stated_factor": "Planned production deployment of agentic AI solutions in insurance workflows",
+      "statistic": "22% plan to deploy agentic AI by year-end 2026",
+      "publisher": "Celent"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "data_governance",
+    "claim_count": 7,
+    "distinct_sources": 6,
+    "examples": [
+     {
+      "claim_id": 50,
+      "stated_factor": "Immature data governance preventing trust in straight-through processing",
+      "statistic": "Over 50% describe data governance frameworks as early-stage or developing",
+      "publisher": "hyperexponential"
+     },
+     {
+      "claim_id": 90,
+      "stated_factor": "Data sovereignty, hallucination risks, and black-box opacity",
+      "statistic": "",
+      "publisher": "Moody's Analytics"
+     },
+     {
+      "claim_id": 246,
+      "stated_factor": "Data privacy, security, and regulatory constraints when agents interact with live customer records",
+      "statistic": "",
+      "publisher": "arXiv / ACM SIGKDD"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "regulatory_compliance",
+    "claim_count": 7,
+    "distinct_sources": 7,
+    "examples": [
+     {
+      "claim_id": 57,
+      "stated_factor": "Operational and compliance surveillance efficiency",
+      "statistic": "",
+      "publisher": "Financial Industry Regulatory Authority (FINRA)"
+     },
+     {
+      "claim_id": 94,
+      "stated_factor": "Operational efficiency, regulatory compliance, and advanced analytics",
+      "statistic": "",
+      "publisher": "Financial Stability Board"
+     },
+     {
+      "claim_id": 129,
+      "stated_factor": "Principles-based regulatory flexibility enabling enterprise AI experimentation and deployment",
+      "statistic": "",
+      "publisher": "Financial Conduct Authority (FCA)"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "integration_connectors",
+    "claim_count": 6,
+    "distinct_sources": 5,
+    "examples": [
+     {
+      "claim_id": 42,
+      "stated_factor": "Ineffective legacy systems, poor data quality, and limited data accessibility",
+      "statistic": "",
+      "publisher": "arXiv"
+     },
+     {
+      "claim_id": 49,
+      "stated_factor": "Legacy system integration, data fragmentation, and AI expertise shortage",
+      "statistic": "42% cite legacy system integration, 39% fragmented data, 40% lack of in-house AI expertise",
+      "publisher": "hyperexponential"
+     },
+     {
+      "claim_id": 71,
+      "stated_factor": "Data deficiencies, legacy systems, and skilled talent shortages",
+      "statistic": "insufficient access to data (54%), legacy core systems (51%), skilled talent shortages (47%)",
+      "publisher": "Capgemini Research Institute"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "model_quality",
+    "claim_count": 6,
+    "distinct_sources": 6,
+    "examples": [
+     {
+      "claim_id": 43,
+      "stated_factor": "Hallucination risks and regulatory human oversight mandates",
+      "statistic": "Hallucination rates reach 15% in finance-related tasks",
+      "publisher": "arXiv"
+     },
+     {
+      "claim_id": 48,
+      "stated_factor": "Skepticism over decision quality in underwriting decisioning",
+      "statistic": "only 21% say AI has improved decision quality",
+      "publisher": "hyperexponential"
+     },
+     {
+      "claim_id": 191,
+      "stated_factor": "Waning effectiveness and technical limitations when addressing complex inquiries",
+      "statistic": "",
+      "publisher": "Consumer Financial Protection Bureau"
+     }
+    ]
+   }
+  ],
+  "use_case_mentions": {
+   "regulatory-compliance-reporting": 22,
+   "regulatory_compliance_tracking": 15,
+   "Autonomous Customer Service Voice & Chat Agents": 15,
+   "commercial_underwriting": 14,
+   "fraud-detection-investigation": 12,
+   "commercial-underwriting-assist": 12,
+   "aml-alert-triage-investigation": 12,
+   "Customer Complaints Handling & Dispute Resolution": 11,
+   "aml_alert_triage": 10,
+   "Customer Billing Inquiry & Payment Arrangement Agent": 10,
+   "Anti-Money Laundering (AML) Alert Triage & Transaction Monitoring": 9,
+   "wealth-management-portfolio-rebalancing": 9
+  }
+ },
+ "hcls": {
+  "claim_count": 55,
+  "distinct_sources": 17,
+  "groups": [
+   {
+    "polarity": "driver",
+    "root_cause_id": "cost_roi",
+    "claim_count": 10,
+    "distinct_sources": 8,
+    "examples": [
+     {
+      "claim_id": 308,
+      "stated_factor": "addressing administrative burden through automation",
+      "statistic": "57% of physicians",
+      "publisher": "American Medical Association"
+     },
+     {
+      "claim_id": 391,
+      "stated_factor": "escalating patient volume and clinical workload pressures",
+      "statistic": "61% of nurses see more patients than a year ago",
+      "publisher": "Elsevier"
+     },
+     {
+      "claim_id": 396,
+      "stated_factor": "measurable revenue growth and operational cost reductions",
+      "statistic": "85% report increased revenue, 80% reduced costs",
+      "publisher": "NVIDIA"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "regulatory_compliance",
+    "claim_count": 10,
+    "distinct_sources": 8,
+    "examples": [
+     {
+      "claim_id": 411,
+      "stated_factor": "stringent regulatory submission requirements (Description of Modifications, Modification Protocol, and Impact Assessment)",
+      "statistic": "",
+      "publisher": "Food and Drug Administration (FDA)"
+     },
+     {
+      "claim_id": 422,
+      "stated_factor": "mandatory third-party post-release auditing and human rights impact assessments",
+      "statistic": "over 40 regulatory recommendations",
+      "publisher": "World Health Organization (WHO)"
+     },
+     {
+      "claim_id": 550,
+      "stated_factor": "regulatory compliance and mandatory pre-deployment data classification overhead",
+      "statistic": "58% of UK FSI firms added controls; 43% increase in healthcare data classification",
+      "publisher": "Metomic"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "model_quality",
+    "claim_count": 8,
+    "distinct_sources": 5,
+    "examples": [
+     {
+      "claim_id": 393,
+      "stated_factor": "lack of trust in AI tool reliability",
+      "statistic": "only 42% say AI tools are trustworthy today",
+      "publisher": "Elsevier"
+     },
+     {
+      "claim_id": 394,
+      "stated_factor": "demand for transparency, safety, and grounding in verified clinical sources",
+      "statistic": "",
+      "publisher": "Elsevier"
+     },
+     {
+      "claim_id": 421,
+      "stated_factor": "risks of false, inaccurate, biased, or incomplete generative outputs in health decision-making",
+      "statistic": "",
+      "publisher": "World Health Organization (WHO)"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "model_quality",
+    "claim_count": 5,
+    "distinct_sources": 4,
+    "examples": [
+     {
+      "claim_id": 676,
+      "stated_factor": "Autonomous orchestration and complex task management across clinical domains",
+      "statistic": "",
+      "publisher": "Cell Reports Medicine (PMC)"
+     },
+     {
+      "claim_id": 679,
+      "stated_factor": "Autonomous planning and tool utilization to execute high-level clinical tasks in EHRs",
+      "statistic": "",
+      "publisher": "arXiv"
+     },
+     {
+      "claim_id": 699,
+      "stated_factor": "Persistent case tooling and experiential learning boosting clinical agent performance",
+      "statistic": "up to 92% relative improvements with persistent notebook tool",
+      "publisher": "arXiv"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "integration_connectors",
+    "claim_count": 4,
+    "distinct_sources": 4,
+    "examples": [
+     {
+      "claim_id": 309,
+      "stated_factor": "lack of EHR integration",
+      "statistic": "84% cite EHR integration as required attribute",
+      "publisher": "American Medical Association"
+     },
+     {
+      "claim_id": 398,
+      "stated_factor": "friction from standalone tools vs. deep workflow embedding",
+      "statistic": "",
+      "publisher": "NVIDIA"
+     },
+     {
+      "claim_id": 439,
+      "stated_factor": "requirement for human oversight and legacy information system integration",
+      "statistic": "",
+      "publisher": "Capgemini Research Institute"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "risk_auditability",
+    "claim_count": 4,
+    "distinct_sources": 4,
+    "examples": [
+     {
+      "claim_id": 311,
+      "stated_factor": "concerns over medical liability for model errors",
+      "statistic": "87% require not being held liable for AI errors",
+      "publisher": "American Medical Association"
+     },
+     {
+      "claim_id": 374,
+      "stated_factor": "rigorous local evaluation and governance requirements (accuracy, bias, postdeployment monitoring)",
+      "statistic": "12.1 percentage points less likely to be early adopters",
+      "publisher": "JAMA Network Open"
+     },
+     {
+      "claim_id": 399,
+      "stated_factor": "stringent clinical safety, legal liability, and accountability standards",
+      "statistic": "",
+      "publisher": "NVIDIA"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "integration_connectors",
+    "claim_count": 3,
+    "distinct_sources": 2,
+    "examples": [
+     {
+      "claim_id": 372,
+      "stated_factor": "EHR-integrated generative AI deployment momentum",
+      "statistic": "31.5% currently using, 24.7% planning within 1 year",
+      "publisher": "JAMA Network Open"
+     },
+     {
+      "claim_id": 373,
+      "stated_factor": "native EHR vendor platform integration",
+      "statistic": "21.9 percentage points higher likelihood for Epic users",
+      "publisher": "JAMA Network Open"
+     },
+     {
+      "claim_id": 414,
+      "stated_factor": "market-leading EHR vendor integration ecosystem",
+      "statistic": "90% vs 50% of hospitals using other vendors",
+      "publisher": "Office of the Assistant Secretary for Technology Policy (ASTP) / ONC"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "skills_change",
+    "claim_count": 3,
+    "distinct_sources": 2,
+    "examples": [
+     {
+      "claim_id": 392,
+      "stated_factor": "uneven AI adoption and workflow integration across clinical roles",
+      "statistic": "41% of nurses vs 57% of doctors",
+      "publisher": "Elsevier"
+     },
+     {
+      "claim_id": 420,
+      "stated_factor": "automation bias and inappropriate clinical cognitive delegation",
+      "statistic": "",
+      "publisher": "World Health Organization (WHO)"
+     },
+     {
+      "claim_id": 704,
+      "stated_factor": "Automation bias causing overlooked clinical errors and improper delegation of decisions",
+      "statistic": "",
+      "publisher": "World Health Organization (WHO)"
+     }
+    ]
+   }
+  ],
+  "use_case_mentions": {
+   "regulatory-compliance-reporting": 16,
+   "enterprise-knowledge-search-qna": 9,
+   "content-summarization-synthesis": 3,
+   "supply-chain-demand-exception-management": 3,
+   "inventory-logistics-dispatch-optimization": 3,
+   "contact-center-agent-assist": 2,
+   "post-call-summarization-crm-wrapup": 1,
+   "billing-inquiry-payment-support": 1,
+   "accounts-payable-invoice-processing": 1,
+   "document-report-drafting": 1
+  }
+ },
+ "manufacturing": {
+  "claim_count": 57,
+  "distinct_sources": 17,
+  "groups": [
+   {
+    "polarity": "driver",
+    "root_cause_id": "cost_roi",
+    "claim_count": 20,
+    "distinct_sources": 15,
+    "examples": [
+     {
+      "claim_id": 2,
+      "stated_factor": "Proven production-scale productivity and inventory precision outcomes",
+      "statistic": "30% productivity increase; >3M freight shipment tasks processed",
+      "publisher": "Deloitte"
+     },
+     {
+      "claim_id": 8,
+      "stated_factor": "Direct cost savings, cycle time compression, and freed buyer capacity",
+      "statistic": "8% to 15% cost savings; 30% to 60% sourcing cycle time reduction; 60% capacity freed",
+      "publisher": "Boston Consulting Group"
+     },
+     {
+      "claim_id": 204,
+      "stated_factor": "Drastic reduction in disruption response times and transportation costs through dynamic network optimization",
+      "statistic": "75% reduction in disruption response time; 5% reduction in transportation spend; 80% adoption by 2027",
+      "publisher": "IDC"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "skills_change",
+    "claim_count": 6,
+    "distinct_sources": 5,
+    "examples": [
+     {
+      "claim_id": 3,
+      "stated_factor": "Accessibility of low-code agent platforms and embedded enterprise software",
+      "statistic": "",
+      "publisher": "Deloitte"
+     },
+     {
+      "claim_id": 253,
+      "stated_factor": "Enterprise investment in Agentic AI and GenAI to augment field service engineers and resolve talent shortages",
+      "statistic": "39% investing in Agentic AI, 46% in GenAI, 32% in Service Parts Management",
+      "publisher": "Service Council"
+     },
+     {
+      "claim_id": 647,
+      "stated_factor": "manufacturing retirement wave and workforce skills shortages",
+      "statistic": "53% of open manufacturing positions unfilled",
+      "publisher": "Amazon Web Services (AWS)"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "operating_model",
+    "claim_count": 5,
+    "distinct_sources": 5,
+    "examples": [
+     {
+      "claim_id": 1,
+      "stated_factor": "Lack of workflow, job, and decision rights redesign",
+      "statistic": "More than 70%",
+      "publisher": "Deloitte"
+     },
+     {
+      "claim_id": 9,
+      "stated_factor": "Organizational, people, and process redesign barriers over technology",
+      "statistic": "70% of effort required for people, org, and process redesign",
+      "publisher": "Boston Consulting Group"
+     },
+     {
+      "claim_id": 366,
+      "stated_factor": "Severe challenges in scaling AI solutions across production networks",
+      "statistic": "89% plan to implement AI, 68% started, but only 16% achieved AI-related targets",
+      "publisher": "Boston Consulting Group"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "operating_model",
+    "claim_count": 5,
+    "distinct_sources": 5,
+    "examples": [
+     {
+      "claim_id": 10,
+      "stated_factor": "Autonomous exception handling and continuous renegotiation orchestration",
+      "statistic": "",
+      "publisher": "Boston Consulting Group"
+     },
+     {
+      "claim_id": 141,
+      "stated_factor": "Competitive pressure and belief that AI can reinvent supply chains",
+      "statistic": "69% believe failing to integrate GenAI creates a competitive disadvantage; 80% believe it can reinvent supply chains",
+      "publisher": "EY"
+     },
+     {
+      "claim_id": 405,
+      "stated_factor": "Convergence of agentic AI with physical robotics for unstructured factory floor operations",
+      "statistic": "22% plan to use physical AI in two years, up from 9%",
+      "publisher": "Deloitte Insights"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "integration_connectors",
+    "claim_count": 5,
+    "distinct_sources": 5,
+    "examples": [
+     {
+      "claim_id": 140,
+      "stated_factor": "Lack of end-to-end visibility and low baseline automation required for autonomous operations",
+      "statistic": "Only 28% have achieved low-human-touch workflows; only 50% have end-to-end visibility",
+      "publisher": "EY"
+     },
+     {
+      "claim_id": 255,
+      "stated_factor": "Siloed, redundant incumbent legacy platforms unable to scale across modern service workflows",
+      "statistic": "",
+      "publisher": "Service Council"
+     },
+     {
+      "claim_id": 367,
+      "stated_factor": "Patchwork of poorly integrated off-the-shelf point solutions misaligned with shop-floor operations",
+      "statistic": "",
+      "publisher": "Boston Consulting Group"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "data_governance",
+    "claim_count": 3,
+    "distinct_sources": 3,
+    "examples": [
+     {
+      "claim_id": 638,
+      "stated_factor": "highly specialized and intricate domain data and regulatory frameworks",
+      "statistic": "",
+      "publisher": "University of Georgia / arXiv"
+     },
+     {
+      "claim_id": 648,
+      "stated_factor": "lack of centralized, accessible knowledge across disparate manufacturing systems",
+      "statistic": "",
+      "publisher": "Amazon Web Services (AWS)"
+     },
+     {
+      "claim_id": 707,
+      "stated_factor": "underutilization of unstructured operational textual data in manufacturing systems",
+      "statistic": "",
+      "publisher": "Pennsylvania State University & Technical University of Munich / arXiv"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "model_quality",
+    "claim_count": 3,
+    "distinct_sources": 2,
+    "examples": [
+     {
+      "claim_id": 639,
+      "stated_factor": "exceptionally high precision and outcome reliability expectations in engineering disciplines",
+      "statistic": "",
+      "publisher": "University of Georgia / arXiv"
+     },
+     {
+      "claim_id": 640,
+      "stated_factor": "computational limitations in physical manufacturing and generative design",
+      "statistic": "",
+      "publisher": "University of Georgia / arXiv"
+     },
+     {
+      "claim_id": 710,
+      "stated_factor": "challenges in analytical reasoning, structured data handling, and ambiguity in safety-critical domains",
+      "statistic": "",
+      "publisher": "Chalmers University of Technology & Industry Partners / arXiv"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "risk_auditability",
+    "claim_count": 2,
+    "distinct_sources": 2,
+    "examples": [
+     {
+      "claim_id": 139,
+      "stated_factor": "Risk concerns and implementation complexity causing project reassessments",
+      "statistic": "62% have reassessed GenAI initiatives; only 7% completed deployment",
+      "publisher": "EY"
+     },
+     {
+      "claim_id": 694,
+      "stated_factor": "lack of observability and stakeholder security verification for autonomous agents",
+      "statistic": "",
+      "publisher": "LangChain"
+     }
+    ]
+   }
+  ],
+  "use_case_mentions": {
+   "enterprise-knowledge-search-qna": 13,
+   "software-engineering-coding-agents": 10,
+   "Supply Chain Exception & Disruption Management": 9,
+   "Inventory Allocation & Logistics Dispatch Agent": 7,
+   "supply-chain-demand-exception-management": 7,
+   "inventory-logistics-dispatch-optimization": 6,
+   "Autonomous Procurement & Vendor Sourcing": 4,
+   "Field Service & Technical Support Agent": 3,
+   "it-service-desk-support": 3,
+   "procurement-supplier-sourcing": 2,
+   "secops-incident-triage-investigation": 2,
+   "knowledge-base-auto-maintenance": 2
+  }
+ },
+ "retail_cpg": {
+  "claim_count": 74,
+  "distinct_sources": 25,
+  "groups": [
+   {
+    "polarity": "driver",
+    "root_cause_id": "cost_roi",
+    "claim_count": 26,
+    "distinct_sources": 18,
+    "examples": [
+     {
+      "claim_id": 2,
+      "stated_factor": "Proven production-scale productivity and inventory precision outcomes",
+      "statistic": "30% productivity increase; >3M freight shipment tasks processed",
+      "publisher": "Deloitte"
+     },
+     {
+      "claim_id": 8,
+      "stated_factor": "Direct cost savings, cycle time compression, and freed buyer capacity",
+      "statistic": "8% to 15% cost savings; 30% to 60% sourcing cycle time reduction; 60% capacity freed",
+      "publisher": "Boston Consulting Group"
+     },
+     {
+      "claim_id": 60,
+      "stated_factor": "High straight-through chat resolution volume replacing manual agent capacity",
+      "statistic": "Handles 2/3 of customer chats (2.3 million chats), equivalent to 700 FTEs",
+      "publisher": "Klarna Bank AB"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "operating_model",
+    "claim_count": 13,
+    "distinct_sources": 12,
+    "examples": [
+     {
+      "claim_id": 10,
+      "stated_factor": "Autonomous exception handling and continuous renegotiation orchestration",
+      "statistic": "",
+      "publisher": "Boston Consulting Group"
+     },
+     {
+      "claim_id": 141,
+      "stated_factor": "Competitive pressure and belief that AI can reinvent supply chains",
+      "statistic": "69% believe failing to integrate GenAI creates a competitive disadvantage; 80% believe it can reinvent supply chains",
+      "publisher": "EY"
+     },
+     {
+      "claim_id": 278,
+      "stated_factor": "Operational expansion into supply chain operations and fraud prevention",
+      "statistic": "66% implement in cybersecurity/fraud prevention; 59% prioritize supply chain operations",
+      "publisher": "National Retail Federation (NRF) Center for Digital Risk & Innovation"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "integration_connectors",
+    "claim_count": 5,
+    "distinct_sources": 5,
+    "examples": [
+     {
+      "claim_id": 140,
+      "stated_factor": "Lack of end-to-end visibility and low baseline automation required for autonomous operations",
+      "statistic": "Only 28% have achieved low-human-touch workflows; only 50% have end-to-end visibility",
+      "publisher": "EY"
+     },
+     {
+      "claim_id": 294,
+      "stated_factor": "Disconnected enterprise systems and lack of unified customer data",
+      "statistic": "only 17% have access to unified customer data; only 15% realized unified commerce value",
+      "publisher": "ZDNET"
+     },
+     {
+      "claim_id": 339,
+      "stated_factor": "Backend system integration barriers across inventory, order orchestration, and catalog data",
+      "statistic": "46% struggle to link physical and digital touchpoints",
+      "publisher": "Incisiv"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "skills_change",
+    "claim_count": 5,
+    "distinct_sources": 4,
+    "examples": [
+     {
+      "claim_id": 306,
+      "stated_factor": "Customer preference for human-in-the-loop support during high-stakes or complex service interactions",
+      "statistic": "74% value human support during in-store service; 66% during purchase decisions",
+      "publisher": "Capgemini Research Institute"
+     },
+     {
+      "claim_id": 338,
+      "stated_factor": "Lack of internal AI/ML expertise and low organizational capabilities",
+      "statistic": "only 19% rate capabilities above average; 50% cite limited internal AI/ML expertise as a barrier",
+      "publisher": "Incisiv"
+     },
+     {
+      "claim_id": 341,
+      "stated_factor": "Consumer preference for human assistance for nuanced service, returns, and complaints",
+      "statistic": "",
+      "publisher": "Incisiv"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "skills_change",
+    "claim_count": 4,
+    "distinct_sources": 4,
+    "examples": [
+     {
+      "claim_id": 3,
+      "stated_factor": "Accessibility of low-code agent platforms and embedded enterprise software",
+      "statistic": "",
+      "publisher": "Deloitte"
+     },
+     {
+      "claim_id": 307,
+      "stated_factor": "Consumer adoption and demand for conversational AI shopping and assistance tools",
+      "statistic": "25% have used Gen AI shopping tools; 31% plan to use them; 65% say technology reduces stress",
+      "publisher": "Capgemini Research Institute"
+     },
+     {
+      "claim_id": 312,
+      "stated_factor": "Rapid rise of consumer AI assistants across pre-purchase product research and deal discovery",
+      "statistic": "41% use AI assistants to research products, 33% for reviews, 31% to search for deals",
+      "publisher": "National Retail Federation and IBM Institute for Business Value"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "cost_roi",
+    "claim_count": 4,
+    "distinct_sources": 3,
+    "examples": [
+     {
+      "claim_id": 276,
+      "stated_factor": "High implementation cost, model accuracy concerns, and workforce expertise gaps",
+      "statistic": "57% cite cost, 57% cite model accuracy, 55% cite workforce expertise gaps",
+      "publisher": "National Retail Federation (NRF) Center for Digital Risk & Innovation"
+     },
+     {
+      "claim_id": 573,
+      "stated_factor": "High computational cost per query and legacy architecture integration friction",
+      "statistic": "10x the cost and load per query",
+      "publisher": "IHL Group"
+     },
+     {
+      "claim_id": 586,
+      "stated_factor": "Failure of pilot economics to translate into scaled production returns",
+      "statistic": "",
+      "publisher": "Boston Consulting Group & The Consumer Goods Forum"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "risk_auditability",
+    "claim_count": 3,
+    "distinct_sources": 3,
+    "examples": [
+     {
+      "claim_id": 139,
+      "stated_factor": "Risk concerns and implementation complexity causing project reassessments",
+      "statistic": "62% have reassessed GenAI initiatives; only 7% completed deployment",
+      "publisher": "EY"
+     },
+     {
+      "claim_id": 295,
+      "stated_factor": "Consumer trust and autonomy boundaries (privacy, override controls, human backup)",
+      "statistic": "",
+      "publisher": "ZDNET"
+     },
+     {
+      "claim_id": 305,
+      "stated_factor": "Consumer demand for operational boundaries, transparency, and data privacy controls",
+      "statistic": "76% want clear rules before an AI assistant acts; 71% concerned about data use",
+      "publisher": "Capgemini Research Institute"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "data_governance",
+    "claim_count": 3,
+    "distinct_sources": 2,
+    "examples": [
+     {
+      "claim_id": 313,
+      "stated_factor": "Consumer data privacy, misuse, and algorithm trust concerns",
+      "statistic": "83% share multiple overlapping concerns about privacy, misuse, and unwanted marketing",
+      "publisher": "National Retail Federation and IBM Institute for Business Value"
+     },
+     {
+      "claim_id": 329,
+      "stated_factor": "Fragmented customer data, tool costs, and technical expertise shortages",
+      "statistic": "58% report fragmented/incomplete customer data; 46% cite high tool costs; 35% cite limited expertise",
+      "publisher": "Amperity"
+     },
+     {
+      "claim_id": 330,
+      "stated_factor": "Lag in production deployment for customer-facing chatbots and identity resolution",
+      "statistic": "only 43% use AI in customer-facing applications; only 23% use AI in production for customer identity data",
+      "publisher": "Amperity"
+     }
+    ]
+   }
+  ],
+  "use_case_mentions": {
+   "autonomous-customer-service-agents": 27,
+   "inventory-logistics-dispatch-optimization": 16,
+   "supply-chain-demand-exception-management": 15,
+   "Supply Chain Exception & Disruption Management": 9,
+   "customer-complaints-handling-resolution": 9,
+   "Inventory Allocation & Logistics Dispatch Agent": 7,
+   "omnichannel-ticket-triage-routing": 5,
+   "Autonomous Procurement & Vendor Sourcing": 4,
+   "Autonomous Customer Service Voice & Chat Agents": 4,
+   "spreadsheet-data-analysis": 4,
+   "email-triage-drafting": 2,
+   "fraud-detection-investigation": 2
+  }
+ },
+ "tmt": {
+  "claim_count": 74,
+  "distinct_sources": 21,
+  "groups": [
+   {
+    "polarity": "driver",
+    "root_cause_id": "cost_roi",
+    "claim_count": 21,
+    "distinct_sources": 12,
+    "examples": [
+     {
+      "claim_id": 128,
+      "stated_factor": "Dramatic alert noise reduction and straight-through automated incident remediation",
+      "statistic": "Collapsed 1B alerts into 57K incidents; 21% reduction in customer-impacting incidents",
+      "publisher": "Gartner / Itential"
+     },
+     {
+      "claim_id": 220,
+      "stated_factor": "Predictive call intent recognition and routing to reduce churn and unnecessary physical visits",
+      "statistic": "predicts reason behind 80% of calls; staved off defection of ~100,000 customers in 2024",
+      "publisher": "Bain & Company"
+     },
+     {
+      "claim_id": 254,
+      "stated_factor": "Inclusion of AI in service ecosystem to achieve dispatch avoidance and call deflection",
+      "statistic": "31% rank AI inclusion in top 3 performance levers; 23% prioritize dispatch avoidance",
+      "publisher": "Service Council"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "operating_model",
+    "claim_count": 10,
+    "distinct_sources": 6,
+    "examples": [
+     {
+      "claim_id": 279,
+      "stated_factor": "Network optimization and self-healing operational automation",
+      "statistic": "82% of operators trialling or using GenAI in at least one domain",
+      "publisher": "Analysys Mason"
+     },
+     {
+      "claim_id": 302,
+      "stated_factor": "Transition toward higher-level autonomous networks and zero-touch operations",
+      "statistic": "88% of organizations currently at TM Forum autonomy levels 1-3",
+      "publisher": "NVIDIA"
+     },
+     {
+      "claim_id": 304,
+      "stated_factor": "Cross-domain autonomous decision-making without human delay",
+      "statistic": "",
+      "publisher": "NVIDIA"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "data_governance",
+    "claim_count": 8,
+    "distinct_sources": 6,
+    "examples": [
+     {
+      "claim_id": 282,
+      "stated_factor": "Data readiness, availability, and governance constraints",
+      "statistic": "",
+      "publisher": "Analysys Mason"
+     },
+     {
+      "claim_id": 344,
+      "stated_factor": "Internal enterprise data inaccessibility and poor data health",
+      "statistic": "Only 50% of internal telecom data is accessible to AI models and analytics",
+      "publisher": "IDC / Amdocs"
+     },
+     {
+      "claim_id": 345,
+      "stated_factor": "Lack of integrated AI governance policies and platforms",
+      "statistic": "Only 19% of CSPs have fully implemented integrated AI data governance",
+      "publisher": "IDC / Amdocs"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "operating_model",
+    "claim_count": 8,
+    "distinct_sources": 6,
+    "examples": [
+     {
+      "claim_id": 320,
+      "stated_factor": "Pilot congestion and proof-of-concept stagnation",
+      "statistic": "More than half of projects stalling at proof-of-concept stage",
+      "publisher": "Altman Solon"
+     },
+     {
+      "claim_id": 333,
+      "stated_factor": "Lagging enterprise-wide scaling capabilities and operating model inertia",
+      "statistic": "",
+      "publisher": "PwC"
+     },
+     {
+      "claim_id": 527,
+      "stated_factor": "Increased pull request closure duration due to automated review triage overhead",
+      "statistic": "average pull request closure duration increased from 5 hours 52 minutes to 8 hours 20 minutes",
+      "publisher": "arXiv"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "skills_change",
+    "claim_count": 6,
+    "distinct_sources": 6,
+    "examples": [
+     {
+      "claim_id": 281,
+      "stated_factor": "Telecom internal AI and data engineering skill shortages",
+      "statistic": "Employee skillset cited as the top organisational challenge",
+      "publisher": "Analysys Mason"
+     },
+     {
+      "claim_id": 322,
+      "stated_factor": "Talent shortages, integration complexity, and model performance risks",
+      "statistic": "",
+      "publisher": "Altman Solon"
+     },
+     {
+      "claim_id": 522,
+      "stated_factor": "Downstream review pickup delays for AI-generated pull requests",
+      "statistic": "AI PRs wait 4.6x longer before review",
+      "publisher": "LinearB"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "model_quality",
+    "claim_count": 5,
+    "distinct_sources": 5,
+    "examples": [
+     {
+      "claim_id": 280,
+      "stated_factor": "Model accuracy and domain tailoring difficulties",
+      "statistic": "Four in five operators (80%) report difficulty achieving expected GenAI performance",
+      "publisher": "Analysys Mason"
+     },
+     {
+      "claim_id": 350,
+      "stated_factor": "Lack of confidence in accuracy and explainability of agent outputs",
+      "statistic": "57% not fully confident in accuracy or explainability",
+      "publisher": "Salesforce Research"
+     },
+     {
+      "claim_id": 357,
+      "stated_factor": "Lack of standardized agent communication protocols and compounding multistep execution errors",
+      "statistic": "",
+      "publisher": "Bain & Company"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "integration_connectors",
+    "claim_count": 4,
+    "distinct_sources": 4,
+    "examples": [
+     {
+      "claim_id": 255,
+      "stated_factor": "Siloed, redundant incumbent legacy platforms unable to scale across modern service workflows",
+      "statistic": "",
+      "publisher": "Service Council"
+     },
+     {
+      "claim_id": 358,
+      "stated_factor": "Vendor walled gardens and misaligned commercial incentives against interoperability",
+      "statistic": "",
+      "publisher": "Bain & Company"
+     },
+     {
+      "claim_id": 636,
+      "stated_factor": "Technical debt, vendor interoperability, legacy migration complexity, and talent gaps",
+      "statistic": "",
+      "publisher": "Bain & Company"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "risk_auditability",
+    "claim_count": 3,
+    "distinct_sources": 3,
+    "examples": [
+     {
+      "claim_id": 321,
+      "stated_factor": "Governance deficits and undefined enterprise autonomy thresholds",
+      "statistic": "Only about one in four operators (25%) reports full alignment between AI and commercial strategy",
+      "publisher": "Altman Solon"
+     },
+     {
+      "claim_id": 662,
+      "stated_factor": "Lack of governance, proper guardrails, and live monitoring to control agent actions",
+      "statistic": "Only 24% of organizations globally can control agent actions with guardrails and live monitoring",
+      "publisher": "Cisco"
+     },
+     {
+      "claim_id": 687,
+      "stated_factor": "Requirement for bounded autonomy, data foundations, and outcome-based commercial integration",
+      "statistic": "",
+      "publisher": "Appledore Research"
+     }
+    ]
+   }
+  ],
+  "use_case_mentions": {
+   "application-performance-monitoring-remediation": 45,
+   "autonomous-customer-service-agents": 19,
+   "it-service-desk-support": 6,
+   "contact-center-agent-assist": 6,
+   "software-engineering-coding-agents": 6,
+   "cloud-infrastructure-finops-optimization": 6,
+   "secops-incident-triage-investigation": 6,
+   "code-review-pull-request-agents": 5,
+   "b2b-sales-lead-qualification": 4,
+   "Field Service & Technical Support Agent": 3,
+   "Omnichannel Customer Support Ticket Triage & Routing": 2,
+   "field-service-technician-support": 2
+  }
+ },
+ "public_sector": {
+  "claim_count": 49,
+  "distinct_sources": 17,
+  "groups": [
+   {
+    "polarity": "driver",
+    "root_cause_id": "cost_roi",
+    "claim_count": 14,
+    "distinct_sources": 13,
+    "examples": [
+     {
+      "claim_id": 132,
+      "stated_factor": "Operational efficiency gains from predictive real-time agent assist and voice bot intent routing",
+      "statistic": "",
+      "publisher": "Financial Conduct Authority (FCA)"
+     },
+     {
+      "claim_id": 155,
+      "stated_factor": "Time savings on administrative tasks and information retrieval",
+      "statistic": "26 minutes saved per day on average; over 70% agreed time searching for info was reduced",
+      "publisher": "UK Government Digital Service (GDS)"
+     },
+     {
+      "claim_id": 161,
+      "stated_factor": "Substantial gains in customer satisfaction (CSAT) and employee satisfaction",
+      "statistic": "4.6x more likely to report excellent CSAT, 2.5x more likely for employee satisfaction",
+      "publisher": "Deloitte"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "data_governance",
+    "claim_count": 7,
+    "distinct_sources": 6,
+    "examples": [
+     {
+      "claim_id": 156,
+      "stated_factor": "Internal permissions exposure and data oversharing risks",
+      "statistic": "",
+      "publisher": "UK Government Digital Service (GDS)"
+     },
+     {
+      "claim_id": 157,
+      "stated_factor": "Security concerns over sensitive data and poor performance on complex data tasks",
+      "statistic": "",
+      "publisher": "UK Government Digital Service (GDS)"
+     },
+     {
+      "claim_id": 382,
+      "stated_factor": "Data fragmentation, siloed legacy systems, and acquisition workforce literacy constraints",
+      "statistic": "",
+      "publisher": "IBM Center for The Business of Government"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "operating_model",
+    "claim_count": 7,
+    "distinct_sources": 6,
+    "examples": [
+     {
+      "claim_id": 274,
+      "stated_factor": "Digital skills, funding, and wider enablers deficit",
+      "statistic": "",
+      "publisher": "UK National Audit Office (NAO)"
+     },
+     {
+      "claim_id": 354,
+      "stated_factor": "Lack of comprehensive executive sponsorship and change leadership",
+      "statistic": "Only 32% report comprehensive executive sponsorship and support",
+      "publisher": "Google Cloud"
+     },
+     {
+      "claim_id": 361,
+      "stated_factor": "Deficient procurement guidance and lack of supplier accountability structures",
+      "statistic": "",
+      "publisher": "Ada Lovelace Institute"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "risk_auditability",
+    "claim_count": 4,
+    "distinct_sources": 3,
+    "examples": [
+     {
+      "claim_id": 360,
+      "stated_factor": "Higher scrutiny, accountability, and explainability mandates for statutory public services",
+      "statistic": "",
+      "publisher": "Ada Lovelace Institute"
+     },
+     {
+      "claim_id": 600,
+      "stated_factor": "Vendor contracting and AI usage disclosure gaps",
+      "statistic": "",
+      "publisher": "StateTech Magazine / NASCIO / EY"
+     },
+     {
+      "claim_id": 666,
+      "stated_factor": "Mandatory human-in-the-loop approval requirements for sensitive and critical missions",
+      "statistic": "79% of government agencies mandate human-in-the-loop oversight for sensitive data",
+      "publisher": "FedTech Magazine / Market Connections"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "integration_connectors",
+    "claim_count": 3,
+    "distinct_sources": 2,
+    "examples": [
+     {
+      "claim_id": 273,
+      "stated_factor": "Legacy systems and data access and sharing barriers",
+      "statistic": "",
+      "publisher": "UK National Audit Office (NAO)"
+     },
+     {
+      "claim_id": 540,
+      "stated_factor": "Outdated legacy languages, lack of documentation, and retiring expert talent pool",
+      "statistic": "",
+      "publisher": "Boston Consulting Group"
+     },
+     {
+      "claim_id": 674,
+      "stated_factor": "Legacy systems and data access and sharing constraints",
+      "statistic": "",
+      "publisher": "UK National Audit Office (NAO)"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "operating_model",
+    "claim_count": 3,
+    "distinct_sources": 2,
+    "examples": [
+     {
+      "claim_id": 351,
+      "stated_factor": "Public sector adoption and production deployment of AI agents",
+      "statistic": "55% leveraging AI agents, 42% deployed >10 AI agents",
+      "publisher": "Google Cloud"
+     },
+     {
+      "claim_id": 352,
+      "stated_factor": "Allocation of agency budget to agentic AI as mission-critical investment",
+      "statistic": "61% plan to allocate 50% or more of future AI budget to AI agents",
+      "publisher": "Google Cloud"
+     },
+     {
+      "claim_id": 723,
+      "stated_factor": "Autonomous intake, classification, and resolution of constituent service inquiries",
+      "statistic": "Nearly 90% resolved on first call; resolution time cut to under 2.5 days",
+      "publisher": "Salesforce"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "skills_change",
+    "claim_count": 3,
+    "distinct_sources": 2,
+    "examples": [
+     {
+      "claim_id": 378,
+      "stated_factor": "Lack of role-specific training and onboarding materials",
+      "statistic": "Most users relied on self-directed learning through trial and error",
+      "publisher": "UK Department for Work and Pensions (DWP)"
+     },
+     {
+      "claim_id": 379,
+      "stated_factor": "Civil service workforce anxiety regarding job security and AI dependency",
+      "statistic": "",
+      "publisher": "UK Department for Work and Pensions (DWP)"
+     },
+     {
+      "claim_id": 724,
+      "stated_factor": "Staff skepticism and employee cultural resistance to working alongside AI agents",
+      "statistic": "",
+      "publisher": "Salesforce"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "skills_change",
+    "claim_count": 2,
+    "distinct_sources": 2,
+    "examples": [
+     {
+      "claim_id": 160,
+      "stated_factor": "Reduction in agent cognitive burden and overwhelm during live interactions",
+      "statistic": "35% less likely to report agents overwhelmed",
+      "publisher": "Deloitte"
+     },
+     {
+      "claim_id": 657,
+      "stated_factor": "Augmentation and task complementarity for white-collar federal knowledge workers",
+      "statistic": "",
+      "publisher": "IBM Center for The Business of Government"
+     }
+    ]
+   }
+  ],
+  "use_case_mentions": {
+   "legacy-code-modernization-migration": 9,
+   "document-report-drafting": 5,
+   "vendor-contract-rfp-evaluation": 4,
+   "email-triage-drafting": 4,
+   "Contact Centre Real-Time Agent Assist": 3,
+   "Enterprise Knowledge Search & Multi-Repository Q&A": 2,
+   "Omnichannel Customer Support Ticket Triage & Routing": 1,
+   "Meeting Summarization & Action Item Extraction": 1,
+   "Email Triage & Communication Drafting": 1,
+   "Spreadsheet Formula & Data Analysis Assistant": 1,
+   "Cross-Document Summarization & Executive Briefing": 1,
+   "Autonomous Customer Service Voice & Chat Agents": 1
+  }
+ },
+ "energy_utilities": {
+  "claim_count": 47,
+  "distinct_sources": 13,
+  "groups": [
+   {
+    "polarity": "driver",
+    "root_cause_id": "cost_roi",
+    "claim_count": 12,
+    "distinct_sources": 9,
+    "examples": [
+     {
+      "claim_id": 254,
+      "stated_factor": "Inclusion of AI in service ecosystem to achieve dispatch avoidance and call deflection",
+      "statistic": "31% rank AI inclusion in top 3 performance levers; 23% prioritize dispatch avoidance",
+      "publisher": "Service Council"
+     },
+     {
+      "claim_id": 387,
+      "stated_factor": "Accelerating technical knowledge work, engineering queries, and procedure drafting",
+      "statistic": "",
+      "publisher": "Electric Power Research Institute (EPRI)"
+     },
+     {
+      "claim_id": 390,
+      "stated_factor": "Improving operations and maintenance (O&M) and capital planning decisions",
+      "statistic": "",
+      "publisher": "Electric Power Research Institute (EPRI)"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "operating_model",
+    "claim_count": 9,
+    "distinct_sources": 7,
+    "examples": [
+     {
+      "claim_id": 402,
+      "stated_factor": "Surging bulk power system complexity demanding augmented operator cognition and vigilance",
+      "statistic": "",
+      "publisher": "American Public Power Association"
+     },
+     {
+      "claim_id": 416,
+      "stated_factor": "Grid operational complexity from DERs, EVs, weather volatility, and cyber threats",
+      "statistic": "",
+      "publisher": "arXiv"
+     },
+     {
+      "claim_id": 417,
+      "stated_factor": "Autonomous detection and remediation of operational grid violations",
+      "statistic": "",
+      "publisher": "arXiv"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "data_governance",
+    "claim_count": 7,
+    "distinct_sources": 6,
+    "examples": [
+     {
+      "claim_id": 386,
+      "stated_factor": "Retrieval layer vulnerability to irrelevant or misleading data",
+      "statistic": "",
+      "publisher": "Electric Power Research Institute (EPRI)"
+     },
+     {
+      "claim_id": 388,
+      "stated_factor": "Lack of data readiness as primary obstacle to scaling AI",
+      "statistic": "",
+      "publisher": "Electric Power Research Institute (EPRI)"
+     },
+     {
+      "claim_id": 389,
+      "stated_factor": "Limited cross-enterprise data accessibility, unresolved privacy/security concerns, and inconsistent data quality",
+      "statistic": "",
+      "publisher": "Electric Power Research Institute (EPRI)"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "skills_change",
+    "claim_count": 4,
+    "distinct_sources": 3,
+    "examples": [
+     {
+      "claim_id": 253,
+      "stated_factor": "Enterprise investment in Agentic AI and GenAI to augment field service engineers and resolve talent shortages",
+      "statistic": "39% investing in Agentic AI, 46% in GenAI, 32% in Service Parts Management",
+      "publisher": "Service Council"
+     },
+     {
+      "claim_id": 596,
+      "stated_factor": "Mitigating frontline technician skill shortages and capturing institutional knowledge",
+      "statistic": "",
+      "publisher": "Amazon Web Services (AWS)"
+     },
+     {
+      "claim_id": 625,
+      "stated_factor": "Demonstrated uplift in work deliverable quality and employee analytical confidence",
+      "statistic": "boosted output quality by 16.2%",
+      "publisher": "Accenture"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "model_quality",
+    "claim_count": 2,
+    "distinct_sources": 2,
+    "examples": [
+     {
+      "claim_id": 385,
+      "stated_factor": "Safety, reliability, and compliance risks requiring human expert oversight",
+      "statistic": "",
+      "publisher": "Electric Power Research Institute (EPRI)"
+     },
+     {
+      "claim_id": 401,
+      "stated_factor": "Requirement for human-in-the-loop oversight to question AI accuracy and prevent novel errors in high-stakes operations",
+      "statistic": "",
+      "publisher": "American Public Power Association"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "skills_change",
+    "claim_count": 2,
+    "distinct_sources": 2,
+    "examples": [
+     {
+      "claim_id": 400,
+      "stated_factor": "Risk of operator cognitive overload and switch-tasking distractions",
+      "statistic": "",
+      "publisher": "American Public Power Association"
+     },
+     {
+      "claim_id": 565,
+      "stated_factor": "Lack of expertise, high implementation costs, and inadequate data infrastructure",
+      "statistic": "",
+      "publisher": "Itron"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "regulatory_compliance",
+    "claim_count": 2,
+    "distinct_sources": 2,
+    "examples": [
+     {
+      "claim_id": 552,
+      "stated_factor": "Responsible AI and governance requirements",
+      "statistic": "72% cite increased focus on responsible AI guardrails",
+      "publisher": "Ernst & Young (EY)"
+     },
+     {
+      "claim_id": 616,
+      "stated_factor": "Strict utility regulatory scrutiny and conflicting operational cost pressures",
+      "statistic": "",
+      "publisher": "PwC"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "security_identity",
+    "claim_count": 2,
+    "distinct_sources": 2,
+    "examples": [
+     {
+      "claim_id": 561,
+      "stated_factor": "Need to counter AI-empowered threat actors and automated cyberattacks",
+      "statistic": "47% fear falling behind adversaries unless they harness AI",
+      "publisher": "Industrial Cyber"
+     },
+     {
+      "claim_id": 566,
+      "stated_factor": "Predictive maintenance and cybersecurity threat detection priorities",
+      "statistic": "",
+      "publisher": "Itron"
+     }
+    ]
+   }
+  ],
+  "use_case_mentions": {
+   "secops-incident-triage-investigation": 12,
+   "field-service-technician-support": 10,
+   "regulatory-compliance-reporting": 9,
+   "Field Service & Technical Support Agent": 3,
+   "autonomous-customer-service-agents": 3,
+   "billing-inquiry-payment-support": 2,
+   "Autonomous Customer Service Voice & Chat Agents": 1,
+   "Omnichannel Customer Support Ticket Triage & Routing": 1,
+   "customer-complaints-handling-resolution": 1,
+   "it-service-desk-support": 1
+  }
+ },
+ "cross_industry": {
+  "claim_count": 273,
+  "groups": [
+   {
+    "polarity": "driver",
+    "root_cause_id": "cost_roi",
+    "claim_count": 74,
+    "distinct_sources": 58,
+    "examples": [
+     {
+      "claim_id": 7,
+      "stated_factor": "Substantial productivity uplift and operating cost reductions",
+      "statistic": "60% or more long-term productivity uplift; 10% to 20% short-term P&L effect",
+      "publisher": "Boston Consulting Group (BCG)"
+     },
+     {
+      "claim_id": 11,
+      "stated_factor": "Measurable productivity gains and cost savings",
+      "statistic": "66% report increased productivity, 57% report cost savings, 55% faster decision-making",
+      "publisher": "PwC"
+     },
+     {
+      "claim_id": 15,
+      "stated_factor": "Higher customer satisfaction (CSAT) and frontline employee retention",
+      "statistic": "4.6x more likely to report excellent CSAT; 2.5x more likely to report excellent employee satisfaction",
+      "publisher": "Deloitte Digital"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "skills_change",
+    "claim_count": 24,
+    "distinct_sources": 22,
+    "examples": [
+     {
+      "claim_id": 5,
+      "stated_factor": "Change management, process redesign, and workforce retraining barriers",
+      "statistic": "50% identify change management as the primary barrier to obtaining full value",
+      "publisher": "Boston Consulting Group (BCG)"
+     },
+     {
+      "claim_id": 32,
+      "stated_factor": "Escalation of case complexity as routine interactions are deflected",
+      "statistic": "65% of agents and 66% of mobile workers report higher case complexity",
+      "publisher": "Salesforce"
+     },
+     {
+      "claim_id": 45,
+      "stated_factor": "Lack of developer trust in AI-generated outputs and code accuracy",
+      "statistic": "39% of developers trust AI outputs 'a little' or 'not at all'",
+      "publisher": "Google Cloud DORA"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "integration_connectors",
+    "claim_count": 22,
+    "distinct_sources": 17,
+    "examples": [
+     {
+      "claim_id": 4,
+      "stated_factor": "GenAI conversational tools failing to solve underlying problems without agentic execution and integration",
+      "statistic": "Only 28% have unlocked measurable business value from GenAI",
+      "publisher": "Boston Consulting Group (BCG)"
+     },
+     {
+      "claim_id": 6,
+      "stated_factor": "Fragmented technology ecosystem and complex multi-platform system orchestration",
+      "statistic": "Roughly 9 in 10 report vendor navigation difficulties",
+      "publisher": "Boston Consulting Group (BCG)"
+     },
+     {
+      "claim_id": 31,
+      "stated_factor": "Data fragmentation across disparate enterprise systems requiring integration investment",
+      "statistic": "83% plan to boost investments in data integration",
+      "publisher": "Salesforce"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "operating_model",
+    "claim_count": 22,
+    "distinct_sources": 20,
+    "examples": [
+     {
+      "claim_id": 17,
+      "stated_factor": "Lack of cross-functional enterprise strategy for self-service automation",
+      "statistic": "Only 26% of companies have a well-defined cross-functional strategy",
+      "publisher": "Deloitte Digital"
+     },
+     {
+      "claim_id": 20,
+      "stated_factor": "Exclusion of HR functional leadership from enterprise AI strategy",
+      "statistic": "52% do not involve HR in AI strategy",
+      "publisher": "Society for Human Resource Management (SHRM)"
+     },
+     {
+      "claim_id": 35,
+      "stated_factor": "Siloed single-use-case pilot approach without end-to-end process redesign",
+      "statistic": "",
+      "publisher": "Procurement Magazine / The Hackett Group"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "operating_model",
+    "claim_count": 20,
+    "distinct_sources": 20,
+    "examples": [
+     {
+      "claim_id": 24,
+      "stated_factor": "Expanding production deployment and active piloting of autonomous AI agents",
+      "statistic": "40% in production; 31% running pilots or tests",
+      "publisher": "Cloud Security Alliance"
+     },
+     {
+      "claim_id": 30,
+      "stated_factor": "Commercial shift from cost centre to revenue generation and churn retention",
+      "statistic": "85% expected to contribute a larger slice of revenue",
+      "publisher": "Salesforce"
+     },
+     {
+      "claim_id": 36,
+      "stated_factor": "Executive expectation of structural transformation in procurement operations",
+      "statistic": "64% of procurement executives",
+      "publisher": "Procurement Magazine / The Hackett Group"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "model_quality",
+    "claim_count": 15,
+    "distinct_sources": 12,
+    "examples": [
+     {
+      "claim_id": 40,
+      "stated_factor": "Customer churn risk from failed or frustrating automated AI interactions",
+      "statistic": "63% willing to switch after just one bad experience",
+      "publisher": "Zendesk"
+     },
+     {
+      "claim_id": 117,
+      "stated_factor": "Diminished AI efficacy and customer frustration during repeat complaints and escalations",
+      "statistic": "",
+      "publisher": "Harvard Business School Working Knowledge"
+     },
+     {
+      "claim_id": 119,
+      "stated_factor": "Need for human-in-the-loop review and code defects from unverified AI generation",
+      "statistic": "Only 37% trust AI without human review; 73% encountered defects from 'vibe coding'",
+      "publisher": "BetaNews / GitLab"
+     }
+    ]
+   },
+   {
+    "polarity": "inhibitor",
+    "root_cause_id": "data_governance",
+    "claim_count": 15,
+    "distinct_sources": 14,
+    "examples": [
+     {
+      "claim_id": 147,
+      "stated_factor": "Knowledge base maintenance backlogs and lack of formal update processes",
+      "statistic": "61% report content backlogs, over 33% lack formal processes",
+      "publisher": "CDO Magazine"
+     },
+     {
+      "claim_id": 181,
+      "stated_factor": "Lack of a shared source of truth and fragmented data across platforms and clouds",
+      "statistic": "",
+      "publisher": "IBM Institute for Business Value"
+     },
+     {
+      "claim_id": 186,
+      "stated_factor": "Data oversharing concerns and information governance resource requirements",
+      "statistic": "64% cite governance/security resource drain; 40% delayed rollouts by 3+ months; 57% restricted to low-risk users",
+      "publisher": "Computerworld"
+     }
+    ]
+   },
+   {
+    "polarity": "driver",
+    "root_cause_id": "skills_change",
+    "claim_count": 14,
+    "distinct_sources": 11,
+    "examples": [
+     {
+      "claim_id": 14,
+      "stated_factor": "Reduced agent cognitive overload and tool fatigue during live interactions",
+      "statistic": "35% less likely to report agents are overwhelmed",
+      "publisher": "Deloitte Digital"
+     },
+     {
+      "claim_id": 39,
+      "stated_factor": "Agent sentiment favorability toward AI copilots offloading routine work",
+      "statistic": "73% of agents believe AI copilot helps them do their job better",
+      "publisher": "Zendesk"
+     },
+     {
+      "claim_id": 79,
+      "stated_factor": "Dissemination of top-performing agent tacit knowledge and rapid skill onboarding",
+      "statistic": "",
+      "publisher": "National Bureau of Economic Research (NBER)"
+     }
+    ]
+   }
+  ]
+ }
+}

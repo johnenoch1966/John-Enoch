@@ -126,6 +126,7 @@ Full details are in **[`deployment/README.md`](deployment/README.md)**.
 | Layer | Implementation |
 |---|---|
 | **Infrastructure as Code** | [`deployment/terraform/`](deployment/terraform) provisions APIs, least-privilege service accounts, **keyless Workload Identity Federation** for GitHub, Artifact Registry, a versioned GCS bucket for long-term memory, a **Cloud Run Job**, a weekly **Cloud Scheduler** trigger, and a **Monitoring alert** on failed runs. It supports separate `staging` and `prod` states, and is validated in CI with `terraform validate`. |
+| **Agent evaluation (golden datasets)** | [`evals/`](evals) is an automated evaluation suite that measures **generative-agent regressions** against hand-labelled golden datasets: 32 root-cause/industry claims and 20 PII cases, including false-positive traps. **Live suites** run the production semantic-bias agent and both analysts with real model calls and score accuracy, citation validity, coverage and conciseness. Deterministic suites cover masking, the taxonomy tool and a synthesis rubric. Results are gated by [`thresholds.json`](evals/thresholds.json) and a **regression baseline** ([`baseline.json`](evals/baseline.json)). Offline evals block every CI run; live evals run on prompt or agent changes, nightly for model drift, and before staging deploys ([`evals.yml`](.github/workflows/evals.yml), [`staging.yaml`](.cloudbuild/staging.yaml)). |
 | **CI** | [`ci.yml`](.github/workflows/ci.yml) and [`.cloudbuild/pr_checks.yaml`](.cloudbuild/pr_checks.yaml) run ruff, a **bandit** security scan, a **pip-audit** dependency audit, a **gitleaks** secret scan, and pytest on 3.11 and 3.12 with an **80% coverage gate**. That includes an offline end-to-end test of the whole agent graph. CI also runs Terraform fmt/validate, and a Docker build with a container smoke test. |
 | **CD** | [`cd.yml`](.github/workflows/cd.yml) and [`.cloudbuild/staging.yaml`](.cloudbuild/staging.yaml) build the image once and push an immutable digest. They deploy to **staging** and verify the rollout. After **manual approval**, the same digest is promoted to **production** ([`deploy-to-prod.yaml`](.cloudbuild/deploy-to-prod.yaml)). |
 | **Infrastructure pipeline** | [`infra.yml`](.github/workflows/infra.yml) runs `terraform plan` on PRs and `apply` after approval. |
@@ -191,6 +192,7 @@ pytest -v
 | `test_report.py` | citation sanitising, impact ranking, industry views, run-to-run diff, HTML rendering, XSS escaping |
 | `test_privacy.py` | PII detection for 9 types, false-positive guards, idempotency, DLP fail-safe, and masking at every enforcement point (fetch, plugin, storage, back-fill) |
 | `test_state_sync.py` | GCS round-trip of long-term memory for Cloud Run Jobs |
+| `test_evals.py` | eval metrics, threshold and baseline gating, golden-dataset integrity; the offline eval suite passes its gates |
 | `test_observability.py` | telemetry plugin handles the nested runs created by `AgentTool` without resetting metrics |
 | `test_pipeline.py` | **full agent graph offline**: all stages run in order, loops end, the report is published, telemetry is written, and a second run accumulates evidence and produces a diff |
 
@@ -213,6 +215,7 @@ adoption_agent/
   state_sync.py       GCS sync of long-term memory for Cloud Run Jobs
 data/, reports/       generated at runtime; published on the `research-data` branch
 tests/                unit + offline end-to-end tests
+evals/                golden datasets, eval suites, thresholds + regression baseline
 .github/workflows/    CI, CD (staging -> approval -> prod), infra, refresh, Pages
 .cloudbuild/          Cloud Build PR checks, staging delivery, prod promotion
 deployment/           Terraform (IaC) + deployment and operations guide

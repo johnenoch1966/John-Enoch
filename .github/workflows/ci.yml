@@ -24,8 +24,8 @@ jobs:
       - run: pip install -r requirements.lock -e ".[dev]"
       - name: Ruff lint + format check
         run: |
-          ruff check adoption_agent tests
-          ruff format --check adoption_agent tests
+          ruff check adoption_agent tests evals
+          ruff format --check adoption_agent tests evals
 
   security:
     runs-on: ubuntu-latest
@@ -72,6 +72,28 @@ jobs:
           name: coverage-xml
           path: coverage.xml
 
+  evals:
+    # Golden-dataset evaluation (deterministic suites) gates every change;
+    # live generative-agent evals run in evals.yml.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.lock -e ".[dev]"
+      - name: Offline evals vs thresholds + baseline
+        env:
+          GOOGLE_GENAI_USE_VERTEXAI: "TRUE"
+          GOOGLE_CLOUD_PROJECT: ci
+        run: python -m evals.run --suite offline --check
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-results-offline
+          path: evals/results/
+
   terraform:
     runs-on: ubuntu-latest
     defaults:
@@ -88,7 +110,7 @@ jobs:
 
   docker:
     runs-on: ubuntu-latest
-    needs: [lint, test]
+    needs: [lint, test, evals]
     steps:
       - uses: actions/checkout@v4
       - name: Build image

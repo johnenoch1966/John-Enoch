@@ -11,7 +11,7 @@ steps:
   - id: lint
     name: python:3.12-slim
     entrypoint: bash
-    args: ["-c", "/workspace/.venv/bin/ruff check adoption_agent tests && /workspace/.venv/bin/ruff format --check adoption_agent tests"]
+    args: ["-c", "/workspace/.venv/bin/ruff check adoption_agent tests evals && /workspace/.venv/bin/ruff format --check adoption_agent tests evals"]
     waitFor: ["install"]
 
   - id: security-scan
@@ -24,6 +24,13 @@ steps:
     name: python:3.12-slim
     entrypoint: bash
     args: ["-c", "/workspace/.venv/bin/pytest -q --cov=adoption_agent --cov-fail-under=80"]
+    env: ["GOOGLE_GENAI_USE_VERTEXAI=TRUE", "GOOGLE_CLOUD_PROJECT=ci"]
+    waitFor: ["install"]
+
+  - id: evals-offline
+    name: python:3.12-slim
+    entrypoint: bash
+    args: ["-c", "/workspace/.venv/bin/python -m evals.run --suite offline --check"]
     env: ["GOOGLE_GENAI_USE_VERTEXAI=TRUE", "GOOGLE_CLOUD_PROJECT=ci"]
     waitFor: ["install"]
 

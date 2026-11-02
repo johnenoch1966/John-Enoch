@@ -1,0 +1,69 @@
+name: Agent evals
+
+# Regression gate for the GENERATIVE agents, scored against golden datasets:
+#   - root_cause_agent  : semantic-bias agent on 32 hand-labelled claims
+#   - segment_analyst   : rubric on a frozen evidence digest
+#   - industry_analyst  : rubric on a frozen industry digest
+# plus the deterministic suites. Fails on threshold breach or regression vs
+# evals/baseline.json. Live suites need GCP (repository VARIABLES
+# GCP_PROJECT_ID, GCP_WIF_PROVIDER, GCP_SERVICE_ACCOUNT); until then only the
+# offline suites run.
+
+on:
+  pull_request:
+    paths:
+      - "adoption_agent/prompts.py"
+      - "adoption_agent/agent.py"
+      - "adoption_agent/schemas.py"
+      - "adoption_agent/taxonomy.yaml"
+      - "adoption_agent/privacy.py"
+      - "evals/**"
+  schedule:
+    - cron: "0 3 * * *" # nightly: catches model-side drift
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.lock -e ".[dev]"
+      - run: python -m evals.run --suite offline --check
+        env:
+          GOOGLE_GENAI_USE_VERTEXAI: "TRUE"
+          GOOGLE_CLOUD_PROJECT: ci
+
+  live:
+    if: vars.GCP_PROJECT_ID != ''
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: pip install -r requirements.lock -e ".[dev]"
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: ${{ vars.GCP_WIF_PROVIDER }}
+          service_account: ${{ vars.GCP_SERVICE_ACCOUNT }}
+      - name: Live generative-agent evals vs golden datasets
+        env:
+          GOOGLE_GENAI_USE_VERTEXAI: "TRUE"
+          GOOGLE_CLOUD_PROJECT: ${{ vars.GCP_PROJECT_ID }}
+          GOOGLE_CLOUD_LOCATION: global
+        run: python -m evals.run --suite live --check
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: eval-results-live
+          path: evals/results/

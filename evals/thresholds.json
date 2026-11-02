@@ -1,0 +1,29 @@
+{
+  "_comment": "Minimum acceptable scores (false_positive_rate is a maximum). CI fails below these; it also fails on a regression > tolerance vs baseline.json.",
+  "pii_masking": {"recall": 0.95, "false_positive_rate": 0.05, "keep_rate": 0.98},
+  "taxonomy_lookup": {"top1_hit": 0.70, "top3_hit": 0.80},
+  "synthesis_rubric": {
+    "segment.schema_valid": 1.0,
+    "segment.segment_coverage": 1.0,
+    "segment.use_case_coverage": 0.9,
+    "segment.section_completeness": 0.9,
+    "segment.citation_validity": 0.95,
+    "segment.items_cited": 0.9,
+    "segment.conciseness": 0.85,
+    "industry.schema_valid": 1.0,
+    "industry.industry_completeness": 0.85,
+    "industry.citation_validity": 0.95,
+    "industry.conciseness": 0.85
+  },
+  "root_cause_agent": {"top1_accuracy": 0.75, "any_accuracy": 0.85, "industry_match": 0.80, "coverage": 0.95},
+  "segment_analyst": {
+    "schema_valid": 1.0,
+    "segment_coverage": 1.0,
+    "use_case_coverage": 0.9,
+    "section_completeness": 0.9,
+    "citation_validity": 0.95,
+    "items_cited": 0.9,
+    "conciseness": 0.8
+  },
+  "industry_analyst": {"schema_valid": 1.0, "industry_completeness": 0.85, "citation_validity": 0.95, "conciseness": 0.8}
+}

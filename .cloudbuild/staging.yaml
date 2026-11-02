@@ -13,6 +13,14 @@ steps:
     args: ["-c", "pip install -q -r requirements.lock -e '.[dev]' && python -m pytest -q"]
     env: ["GOOGLE_GENAI_USE_VERTEXAI=TRUE", "GOOGLE_CLOUD_PROJECT=ci"]
 
+  - id: live-evals
+    # Generative-agent regression gate: real model calls on golden datasets.
+    name: python:3.12-slim
+    entrypoint: bash
+    args: ["-c", "pip install -q -r requirements.lock -e '.[dev]' && python -m evals.run --suite live --check"]
+    env: ["GOOGLE_GENAI_USE_VERTEXAI=TRUE", "GOOGLE_CLOUD_PROJECT=$PROJECT_ID", "GOOGLE_CLOUD_LOCATION=global"]
+    waitFor: ["unit-tests"]
+
   - id: build
     name: gcr.io/cloud-builders/docker
     args:
@@ -21,7 +29,7 @@ steps:
       - -t=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/agent:$SHORT_SHA
       - -t=${_REGION}-docker.pkg.dev/$PROJECT_ID/${_REPO}/agent:${_ENV}
       - .
-    waitFor: ["unit-tests"]
+    waitFor: ["live-evals"]
 
   - id: container-smoke-test
     name: gcr.io/cloud-builders/docker

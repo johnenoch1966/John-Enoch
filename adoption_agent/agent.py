@@ -281,24 +281,31 @@ industry_research_fanout = ParallelAgent(
 # --------------------------------------------------------------------------
 # Stage 3: semantic-bias / root-cause + industry tagging loop
 # --------------------------------------------------------------------------
-semantic_bias_analyst = LlmAgent(
-    name="semantic_bias_analyst",
-    model=REASONING_LLM,
-    description="Maps stated adoption factors to underlying root causes and industries.",
-    instruction=prompts.BIAS_ANALYST.format(
-        taxonomy=taxonomy_brief(), industries=industries_brief()
-    ),
-    tools=[get_unmapped_claims, lookup_taxonomy, record_root_cause_mappings],
-    include_contents="none",
-    generate_content_config=_LOW_TEMP,
-)
+def make_semantic_bias_analyst() -> LlmAgent:
+    """Factory (also used by the evaluation suite to test the exact config)."""
+    return LlmAgent(
+        name="semantic_bias_analyst",
+        model=REASONING_LLM,
+        description="Maps stated adoption factors to underlying root causes and industries.",
+        instruction=prompts.BIAS_ANALYST.format(
+            taxonomy=taxonomy_brief(), industries=industries_brief()
+        ),
+        tools=[get_unmapped_claims, lookup_taxonomy, record_root_cause_mappings],
+        include_contents="none",
+        generate_content_config=_LOW_TEMP,
+    )
 
-root_cause_mapping_loop = LoopAgent(
-    name="root_cause_mapping_loop",
-    description="Maps claims in batches until none remain.",
-    sub_agents=[MappingGate(name="mapping_gate"), semantic_bias_analyst],
-    max_iterations=config.MAX_MAPPING_ITERATIONS,
-)
+
+def make_root_cause_mapping_loop() -> LoopAgent:
+    return LoopAgent(
+        name="root_cause_mapping_loop",
+        description="Maps claims in batches until none remain.",
+        sub_agents=[MappingGate(name="mapping_gate"), make_semantic_bias_analyst()],
+        max_iterations=config.MAX_MAPPING_ITERATIONS,
+    )
+
+
+root_cause_mapping_loop = make_root_cause_mapping_loop()
 
 
 # --------------------------------------------------------------------------
@@ -363,27 +370,34 @@ def skip_if_no_evidence(callback_context: CallbackContext) -> types.Content | No
     return None
 
 
-segment_analyst = LlmAgent(
-    name="segment_analyst",
-    model=REASONING_LLM,
-    description="Ranks copilot and workflow use cases by impact; drivers and blockers.",
-    instruction=segment_analyst_instruction,
-    output_schema=SegmentSynthesis,
-    output_key="synthesis_segments",
-    include_contents="none",
-    generate_content_config=_LOW_TEMP,
-)
+def make_segment_analyst() -> LlmAgent:
+    return LlmAgent(
+        name="segment_analyst",
+        model=REASONING_LLM,
+        description="Ranks copilot and workflow use cases by impact; drivers and blockers.",
+        instruction=segment_analyst_instruction,
+        output_schema=SegmentSynthesis,
+        output_key="synthesis_segments",
+        include_contents="none",
+        generate_content_config=_LOW_TEMP,
+    )
 
-industry_analyst = LlmAgent(
-    name="industry_analyst",
-    model=REASONING_LLM,
-    description="Builds per-industry top-5 drivers, blockers and advice.",
-    instruction=industry_analyst_instruction,
-    output_schema=IndustrySynthesis,
-    output_key="synthesis_industries",
-    include_contents="none",
-    generate_content_config=_LOW_TEMP,
-)
+
+def make_industry_analyst() -> LlmAgent:
+    return LlmAgent(
+        name="industry_analyst",
+        model=REASONING_LLM,
+        description="Builds per-industry top-5 drivers, blockers and advice.",
+        instruction=industry_analyst_instruction,
+        output_schema=IndustrySynthesis,
+        output_key="synthesis_industries",
+        include_contents="none",
+        generate_content_config=_LOW_TEMP,
+    )
+
+
+segment_analyst = make_segment_analyst()
+industry_analyst = make_industry_analyst()
 
 synthesis_fanout = ParallelAgent(
     name="synthesis_fanout",

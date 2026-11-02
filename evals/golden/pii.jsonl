@@ -1,0 +1,20 @@
+{"id": "pii-01", "text": "Contact the programme lead at sarah.jones@bigbank.com for the deck.", "expected_types": ["EMAIL"], "must_keep": ["programme lead"]}
+{"id": "pii-02", "text": "Press office: +44 20 7946 0958 (UK) or +1 415 555 0132 (US).", "expected_types": ["PHONE", "PHONE"], "must_keep": ["Press office"]}
+{"id": "pii-03", "text": "Test card 4111 1111 1111 1111 was used in the demo.", "expected_types": ["CREDIT_CARD"], "must_keep": ["demo"]}
+{"id": "pii-04", "text": "Refunds go to GB82 WEST 1234 5698 7654 32.", "expected_types": ["IBAN"], "must_keep": ["Refunds"]}
+{"id": "pii-05", "text": "The claimant's SSN 123-45-6789 appeared in the log.", "expected_types": ["US_SSN"], "must_keep": ["claimant"]}
+{"id": "pii-06", "text": "NI number JG 10 37 48 C was found in the HR export.", "expected_types": ["UK_NINO"], "must_keep": ["HR export"]}
+{"id": "pii-07", "text": "Requests from 203.0.113.42 were throttled.", "expected_types": ["IP_ADDRESS"], "must_keep": ["throttled"]}
+{"id": "pii-08", "text": "Repo mirror at https://ci-bot:hunter2@git.example.com/org/repo.", "expected_types": ["URL_CREDENTIALS"], "must_keep": ["git.example.com"]}
+{"id": "pii-09", "text": "Email ops@acme.io or call (212) 555-0199 to escalate.", "expected_types": ["EMAIL", "PHONE"], "must_keep": ["escalate"]}
+{"id": "pii-10", "text": "Customer jane_doe+billing@mail.co.uk disputed charge on 5500 0000 0000 0004.", "expected_types": ["EMAIL", "CREDIT_CARD"], "must_keep": ["disputed charge"]}
+{"id": "neg-01", "text": "62% of 1,100 IT leaders cite governance as the top barrier (2024-2025 survey).", "expected_types": [], "must_keep": ["62%", "1,100", "2024-2025"]}
+{"id": "neg-02", "text": "Adoption rose from 12.5% to 31% between 2023 and 2025.", "expected_types": [], "must_keep": ["12.5%", "31%", "2023", "2025"]}
+{"id": "neg-03", "text": "Licences cost $30 per user per month; 25-30 minutes saved per day.", "expected_types": [], "must_keep": ["$30", "25-30 minutes"]}
+{"id": "neg-04", "text": "Order 4111 1111 1111 1112 failed validation.", "expected_types": [], "must_keep": ["4111 1111 1111 1112"]}
+{"id": "neg-05", "text": "Gartner predicts over 40% of agentic AI projects will be cancelled by end of 2027.", "expected_types": [], "must_keep": ["40%", "2027"]}
+{"id": "neg-06", "text": "SDK version 1.2.3 and build 10.4.2.900 shipped in Q3.", "expected_types": [], "must_keep": ["1.2.3", "10.4.2.900"]}
+{"id": "neg-07", "text": "The survey of 2,500 executives across 14 countries ran from 2025-03 to 2025-05.", "expected_types": [], "must_keep": ["2,500", "14 countries", "2025-03"]}
+{"id": "neg-08", "text": "Contact-centre AHT fell 30% and CSAT rose 12 points; ROI of 3.5x in 18 months.", "expected_types": [], "must_keep": ["30%", "12 points", "3.5x"]}
+{"id": "neg-09", "text": "See https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai for details.", "expected_types": [], "must_keep": ["mckinsey.com"]}
+{"id": "neg-10", "text": "EU AI Act Article 14 requires human oversight; SR 11-7 governs model risk.", "expected_types": [], "must_keep": ["Article 14", "SR 11-7"]}

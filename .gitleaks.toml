@@ -5,4 +5,4 @@ useDefault = true
 
 [allowlist]
 description = "Synthetic test fixtures for PII masking"
-paths = ['''tests/test_privacy\.py''']
+paths = ['''tests/test_privacy\.py''', '''evals/golden/pii\.jsonl''']
