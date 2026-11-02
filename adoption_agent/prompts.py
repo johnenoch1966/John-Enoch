@@ -171,7 +171,7 @@ Weight by claim_count and distinct_sources; discount high vendor_share.
 Taxonomy:
 {taxonomy}
 
-Use-case catalog (id | name | segment):
+Use-case catalog by segment (id | name):
 {scope}
 
 Evidence digest (JSON):
@@ -184,8 +184,11 @@ For EACH segment produce:
 - headline (one sentence)
 - use_case_impact: EVERY catalog use case of that segment, ranked by realised
   business impact (impact_score 1-5), with adoption_stage, value_lever and
-  key_blocker. Base scores on use_case_evidence and related groups; where a
-  use case has little direct evidence, score conservatively.
+  key_blocker. COVERAGE IS MANDATORY: the copilot segment must contain exactly
+  {n_copilot} entries and the workflow segment exactly {n_workflow} entries,
+  one per catalog id above; never skip a use case. Base scores on
+  use_case_evidence and related groups; where a use case has little direct
+  evidence, still include it and score it conservatively (1-2).
 - 5 top drivers and 5 top inhibitors (strongest first)
 - 3-4 approaches associated with HIGH adoption, 3-4 patterns behind LOW adoption
 Then: 4-6 semantic-bias insights (stated framing vs underlying issue), 2-4

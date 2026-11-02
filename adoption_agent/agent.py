@@ -328,10 +328,27 @@ def _as_json(value: Any) -> str:
     return value if isinstance(value, str) else json.dumps(value, ensure_ascii=False)
 
 
+def _segment_catalog_brief(state: Any) -> tuple[str, dict[str, int]]:
+    """Catalog grouped by segment with explicit counts (coverage contract)."""
+    catalog = state.get("use_case_catalog") or {}
+    groups: dict[str, list[str]] = {"copilot": [], "workflow": []}
+    for u in catalog.get("use_cases", []):
+        groups.setdefault(u["segment"], []).append(f"- {u['id']} | {u['name']}")
+    counts = {k: len(v) for k, v in groups.items()}
+    text = "\n\n".join(
+        f"{seg.upper()} use cases ({counts[seg]}; rank ALL {counts[seg]}):\n" + "\n".join(lines)
+        for seg, lines in groups.items()
+    )
+    return text, counts
+
+
 def segment_analyst_instruction(ctx: ReadonlyContext) -> str:
+    scope, counts = _segment_catalog_brief(ctx.state)
     return prompts.SEGMENT_ANALYST.format(
         taxonomy=taxonomy_brief(),
-        scope=_catalog_lines(ctx.state),
+        scope=scope,
+        n_copilot=counts.get("copilot", 0),
+        n_workflow=counts.get("workflow", 0),
         digest=ctx.state.get("evidence_digest", "{}"),
         previous=ctx.state.get("previous_summary", ""),
     )

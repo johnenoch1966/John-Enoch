@@ -77,6 +77,15 @@ def suite_synthesis_rubric() -> dict:
 # --------------------------------------------------------------------------
 # Live suites (real model calls through ADK, isolated temp storage)
 # --------------------------------------------------------------------------
+# One event loop for all live suites, so async client cleanup never runs on a
+# closed loop (asyncio.run would create and close a loop per suite).
+_LOOP = asyncio.new_event_loop()
+
+
+def _run(coro):
+    return _LOOP.run_until_complete(coro)
+
+
 class _TempHome:
     """Point all agent storage at a throwaway directory for the eval."""
 
@@ -173,7 +182,7 @@ def suite_root_cause_agent() -> dict:
                 "eval",
             )
             id_of[cid] = c["id"]
-        asyncio.run(_run_agent(make_root_cause_mapping_loop(), {"run_id": "eval"}))
+        _run(_run_agent(make_root_cause_mapping_loop(), {"run_id": "eval"}))
         preds = {
             id_of[cl["id"]]: {
                 "root_cause_ids": cl["root_cause_ids"],
@@ -205,7 +214,7 @@ def suite_segment_analyst() -> dict:
     from .metrics import segment_rubric
 
     with _TempHome():
-        state = asyncio.run(_run_agent(make_segment_analyst(), _analyst_state()))
+        state = _run(_run_agent(make_segment_analyst(), _analyst_state()))
     out = _as_dict(state.get("synthesis_segments"))
     return segment_rubric(out, set(_fixture("valid_claim_ids.json")), _fixture("catalog.json"))
 
@@ -216,7 +225,7 @@ def suite_industry_analyst() -> dict:
     from .metrics import industry_rubric
 
     with _TempHome():
-        state = asyncio.run(_run_agent(make_industry_analyst(), _analyst_state()))
+        state = _run(_run_agent(make_industry_analyst(), _analyst_state()))
     out = _as_dict(state.get("synthesis_industries"))
     return industry_rubric(out, set(_fixture("valid_claim_ids.json")))
 

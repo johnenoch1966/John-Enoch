@@ -41,3 +41,10 @@ make eval            # offline suites + gates
 make eval-live       # live suites (needs: gcloud auth application-default login)
 make eval-baseline   # accept current scores as the new baseline
 ```
+
+## Findings log
+
+| Date | Suite | Finding | Action | Result |
+|---|---|---|---|---|
+| 2026-11-02 | `segment_analyst` (live) | **Regression caught:** `use_case_coverage` = **0.65** (threshold 0.90). The analyst silently skipped about a third of the catalog use cases when ranking by impact, a non-deterministic failure that the previous production run had not shown. | The prompt now passes the catalog grouped by segment, with explicit per-segment counts as a coverage contract ("exactly N entries; never skip"). | 1.00 and 0.99 on two re-runs; baseline recorded |
+| 2026-11-02 | `root_cause_agent` (live) | First baseline: 32/32 correct primary root cause and industry, including the semantic-bias case "connectors not enabled → Risk & Auditability". The deterministic lookup tool alone scores 0.75 top-1, so the agent adds measurable value. | - | baseline 1.00 |
