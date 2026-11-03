@@ -154,3 +154,15 @@ def test_html_escapes_untrusted_source_text(tmp_home):
     html = render_html(report)
     assert "<script>alert(1)</script>" not in html
     assert "&lt;script&gt;" in html
+
+
+def test_refresh_button_links_to_workflow(tmp_home, monkeypatch):
+    store = EvidenceStore(config.EVIDENCE_DB)
+    ids = _seed(store)
+    report = build_report(sample_synthesis(ids), store, run_id="r1", catalog=None, previous=None)
+    monkeypatch.setattr(config, "REPO_URL", "https://github.com/acme/repo")
+    html = render_html(report)
+    assert 'href="https://github.com/acme/repo/actions/workflows/refresh-report.yml"' in html
+    assert "Refresh research" in html and "refresh-report.yml/badge.svg" in html
+    monkeypatch.setattr(config, "REPO_URL", "")
+    assert "Refresh research" not in render_html(report)

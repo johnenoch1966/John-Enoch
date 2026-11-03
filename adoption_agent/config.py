@@ -22,6 +22,11 @@ except ImportError:  # pragma: no cover
 MODEL: str = os.getenv("ADOPTION_AGENT_MODEL", "gemini-3.8-flash")
 REASONING_MODEL: str = os.getenv("ADOPTION_AGENT_REASONING_MODEL", MODEL)
 
+# --- Publishing -----------------------------------------------------------
+# GitHub repository hosting the refresh workflow (powers the report's
+# "Refresh research" button). Empty string hides the button.
+REPO_URL: str = os.getenv("ADOPTION_AGENT_REPO_URL", "https://github.com/johnenoch1966/John-Enoch")
+
 # --- Paths ----------------------------------------------------------------
 PROJECT_ROOT: Path = Path(os.getenv("ADOPTION_AGENT_HOME", Path(__file__).resolve().parent.parent))
 DATA_DIR: Path = PROJECT_ROOT / "data"

@@ -172,6 +172,12 @@ open reports/index.html   # you are asked to approve publication first; `make pu
 adk web .        # choose "adoption_agent", send "run"
 ```
 
+**Refresh from the web page:** the report header has a **Refresh research** button. It opens the [Refresh report workflow](.github/workflows/refresh-report.yml) on GitHub, where repo collaborators click *Run workflow*; anonymous visitors can't start paid runs. The workflow restores long-term memory from `research-data`, runs the full web research cycle, and opens a **pull request**. Merging it (human approval) publishes the new report. One-time setup, under Settings → Secrets and variables → Actions:
+- **Credentials, either option:**
+  - a Gemini API key: secret `GEMINI_API_KEY` plus variable `GEMINI_AUTH=api_key`, or
+  - keyless Vertex AI via the Terraform outputs: `GCP_PROJECT_ID`, `GCP_WIF_PROVIDER`, `GCP_SERVICE_ACCOUNT`.
+- **Pull requests:** enable *Allow GitHub Actions to create and approve pull requests*.
+
 Other commands: `python -m adoption_agent.cli stats` shows the evidence-base size, and `python -m adoption_agent.cli render` re-renders the HTML.
 
 **Resilience:** all model calls retry rate-limit (429) and server (5xx) errors with increasing waits and random jitter. Every source and claim is saved the moment it is recorded, so an interrupted run loses no research. `python -m adoption_agent.cli run --resume` skips the web research and continues from root-cause mapping using the stored evidence. `--research clusters|industries|none` runs only one of the two research fan-outs.

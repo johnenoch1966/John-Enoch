@@ -278,7 +278,9 @@ def render_html(report: dict[str, Any], history: list[dict[str, Any]] | None = N
     env = Environment(
         loader=FileSystemLoader(_TEMPLATES), autoescape=select_autoescape(["html", "j2"])
     )
-    return env.get_template("report.html.j2").render(r=report, history=history or [])
+    return env.get_template("report.html.j2").render(
+        r=report, history=history or [], repo_url=config.REPO_URL
+    )
 
 
 def publish(report: dict[str, Any]) -> dict[str, str]:
