@@ -1,22 +1,26 @@
 name: Refresh report
 
-# Started by the report's "Refresh research" button (workflow_dispatch; only
-# repo collaborators can run it) or on schedule. HUMAN-IN-THE-LOOP release:
-#   1. restore long-term memory from the `research-data` branch
-#   2. run the web research cycle (unattended, approval policy "auto")
-#   3. open a pull request against `research-data` with the new report
-#   4. a human reviews and merges -> GitHub Pages deploys (pages.yml)
+# One-click refresh for ANYONE with a free GitHub account:
+#   the report's "Refresh research" button opens a pre-filled issue
+#   ("[refresh] ..."); submitting it starts this workflow. Also runnable via
+#   "Run workflow" (collaborators) and weekly on schedule.
 #
-# Model credentials (configure ONE in Settings > Secrets and variables > Actions):
-#   A) Gemini API key:   secret GEMINI_API_KEY  + variable GEMINI_AUTH=api_key
-#   B) Vertex AI (keyless WIF, from `terraform output`):
-#                        variables GCP_PROJECT_ID, GCP_WIF_PROVIDER, GCP_SERVICE_ACCOUNT
-# Also enable: Settings > Actions > General > "Allow GitHub Actions to create
-# and approve pull requests".
+# Guardrails (protect the owner's model budget):
+#   - one refresh at a time, at most one start per 24 hours (tag `refresh-started`)
+#   - issue text is never executed or passed to the agent (no injection surface)
+# Publication:
+#   - the new report must pass the automated quality gate (evals/gate_report.py:
+#     schema, coverage, citation validity, conciseness) to auto-publish;
+#     otherwise it is opened as a pull request for human review.
+#
+# One-time setup (Settings > Secrets and variables > Actions), ONE of:
+#   A) secret GEMINI_API_KEY + variable GEMINI_AUTH=api_key
+#   B) variables GCP_PROJECT_ID, GCP_WIF_PROVIDER, GCP_SERVICE_ACCOUNT (Vertex AI, keyless)
+# and Settings > Actions > General > "Allow GitHub Actions to create and approve pull requests".
 
 on:
-  schedule:
-    - cron: "0 6 * * 1" # Mondays 06:00 UTC
+  issues:
+    types: [opened]
   workflow_dispatch:
     inputs:
       research:
@@ -24,39 +28,92 @@ on:
         type: choice
         options: [all, clusters, industries, none]
         default: all
+  schedule:
+    - cron: "0 6 * * 1" # Mondays 06:00 UTC
 
 permissions:
   contents: write
   pull-requests: write
+  issues: write
+  actions: read
+  pages: write
   id-token: write
 
-concurrency:
-  group: refresh-report
-  cancel-in-progress: false
+env:
+  COOLDOWN_HOURS: "24"
+  REPORT_URL: https://johnenoch1966.github.io/John-Enoch/
 
 jobs:
-  not-configured:
-    if: vars.GCP_PROJECT_ID == '' && vars.GEMINI_AUTH != 'api_key'
+  admit:
+    # Only issues created from the refresh form; ignore all other issues.
+    if: github.event_name != 'issues' || startsWith(github.event.issue.title, '[refresh]')
     runs-on: ubuntu-latest
+    outputs:
+      allowed: ${{ steps.decide.outputs.allowed }}
     steps:
-      - name: Explain setup
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - id: decide
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HAS_CREDS: ${{ vars.GEMINI_AUTH == 'api_key' || vars.GCP_PROJECT_ID != '' }}
+          ISSUE: ${{ github.event.issue.number }}
+          RUN_ID: ${{ github.run_id }}
         run: |
-          {
-            echo "## Refresh not configured yet"
-            echo "Add model credentials, then click **Run workflow** again:"
-            echo "- **Gemini API key:** secret \`GEMINI_API_KEY\` and variable \`GEMINI_AUTH=api_key\`, or"
-            echo "- **Vertex AI:** variables \`GCP_PROJECT_ID\`, \`GCP_WIF_PROVIDER\`, \`GCP_SERVICE_ACCOUNT\` (see deployment/README.md)."
-            echo "Also enable *Settings > Actions > General > Allow GitHub Actions to create and approve pull requests*."
-          } >> "$GITHUB_STEP_SUMMARY"
+          reason=""
+          if [ "$HAS_CREDS" != "true" ]; then
+            reason="Refresh isn't configured yet: the repository owner needs to add model credentials."
+          fi
+          if [ -z "$reason" ]; then
+            busy=$(gh run list --workflow refresh-report.yml --json databaseId,status \
+              --jq "[.[] | select(.databaseId != $RUN_ID and (.status == \"in_progress\" or .status == \"queued\"))] | length")
+            [ "$busy" -gt 0 ] && reason="A refresh is already running. The page will update when it finishes."
+          fi
+          if [ -z "$reason" ]; then
+            git fetch -q origin "refs/tags/refresh-started:refs/tags/refresh-started" 2>/dev/null || true
+            last=$(git for-each-ref refs/tags/refresh-started --format='%(taggerdate:unix)')
+            now=$(date +%s)
+            if [ -n "$last" ] && [ $(( now - last )) -lt $(( COOLDOWN_HOURS * 3600 )) ]; then
+              next=$(date -u -d "@$(( last + COOLDOWN_HOURS * 3600 ))" '+%Y-%m-%d %H:%M UTC')
+              reason="The report was refreshed less than ${COOLDOWN_HOURS} hours ago. Next refresh possible after ${next}."
+            fi
+          fi
+          if [ -n "$reason" ]; then
+            echo "allowed=false" >> "$GITHUB_OUTPUT"
+            echo "### Refresh not started" >> "$GITHUB_STEP_SUMMARY"; echo "$reason" >> "$GITHUB_STEP_SUMMARY"
+            if [ -n "$ISSUE" ]; then
+              gh issue comment "$ISSUE" --body "Thanks! $reason Current report: $REPORT_URL"
+              gh issue close "$ISSUE" --reason "not planned"
+            fi
+          else
+            echo "allowed=true" >> "$GITHUB_OUTPUT"
+            if [ -n "$ISSUE" ]; then
+              gh issue comment "$ISSUE" --body "Refresh started (run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/$RUN_ID). It takes about 3 hours; I'll comment here when it's done."
+            fi
+          fi
 
   refresh:
-    if: vars.GCP_PROJECT_ID != '' || vars.GEMINI_AUTH == 'api_key'
+    needs: admit
+    if: needs.admit.outputs.allowed == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 330
+    concurrency:
+      group: refresh-report
+      cancel-in-progress: false
+    outputs:
+      gate: ${{ steps.gate.outcome }}
+      pr_url: ${{ steps.pr.outputs.pull-request-url }}
     env:
       USE_VERTEX: ${{ vars.GCP_PROJECT_ID != '' && 'TRUE' || 'FALSE' }}
     steps:
       - uses: actions/checkout@v4
+      - name: Mark refresh start (cooldown marker)
+        run: |
+          git config user.name "adoption-agent-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git tag -fa refresh-started -m "refresh run ${{ github.run_id }}"
+          git push -f origin refs/tags/refresh-started
       - name: Restore long-term memory
         uses: actions/checkout@v4
         with:
@@ -67,7 +124,7 @@ jobs:
         with:
           python-version: "3.12"
           cache: pip
-      - run: pip install -r requirements.lock .
+      - run: pip install -r requirements.lock -e .
       - name: Authenticate to Google Cloud (keyless WIF)
         if: env.USE_VERTEX == 'TRUE'
         uses: google-github-actions/auth@v2
@@ -84,27 +141,69 @@ jobs:
           ADOPTION_AGENT_MODEL: ${{ vars.ADOPTION_AGENT_MODEL || 'gemini-3.8-flash' }}
           ADOPTION_AGENT_REASONING_MODEL: ${{ vars.ADOPTION_AGENT_MODEL || 'gemini-3.8-flash' }}
         run: python -m adoption_agent.cli run --approval auto --research "${{ inputs.research || 'all' }}"
+      - name: Automated publication quality gate
+        id: gate
+        continue-on-error: true
+        run: python -m evals.gate_report
       - name: Upload run telemetry + privacy audit
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: run-telemetry-${{ github.run_id }}
           path: runs/
-      - name: Stage results for review
+      - name: Stage results
         if: always()
         run: |
           rsync -a --delete --exclude README.md --exclude draft_report.json data/ _state/data/
           rsync -a --delete --exclude draft.html reports/ _state/reports/
-      - name: Open pull request for human approval
-        if: always()
+      - name: Publish (gate passed)
+        if: steps.gate.outcome == 'success'
+        working-directory: _state
+        run: |
+          git config user.name "adoption-agent-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A data reports
+          git diff --cached --quiet || git commit -m "chore(report): refresh ${{ github.run_id }} (quality gate passed)"
+          git push origin HEAD:research-data
+      - name: Open pull request for human review (gate failed)
+        id: pr
+        if: always() && steps.gate.outcome != 'success'
         uses: peter-evans/create-pull-request@v7
         with:
           path: _state
           base: research-data
           branch: refresh/${{ github.run_id }}
-          title: "Research refresh ${{ github.run_id }}: review before publishing"
-          commit-message: "chore(report): automated research refresh"
+          title: "Research refresh ${{ github.run_id }}: quality gate failed, review needed"
+          commit-message: "chore(report): research refresh (needs review)"
           body: |
-            Web research cycle started from the report's **Refresh research** button (or schedule).
-            **Merging publishes the report to GitHub Pages.** Review `reports/index.html` and the
-            run telemetry / privacy audit artifact before approving.
+            The automated quality gate did not pass for this refresh (see the run summary).
+            Review `reports/index.html`; **merging publishes the report**.
+
+  deploy:
+    needs: refresh
+    if: needs.refresh.outputs.gate == 'success'
+    uses: ./.github/workflows/pages.yml
+
+  report-back:
+    needs: [admit, refresh, deploy]
+    if: always() && needs.admit.outputs.allowed == 'true' && github.event_name == 'issues'
+    runs-on: ubuntu-latest
+    steps:
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          ISSUE: ${{ github.event.issue.number }}
+          REFRESH: ${{ needs.refresh.result }}
+          GATE: ${{ needs.refresh.outputs.gate }}
+          DEPLOY: ${{ needs.deploy.result }}
+          PR_URL: ${{ needs.refresh.outputs.pr_url }}
+        run: |
+          if [ "$DEPLOY" = "success" ]; then
+            msg="Done! The refreshed report passed the quality checks and is live: $REPORT_URL"
+          elif [ "$REFRESH" = "success" ] && [ "$GATE" != "success" ]; then
+            msg="The refresh finished but didn't pass the automated quality checks, so the owner will review it first: $PR_URL"
+          else
+            msg="Sorry, the refresh didn't complete. The owner has been notified via the failed run. Current report: $REPORT_URL"
+          fi
+          gh issue comment "$ISSUE" --body "$msg"
+          gh issue close "$ISSUE"

@@ -172,10 +172,18 @@ open reports/index.html   # you are asked to approve publication first; `make pu
 adk web .        # choose "adoption_agent", send "run"
 ```
 
-**Refresh from the web page:** the report header has a **Refresh research** button. It opens the [Refresh report workflow](.github/workflows/refresh-report.yml) on GitHub, where repo collaborators click *Run workflow*; anonymous visitors can't start paid runs. The workflow restores long-term memory from `research-data`, runs the full web research cycle, and opens a **pull request**. Merging it (human approval) publishes the new report. One-time setup, under Settings → Secrets and variables → Actions:
+**One-click refresh for anyone:** the report header has a **Refresh research** button. Anyone with a free GitHub account clicks it and then *Submit*, which opens a pre-filled request (a GitHub issue form). That starts the [Refresh report workflow](.github/workflows/refresh-report.yml), which:
+1. **Admits or declines the request.** The owner's model budget is protected: only one refresh runs at a time, at most one starts per 24 hours, and the issue text is never executed or passed to the agent.
+2. **Restores long-term memory** from the `research-data` branch and runs the full web research cycle (about 3 hours).
+3. **Runs the automated publication quality gate** ([`evals/gate_report.py`](evals/gate_report.py)): schema, coverage, citation validity against the evidence store, and conciseness.
+   - **Pass:** the report is published to GitHub Pages automatically.
+   - **Fail:** a pull request is opened for human review.
+4. **Comments on the request** with the outcome and closes it.
+
+One-time setup by the owner, under Settings → Secrets and variables → Actions:
 - **Credentials, either option:**
   - a Gemini API key: secret `GEMINI_API_KEY` plus variable `GEMINI_AUTH=api_key`, or
-  - keyless Vertex AI via the Terraform outputs: `GCP_PROJECT_ID`, `GCP_WIF_PROVIDER`, `GCP_SERVICE_ACCOUNT`.
+  - keyless Vertex AI (WIF): `GCP_PROJECT_ID`, `GCP_WIF_PROVIDER`, `GCP_SERVICE_ACCOUNT`.
 - **Pull requests:** enable *Allow GitHub Actions to create and approve pull requests*.
 
 Other commands: `python -m adoption_agent.cli stats` shows the evidence-base size, and `python -m adoption_agent.cli render` re-renders the HTML.

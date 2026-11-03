@@ -162,7 +162,7 @@ def test_refresh_button_links_to_workflow(tmp_home, monkeypatch):
     report = build_report(sample_synthesis(ids), store, run_id="r1", catalog=None, previous=None)
     monkeypatch.setattr(config, "REPO_URL", "https://github.com/acme/repo")
     html = render_html(report)
-    assert 'href="https://github.com/acme/repo/actions/workflows/refresh-report.yml"' in html
+    assert 'href="https://github.com/acme/repo/issues/new?template=refresh.yml"' in html
     assert "Refresh research" in html and "refresh-report.yml/badge.svg" in html
     monkeypatch.setattr(config, "REPO_URL", "")
     assert "Refresh research" not in render_html(report)

@@ -111,11 +111,11 @@
     </div>
     {% if repo_url %}
     <div class="refresh">
-      <a class="btn" href="{{ repo_url }}/actions/workflows/refresh-report.yml" target="_blank" rel="noopener"
-         title="Opens GitHub Actions: click 'Run workflow' to start a new web research cycle (repo collaborators only)">&#x21bb; Refresh research</a>
+      <a class="btn" href="{{ repo_url }}/issues/new?template=refresh.yml" target="_blank" rel="noopener"
+         title="Opens a pre-filled refresh request on GitHub: just click 'Submit new issue'">&#x21bb; Refresh research</a>
       <img src="{{ repo_url }}/actions/workflows/refresh-report.yml/badge.svg" alt="Refresh status" height="20">
-      <small>Runs the full web research cycle on GitHub (~3 h, collaborators only).
-        The new report is opened as a pull request and goes live after you approve it.</small>
+      <small>Anyone with a free GitHub account: click, then <b>Submit</b>. Runs the full web research
+        cycle (~3 h, max once per 24 h) and updates this page automatically if it passes the quality checks.</small>
     </div>
     {% endif %}
   </div>

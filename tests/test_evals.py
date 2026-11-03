@@ -107,3 +107,33 @@ def test_golden_datasets_are_well_formed():
     assert any(c["stated_factor"] == "Access to connectors not enabled" for c in rc)
     pii = run._jsonl(run.GOLDEN / "pii.jsonl")
     assert sum(1 for c in pii if not c["expected_types"]) >= 10  # false-positive traps
+
+
+def test_publication_gate_passes_good_report_and_blocks_bad(tmp_home):
+    from adoption_agent import config
+    from adoption_agent.report import build_report
+    from adoption_agent.store import EvidenceStore
+    from evals.gate_report import gate
+    from tests.samples import sample_claim, sample_source
+
+    store = EvidenceStore(config.EVIDENCE_DB)
+    sid, _ = store.add_source(sample_source(1), "r1")
+    ids = [store.add_claim(sid, sample_claim(f"F{i}"), "r1")[0] for i in range(3)]
+    syn = sample_synthesis(ids)
+    report = build_report(syn, store, run_id="r1", catalog=None, previous=None)
+    path = tmp_home / "report.json"
+
+    # Sample brief: valid citations, but only 1 of 7 industry profiles and thin sections.
+    path.write_text(json.dumps(report))
+    ok, scores, failures = gate(path)
+    assert not ok and any("industry_completeness" in f for f in failures)
+    assert scores["segment.citation_validity"] == 1.0
+
+    # The last published (fixture) brief passes the gate.
+    report["synthesis"] = run._fixture("synthesis_snapshot.json")
+    report["catalog"] = run._fixture("catalog.json")
+    path.write_text(json.dumps(report))
+    for cid in run._fixture("valid_claim_ids.json"):  # make cited ids exist in the store
+        store.add_claim(sid, sample_claim(f"fixture {cid}"), "r1")
+    ok, _, failures = gate(path)
+    assert ok, failures

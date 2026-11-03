@@ -1,0 +1,19 @@
+name: Refresh research
+description: Start a new web research cycle for the Enterprise Agentic AI Adoption report.
+title: "[refresh] Refresh research"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Click **Submit new issue** to start a fresh research cycle. That's all.
+
+        - It searches the web, analyses new reports and rebuilds the page. It takes about **3 hours**.
+        - The page updates **automatically** if the new report passes the quality checks. Otherwise the owner reviews it first.
+        - Only one refresh runs at a time, at most once every 24 hours. You'll get a comment here saying whether it started.
+  - type: textarea
+    id: note
+    attributes:
+      label: Anything you'd like the research to look at? (optional)
+      description: Shown to the owner only; it does not change the automated run.
+    validations:
+      required: false
