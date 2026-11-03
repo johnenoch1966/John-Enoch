@@ -1,17 +1,26 @@
 name: Research data updated
 
-# Signals that new research output landed on this branch. The Pages workflow
-# on `main` listens for this (workflow_run) and deploys reports/ from here.
+# Runs on pushes to research-data. Two jobs:
+#   validate - checks the published report artifacts; the Pages workflow on
+#              `main` listens for this run (workflow_run) and deploys reports/.
+#   notify   - when the Google Cloud refresh job finishes (status.json), comment
+#              on and close the "Refresh research" requests; open a review PR
+#              when the quality gate failed.
 on:
   push:
     branches: [research-data]
-    paths: ["reports/**", "data/**"]
+    paths: ["reports/**", "data/**", "status.json"]
 
 permissions:
   contents: read
+  issues: write
+  pull-requests: write
+
+env:
+  REPORT_URL: https://johnenoch1966.github.io/John-Enoch/
 
 jobs:
-  signal:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,3 +28,34 @@ jobs:
         run: |
           test -s reports/index.html
           python3 -c "import json; r=json.load(open('data/report.json')); print('run', r['run_id'], 'sources', r['stats']['sources_total'])"
+
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Report outcome to requesters
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          test -f status.json || exit 0
+          state=$(python3 -c "import json; print(json.load(open('status.json')).get('state',''))")
+          issues=$(python3 -c "import json; print(' '.join(str(i) for i in json.load(open('status.json')).get('issues',[])))")
+          case "$state" in
+            published)
+              msg="Done! The refreshed report passed the quality checks and is live: $REPORT_URL (it may take a couple of minutes to appear)." ;;
+            needs_review)
+              branch=$(python3 -c "import json; print(json.load(open('status.json')).get('review_branch',''))")
+              pr=$(gh pr create --base research-data --head "$branch" \
+                    --title "Research refresh needs review ($branch)" \
+                    --body "The automated quality gate did not pass. Review reports/index.html; merging publishes the report." 2>/dev/null \
+                   || echo "${{ github.server_url }}/${{ github.repository }}/compare/research-data...$branch")
+              msg="The refresh finished but didn't pass the automated quality checks, so the owner will review it first: $pr" ;;
+            failed)
+              msg="Sorry, the refresh didn't complete. The owner has been notified. Current report: $REPORT_URL" ;;
+            *) exit 0 ;;
+          esac
+          for i in $issues; do
+            gh issue comment "$i" --body "$msg" || true
+            gh issue close "$i" || true
+          done
