@@ -13,7 +13,7 @@ set -euo pipefail
 
 PROJECT_ID="${PROJECT_ID:?set PROJECT_ID}"
 REGION="${REGION:-us-central1}"
-DEPLOY_KEY="${DEPLOY_KEY:?path to the job's GitHub deploy key (private)}"
+DEPLOY_KEY="${DEPLOY_KEY:?path to the private GitHub deploy key for the job}"
 REPO="adoption-agent"
 JOB="adoption-agent-refresh"
 SCHED="adoption-agent-poll"

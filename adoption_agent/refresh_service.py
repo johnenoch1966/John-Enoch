@@ -110,10 +110,12 @@ class Git:
             ["git", *args],
             cwd=cwd or self.workdir,
             env=self.env,
-            check=True,
             capture_output=True,
             text=True,
         )
+        if out.returncode != 0:
+            logger.error("git %s failed: %s", args[0], out.stderr.strip()[-500:])
+            raise subprocess.CalledProcessError(out.returncode, out.args, out.stdout, out.stderr)
         return out.stdout.strip()
 
     def clone(self) -> None:
