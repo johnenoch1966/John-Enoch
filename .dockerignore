@@ -6,4 +6,5 @@ runs
 .ruff_cache
 .env
 tests
+evals/results
 reports

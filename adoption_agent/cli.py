@@ -166,6 +166,7 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("render", help="Re-render HTML from data/report.json")
     sub.add_parser("stats", help="Show evidence-base statistics")
     sub.add_parser("publish-draft", help="Publish a reviewed draft (human approval)")
+    sub.add_parser("poll", help="Cloud Run entry point: run a cycle if a refresh was requested")
     args = parser.parse_args(argv)
 
     configure_logging()
@@ -177,6 +178,10 @@ def main(argv: list[str] | None = None) -> int:
         )
     if args.cmd == "render":
         return render()
+    if args.cmd == "poll":
+        from .refresh_service import poll
+
+        return poll()
     if args.cmd == "publish-draft":
         from .report import publish_draft
 

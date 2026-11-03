@@ -33,6 +33,31 @@ flowchart LR
 
 Environments are separate Terraform states (`staging`, `prod`) using the same code. `prod` jobs have deletion protection.
 
+## Refresh runner inside Google Cloud (`deploy_google.sh`)
+
+The report's **Refresh research** button runs the research **inside Google Cloud** (`.github/refresh-runner` = `google`):
+
+```mermaid
+flowchart LR
+    U["Anyone: Refresh research button<br/>(GitHub issue form)"] --> A["GitHub admit job<br/>guardrails: 1 at a time, 24 h cooldown"]
+    A -->|"status.json = queued"| D[("research-data branch")]
+    S["Cloud Scheduler<br/>every 10 min"] --> J["Cloud Run Job (project service account)<br/>python -m adoption_agent.cli poll"]
+    J <-->|"read status, restore memory"| D
+    J --> G{"Quality gate"}
+    G -->|pass| D
+    G -->|fail| R["refresh/* branch + review PR"]
+    D --> P["GitHub Pages deploy +<br/>requesters notified"]
+```
+
+`PROJECT_ID=ezyai-demos DEPLOY_KEY=~/.ssh/john_enoch_cloudrun ./deployment/deploy_google.sh` needs only **Editor** permissions. It does the following:
+- enables the required APIs
+- creates the Artifact Registry repository and a private bucket for the job's repo-scoped deploy key
+- builds the image with Cloud Build
+- deploys the Cloud Run Job, which runs as the project's default compute service account, so no personal credentials are used and nothing expires
+- schedules the 10-minute poll
+
+The Terraform in `terraform/` is the production-grade alternative: dedicated least-privilege service accounts and WIF. It needs Owner/IAM-admin rights.
+
 ## One-time setup
 
 ```bash

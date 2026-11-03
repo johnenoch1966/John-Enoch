@@ -28,13 +28,18 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     GOOGLE_GENAI_USE_VERTEXAI=TRUE \
     GOOGLE_CLOUD_LOCATION=global \
     ADOPTION_AGENT_HOME=/app
-RUN useradd --create-home --uid 10001 agent
+RUN apt-get update && apt-get install -y --no-install-recommends git openssh-client \
+    && rm -rf /var/lib/apt/lists/* && useradd --create-home --uid 10001 agent
 WORKDIR /app
 COPY --from=builder /opt/venv /opt/venv
 COPY --chown=agent data ./data
+# Publication quality gate used by the refresh service (python -m evals.gate_report).
+COPY --chown=agent evals ./evals
 RUN mkdir -p reports/history runs && chown -R agent /app
 USER agent
 
-# Default: one research cycle. Override for the dev UI:
+# Default: one research cycle. The Cloud Run refresh job runs
+#   python -m adoption_agent.cli poll
+# (starts a cycle only when a refresh was requested). Override for the dev UI:
 #   docker run -p 8080:8080 adoption-agent adk web --host 0.0.0.0 --port 8080 /opt/venv/lib/python3.12/site-packages
 CMD ["python", "-m", "adoption_agent.cli", "run"]

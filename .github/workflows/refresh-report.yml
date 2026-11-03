@@ -1,5 +1,11 @@
 name: Refresh report
 
+# Runner mode is set in .github/refresh-runner:
+#   google  -> the request is queued (status.json on research-data) and the
+#              research runs INSIDE GOOGLE CLOUD (Cloud Run Job + Scheduler,
+#              adoption_agent/refresh_service.py); research-data notifies requesters.
+#   github  -> the research runs here on GitHub Actions (needs credentials below).
+#
 # One-click refresh for ANYONE with a free GitHub account:
 #   the report's "Refresh research" button opens a pre-filled issue
 #   ("[refresh] ..."); submitting it starts this workflow. Also runnable via
@@ -49,12 +55,24 @@ jobs:
     if: github.event_name != 'issues' || startsWith(github.event.issue.title, '[refresh]')
     runs-on: ubuntu-latest
     outputs:
-      allowed: ${{ steps.decide.outputs.allowed }}
+      allowed: ${{ steps.decide.outputs.allowed || 'false' }}
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - id: mode
+        run: echo "runner=$(cat .github/refresh-runner 2>/dev/null || echo github)" >> "$GITHUB_OUTPUT"
+      - name: Queue for Google Cloud (google mode)
+        if: steps.mode.outputs.runner == 'google'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ISSUE: ${{ github.event.issue.number }}
+        run: |
+          git config user.name "adoption-agent-bot"
+          git config user.email "actions@users.noreply.github.com"
+          python3 .github/scripts/admit_refresh.py
       - id: decide
+        if: steps.mode.outputs.runner != 'google'
         env:
           GH_TOKEN: ${{ github.token }}
           HAS_CREDS: ${{ vars.GEMINI_AUTH == 'api_key' || vars.GCP_PROJECT_ID != '' }}
