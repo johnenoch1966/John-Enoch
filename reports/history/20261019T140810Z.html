@@ -16,6 +16,11 @@
   header { background: linear-gradient(120deg, #0b3d91, #1a73e8); color: #fff; padding: 28px 24px; }
   header h1 { margin: 0 0 4px; font-size: 26px; }
   header p { margin: 0; opacity: .9; font-size: 14px; }
+  .hdr { max-width: 1240px; margin: 0 auto; display: flex; gap: 24px; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+  .refresh { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; max-width: 340px; text-align: right; }
+  .refresh .btn { background: #fff; color: #0b3d91; font-weight: 700; padding: 8px 16px; border-radius: 999px; text-decoration: none; }
+  .refresh .btn:hover { background: #e8f0fe; }
+  .refresh small { opacity: .85; font-size: 11px; line-height: 1.35; }
   main { max-width: 1240px; margin: 0 auto; padding: 20px 24px; }
   nav { position: sticky; top: 0; z-index: 5; background: var(--bg); padding: 10px 0;
         display: flex; flex-wrap: wrap; gap: 8px; }
@@ -96,9 +101,22 @@
 
 
 <header>
-  <h1>Enterprise Agentic AI Adoption</h1>
-  <p>What drives and blocks adoption of Gemini, Copilot, Claude and workflow agents in large enterprises &middot;
-     updated 2026-10-19 &middot; run <code>20261019T140810Z</code></p>
+  <div class="hdr">
+    <div>
+      <h1>Enterprise Agentic AI Adoption</h1>
+      <p>What drives and blocks adoption of Gemini, Copilot, Claude and workflow agents in large enterprises &middot;
+         updated 2026-10-19 &middot; run <code>20261019T140810Z</code></p>
+    </div>
+    
+    <div class="refresh">
+      <a class="btn" href="https://github.com/johnenoch1966/John-Enoch/actions/workflows/refresh-report.yml" target="_blank" rel="noopener"
+         title="Opens GitHub Actions: click 'Run workflow' to start a new web research cycle (repo collaborators only)">&#x21bb; Refresh research</a>
+      <img src="https://github.com/johnenoch1966/John-Enoch/actions/workflows/refresh-report.yml/badge.svg" alt="Refresh status" height="20">
+      <small>Runs the full web research cycle on GitHub (~3 h, collaborators only).
+        The new report is opened as a pull request and goes live after you approve it.</small>
+    </div>
+    
+  </div>
 </header>
 <main>
 <nav>
