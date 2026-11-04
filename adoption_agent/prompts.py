@@ -166,7 +166,10 @@ Copilot, Claude and peers), split into two segments:
 Write tersely: labels not paragraphs; respect the word limits in the schema.
 Use ONLY the evidence digest below. Every item must cite claim ids
 (evidence_ids) from the digest (groups[].examples or use_case_evidence).
-Weight by claim_count and distinct_sources; discount high vendor_share.
+Prioritise by evidence_score (already weighted by source quality, recency,
+vendor affiliation and distinct sources). Final rankings on the page are
+computed from these scores by code; your job is to name and explain the
+factors accurately, so pick factors from the highest-scoring groups.
 
 Taxonomy:
 {taxonomy}
@@ -204,7 +207,8 @@ Industries:
 
 Write tersely: labels not paragraphs; respect the word limits in the schema.
 Use ONLY the industry evidence digest. Cite claim ids (evidence_ids) from the
-digest examples. Where an industry's own evidence is thin, you may use the
+digest examples. Pick drivers and blockers from the groups with the highest
+evidence_score (weighted by source quality, recency and distinct sources). Where an industry's own evidence is thin, you may use the
 cross_industry groups, but set evidence_strength to "thin" and prefer
 industry-specific claims whenever they exist.
 

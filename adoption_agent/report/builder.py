@@ -16,7 +16,7 @@ from typing import Any
 
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 
-from .. import config
+from .. import config, scoring
 from ..industries import use_case_industries
 from ..privacy import count_placeholders
 from ..schemas import Synthesis
@@ -136,53 +136,91 @@ def root_cause_matrix(claims: list[dict[str, Any]]) -> list[dict[str, Any]]:
     return rows
 
 
+def _score_factors(
+    items: list[dict], scores: dict, scope: str, polarity: str, key: str
+) -> list[dict]:
+    """Attach the deterministic root-cause score to each AI-written factor and
+    rank by it (ties broken by the AI's original order)."""
+    out = []
+    for order, item in enumerate(items):
+        sc = scores.get((scope, polarity, item.get("root_cause_id")))
+        enriched = {**item, "ai_order": order + 1}
+        if sc:
+            enriched.update(
+                score=sc["score"],
+                strength=sc["strength"],
+                evidence_sources=sc["sources"],
+                evidence_claims=sc["claims"],
+                vendor_share=sc["vendor_share"],
+            )
+        else:
+            enriched.update(score=0.0, strength="weak", evidence_sources=0, evidence_claims=0)
+        out.append(enriched)
+    out.sort(key=lambda f: (-f["score"], f["ai_order"]))
+    return out
+
+
 def segment_views(
     synthesis: Synthesis, catalog: dict[str, Any] | None, claims: list[dict[str, Any]]
 ) -> dict[str, dict[str, Any]]:
-    """Use cases per segment ranked by impact, enriched with names and evidence."""
+    """Use cases per segment ranked by the transparent evidence score.
+
+    Every catalog use case is scored (even ones the analyst skipped); the AI
+    contributes labels (stage, value lever, blocker) and an advisory rating.
+    """
     use_cases = {u["id"]: u for u in (catalog or {}).get("use_cases", [])}
     rank_of = {uid: i + 1 for i, uid in enumerate(use_cases)}
-    ev = EvidenceStore.use_case_evidence(claims)
+    uc_scores = scoring.use_case_scores(claims, catalog)
+    grp = scoring.segment_group_scores(claims)
     out: dict[str, dict[str, Any]] = {}
     for seg in synthesis.segments:
-        rows, seen = [], set()
-        for u in seg.use_case_impact:
-            if u.use_case_id in seen:
-                continue
-            seen.add(u.use_case_id)
-            meta = use_cases.get(u.use_case_id, {})
-            e = ev.get(u.use_case_id, {"drivers": 0, "inhibitors": 0})
-            n_ev = e["drivers"] + e["inhibitors"]
-            row = {
-                **u.model_dump(),
-                "name": meta.get("name", u.use_case_id.replace("-", " ").title()),
-                "prevalence_rank": rank_of.get(u.use_case_id),
-                "evidence_count": n_ev,
-                "low_evidence": n_ev == 0,
-            }
-            # Guard against unsupported optimism: without any direct evidence a
-            # use case cannot be scored above the midpoint.
-            if n_ev == 0 and row["impact_score"] > MAX_SCORE_WITHOUT_EVIDENCE:
-                row["model_score"] = row["impact_score"]
-                row["impact_score"] = MAX_SCORE_WITHOUT_EVIDENCE
-            rows.append(row)
-        rows.sort(key=lambda r: (-r["impact_score"], -r["evidence_count"]))
-        not_assessed = [
-            u["name"]
-            for uid, u in use_cases.items()
-            if u.get("segment") == seg.segment and uid not in seen
-        ]
-        out[seg.segment] = {"ranked": rows, "not_assessed": not_assessed}
+        ai = {u.use_case_id: u.model_dump() for u in seg.use_case_impact}
+        ids = [uid for uid, u in use_cases.items() if u.get("segment") == seg.segment] or list(ai)
+        rows = []
+        for uid in dict.fromkeys(ids):
+            sc = uc_scores.get(uid, {"score": 0.0, "claims": 0, "sources": 0})
+            a = ai.get(uid, {})
+            ai_rating = a.get("impact_score")
+            if ai_rating and sc.get("claims", 0) == 0:
+                ai_rating = min(ai_rating, MAX_SCORE_WITHOUT_EVIDENCE)
+            rows.append(
+                {
+                    "use_case_id": uid,
+                    "name": use_cases.get(uid, {}).get("name", uid.replace("-", " ").title()),
+                    "prevalence_rank": rank_of.get(uid),
+                    "score": sc["score"],
+                    "score_detail": sc,
+                    "ai_rating": ai_rating,
+                    "adoption_stage": a.get("adoption_stage"),
+                    "value_lever": a.get("value_lever", ""),
+                    "key_blocker": a.get("key_blocker", ""),
+                    "evidence_ids": a.get("evidence_ids", []),
+                    "evidence_count": sc.get("claims", 0),
+                    "low_evidence": sc.get("claims", 0) == 0,
+                    "assessed": uid in ai,
+                }
+            )
+        rows.sort(key=lambda r: (-r["score"], -(r["ai_rating"] or 0)))
+        seg_d = seg.model_dump()
+        out[seg.segment] = {
+            "ranked": rows,
+            "not_assessed": [r["name"] for r in rows if not r["assessed"]],
+            "drivers": _score_factors(seg_d["top_drivers"], grp, seg.segment, "driver", "factor"),
+            "blockers": _score_factors(
+                seg_d["top_inhibitors"], grp, seg.segment, "inhibitor", "factor"
+            ),
+        }
     return out
 
 
 def industry_views(
     synthesis: Synthesis, catalog: dict[str, Any] | None, claims: list[dict[str, Any]]
 ) -> list[dict[str, Any]]:
-    """One entry per canonical industry: top use cases + drivers/blockers/advice."""
+    """One entry per canonical industry: top use cases + scored drivers/blockers/advice."""
     use_cases = (catalog or {}).get("use_cases", [])
     by_id = {u["id"]: u for u in use_cases}
     profiles = {p.industry_id: p for p in synthesis.industries}
+    grp = scoring.industry_group_scores(claims, list(config.INDUSTRIES))
     views = []
     for ind_id, ind_name in config.INDUSTRIES.items():
         p = profiles.get(ind_id)
@@ -197,13 +235,19 @@ def industry_views(
             {"id": i, "name": by_id[i]["name"], "segment": by_id[i]["segment"]}
             for i in dict.fromkeys(top_ids)
         ][:8]
+        profile = json.loads(p.model_dump_json()) if p else None
+        if profile:
+            profile["drivers"] = _score_factors(profile["drivers"], grp, ind_id, "driver", "point")
+            profile["blockers"] = _score_factors(
+                profile["blockers"], grp, ind_id, "inhibitor", "point"
+            )
         views.append(
             {
                 "id": ind_id,
                 "name": ind_name,
                 "claim_count": sum(1 for c in claims if ind_id in c["industries"]),
                 "top_use_cases": top,
-                "profile": json.loads(p.model_dump_json()) if p else None,
+                "profile": profile,
             }
         )
     return views
@@ -240,6 +284,7 @@ def build_report(
         "industry_views": industry_views(synthesis, catalog, claims),
         "diff": diff_findings(synthesis, previous),
         "root_cause_matrix": root_cause_matrix(claims),
+        "scoring": scoring.weights(),
         "taxonomy": taxonomy_names(),
         "catalog": catalog,
         "evidence": [by_id[i] for i in sorted(cited)],

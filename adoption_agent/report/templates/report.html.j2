@@ -100,6 +100,10 @@
   "workflow": "Agents embedded in business processes (KYC, claims, service desk, complaints, contact centre, ...). Use cases ranked by realised business impact."} %}
 {% macro cites(ids) -%}{%- for i in ids[:4] %}<a class="cite" href="#e{{ i }}">[{{ i }}]</a>{% endfor -%}{%- endmacro %}
 {% macro rc(id) -%}<span class="badge rc">{{ r.taxonomy.get(id, id) }}</span>{%- endmacro %}
+{% macro score_tip(d) -%}
+{%- if d and d.claims -%}{{ d.claims }} claims from {{ d.sources }} sources; evidence {{ (d.evidence * 100)|round|int }}% of segment best; drivers {{ (d.positivity * 100)|round|int }}% of weighted evidence; vendor share {{ (d.vendor_share * 100)|round|int }}%{%- else -%}No direct evidence{%- endif -%}
+{%- endmacro %}
+{% macro fscore(f) -%}<span class="badge {{ f.strength }}" title="{{ f.evidence_claims }} claims from {{ f.evidence_sources }} sources (weighted by source quality, recency and mapping confidence)">{{ f.score|round|int }} &middot; {{ f.strength }}</span>{%- endmacro %}
 {% macro segbadge(seg) -%}<span class="badge seg-{{ seg }}">{{ "Copilot" if seg == "copilot" else "Workflow" }}</span>{%- endmacro %}
 
 <header>
@@ -128,6 +132,7 @@
   <a href="#industry">Industry deep-dive</a>
   <a href="#bias">Semantic bias</a>
   <a href="#changes">What changed</a>
+  <a href="#scoring">How scores work</a>
   <a href="#evidence">Evidence &amp; method</a>
 </nav>
 
@@ -162,30 +167,31 @@
   <p class="sub">{{ seg_subs.get(seg.segment, "") }}</p>
   <p class="headline"><strong>{{ seg.headline }}</strong></p>
   <table>
-    <tr><th>#</th><th>Use case</th><th>Impact</th><th>Adoption stage</th><th>Main value</th><th>Main blocker</th><th>Evidence</th></tr>
+    <tr><th>#</th><th>Use case</th><th title="0-100, computed from weighted evidence; see How scores are calculated">Score</th><th>Adoption stage</th><th>Main value</th><th>Main blocker</th><th>Evidence</th></tr>
     {% for u in view.ranked %}
     {% if loop.index == 13 %}</table><details><summary>Show {{ view.ranked|length - 12 }} more use cases</summary><table>
-    <tr><th>#</th><th>Use case</th><th>Impact</th><th>Adoption stage</th><th>Main value</th><th>Main blocker</th><th>Evidence</th></tr>{% endif %}
+    <tr><th>#</th><th>Use case</th><th title="0-100, computed from weighted evidence; see How scores are calculated">Score</th><th>Adoption stage</th><th>Main value</th><th>Main blocker</th><th>Evidence</th></tr>{% endif %}
     <tr>
       <td class="rank">{{ loop.index }}</td>
       <td><strong>{{ u.name }}</strong></td>
-      <td style="white-space:nowrap"><span class="bar"><i style="width: {{ u.impact_score * 20 }}%"></i></span><span class="score">{{ u.impact_score }}/5</span></td>
-      <td><span class="badge st-{{ u.adoption_stage }}">{{ u.adoption_stage }}</span></td>
+      <td style="white-space:nowrap" title="{{ score_tip(u.score_detail) }}"><span class="bar"><i style="width: {{ u.score }}%"></i></span><span class="score">{{ u.score|round|int }}</span>
+        {% if u.ai_rating %}<div class="small muted">AI rating {{ u.ai_rating }}/5</div>{% endif %}</td>
+      <td>{% if u.adoption_stage %}<span class="badge st-{{ u.adoption_stage }}">{{ u.adoption_stage }}</span>{% else %}<span class="muted small">n/a</span>{% endif %}</td>
       <td>{{ u.value_lever }}</td>
       <td class="muted">{{ u.key_blocker }}</td>
-      <td class="small">{% if u.low_evidence %}<span class="badge moderate" title="No direct evidence for this use case; score capped at 3">low evidence</span>{% else %}{{ u.evidence_count }} {{ cites(u.evidence_ids) }}{% endif %}</td>
+      <td class="small">{% if u.low_evidence %}<span class="badge moderate" title="No claims mention this use case directly">no direct evidence</span>{% else %}{{ u.score_detail.sources }} sources &middot; {{ u.evidence_count }} claims {{ cites(u.evidence_ids) }}{% endif %}</td>
     </tr>
     {% endfor %}
   </table>{% if view.ranked|length > 12 %}</details>{% endif %}
-  {% if view.not_assessed %}<p class="small muted">Not yet assessed (insufficient evidence): {{ view.not_assessed|join(", ") }}</p>{% endif %}
+  {% if view.not_assessed %}<p class="small muted">Scored from evidence but not yet described by the analyst: {{ view.not_assessed|join(", ") }}</p>{% endif %}
 
   <div class="grid2">
     <div><h3>Top adoption drivers</h3>
-      <ol class="list good">{% for f in seg.top_drivers %}<li><b>{{ f.factor }} <span class="badge {{ f.strength }}">{{ f.strength }}</span></b>
+      <ol class="list good">{% for f in view.drivers %}<li><b>{{ f.factor }} {{ fscore(f) }}</b>
         <span class="small muted">{{ f.explanation }}</span> {{ rc(f.root_cause_id) }} {{ cites(f.evidence_ids) }}</li>{% endfor %}</ol>
     </div>
     <div><h3>Top adoption blockers</h3>
-      <ol class="list bad">{% for f in seg.top_inhibitors %}<li><b>{{ f.factor }} <span class="badge {{ f.strength }}">{{ f.strength }}</span></b>
+      <ol class="list bad">{% for f in view.blockers %}<li><b>{{ f.factor }} {{ fscore(f) }}</b>
         <span class="small muted">{{ f.explanation }}</span> {{ rc(f.root_cause_id) }} {{ cites(f.evidence_ids) }}</li>{% endfor %}</ol>
     </div>
   </div>
@@ -215,9 +221,9 @@
       <span class="small muted">({{ ind.claim_count }} industry-specific claims)</span></p>
     <div class="grid3">
       <div><div class="panel-head ph-good">Top 5 adoption drivers</div>
-        <ol class="list good">{% for d in p.drivers[:5] %}<li><b>{{ d.point }}</b><span class="small muted">{{ d.detail }}</span> {{ rc(d.root_cause_id) }} {{ cites(d.evidence_ids) }}</li>{% endfor %}</ol></div>
+        <ol class="list good">{% for d in p.drivers[:5] %}<li><b>{{ d.point }} {{ fscore(d) }}</b><span class="small muted">{{ d.detail }}</span> {{ rc(d.root_cause_id) }} {{ cites(d.evidence_ids) }}</li>{% endfor %}</ol></div>
       <div><div class="panel-head ph-bad">Top 5 blockers</div>
-        <ol class="list bad">{% for d in p.blockers[:5] %}<li><b>{{ d.point }}</b><span class="small muted">{{ d.detail }}</span> {{ rc(d.root_cause_id) }} {{ cites(d.evidence_ids) }}</li>{% endfor %}</ol></div>
+        <ol class="list bad">{% for d in p.blockers[:5] %}<li><b>{{ d.point }} {{ fscore(d) }}</b><span class="small muted">{{ d.detail }}</span> {{ rc(d.root_cause_id) }} {{ cites(d.evidence_ids) }}</li>{% endfor %}</ol></div>
       <div><div class="panel-head ph-act">Advice: 5 actions to drive success</div>
         <ol class="list act">{% for a in p.advice[:5] %}<li><b>{{ a.action }}</b><span class="small muted">{{ a.rationale }}</span> {{ cites(a.evidence_ids) }}</li>{% endfor %}</ol></div>
     </div>
@@ -264,6 +270,30 @@
       {% for k, hue in [("copilot_driver","24,128,56"),("copilot_inhibitor","197,34,31"),("workflow_driver","24,128,56"),("workflow_inhibitor","197,34,31")] %}
       <td class="n" style="background: rgba({{ hue }}, {{ (row[k] / mx.v * 0.6)|round(2) }})">{{ row[k] }}</td>{% endfor %}</tr>{% endfor %}
   </table></details>
+</section>
+
+<section id="scoring">
+  <h2>How scores are calculated</h2>
+  <p class="sub">Every ranking on this page is computed from the evidence by a fixed formula (weights in <code>adoption_agent/scoring.yaml</code>). The AI writes the labels and explanations; it does not set the order.</p>
+  <div class="grid2">
+    <div>
+      <h3>1. Each claim gets a weight</h3>
+      <p class="small"><b>weight = source quality &times; recency</b> (&times; mapping confidence for drivers/blockers)</p>
+      <table>
+        <tr><th>Source type</th><th>Weight</th></tr>
+        {% for t, w in r.scoring.source_weights.items()|sort(attribute=1, reverse=True) %}<tr><td>{{ t|replace("_", " ") }}</td><td>{{ w }}</td></tr>{% endfor %}
+        <tr><td>vendor-affiliated (any type)</td><td>max {{ r.scoring.vendor_affiliated_cap }}</td></tr>
+      </table>
+      <p class="small muted">Recency: {% for b in r.scoring.recency %}{{ "&le;" if b.max_age_years < 99 else "&gt;" }}{{ b.max_age_years if b.max_age_years < 99 else r.scoring.recency[-2].max_age_years }} yr &rarr; {{ b.weight }}{{ "; " if not loop.last }}{% endfor %}.</p>
+    </div>
+    <div>
+      <h3>2. Weights are combined into scores (0&ndash;100)</h3>
+      <p class="small"><b>Weighted evidence</b> = sum over <em>distinct sources</em> of each source's strongest claim, so one report counts once.</p>
+      <p class="small"><b>Drivers &amp; blockers:</b> weighted evidence of the root-cause group, as a % of the strongest group in the same segment or industry. Labels: strong &ge; {{ r.scoring.strength_bands.strong }}, moderate &ge; {{ r.scoring.strength_bands.moderate }}, else weak.</p>
+      <p class="small"><b>Use cases:</b> score = 100 &times; evidence<sup>{{ r.scoring.evidence_exponent }}</sup> &times; ({{ r.scoring.balance_floor }} + {{ (1 - r.scoring.balance_floor)|round(2) }} &times; positivity), where <em>evidence</em> is weighted evidence as a share of the best-covered use case in the segment and <em>positivity</em> is the drivers' share of weighted evidence. The square root dampens heavily covered topics; well-evidenced use cases with mostly positive evidence rank highest.</p>
+      <p class="small muted">Hover any score for its breakdown. The "AI rating" (1&ndash;5) is the analyst's qualitative view, shown for context only.</p>
+    </div>
+  </div>
 </section>
 
 <section id="evidence">

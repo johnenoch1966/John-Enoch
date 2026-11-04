@@ -30,7 +30,7 @@ adoption-agent = "adoption_agent.cli:main"
 include = ["adoption_agent*"]
 
 [tool.setuptools.package-data]
-adoption_agent = ["taxonomy.yaml", "report/templates/*.j2"]
+adoption_agent = ["taxonomy.yaml", "scoring.yaml", "report/templates/*.j2"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

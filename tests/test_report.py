@@ -43,9 +43,9 @@ def test_build_report_drops_invalid_citations(tmp_home):
     assert risk["copilot_inhibitor"] == 3
 
 
-def test_segment_views_rank_by_impact(tmp_home):
+def test_segment_views_rank_by_transparent_score(tmp_home):
     store = EvidenceStore(config.EVIDENCE_DB)
-    ids = _seed(store)
+    ids = _seed(store)  # 3 claims, 1 source, all about uc-0 (copilot, inhibitor)
     report = build_report(
         sample_synthesis(ids),
         store,
@@ -54,14 +54,19 @@ def test_segment_views_rank_by_impact(tmp_home):
         previous=None,
     )
     copilot = report["segment_views"]["copilot"]
-    # uc-1 was scored 5/5 by the model but has no direct evidence -> capped at 3,
-    # so the evidenced uc-0 (3/5, 3 claims) ranks first.
-    assert [u["use_case_id"] for u in copilot["ranked"]] == ["uc-0", "uc-1"]
-    capped = copilot["ranked"][1]
-    assert capped["impact_score"] == 3 and capped["model_score"] == 5
-    assert capped["low_evidence"] is True and capped["name"] == "Use case 1"
-    assert copilot["ranked"][0]["evidence_count"] == 3  # seeded claims cite uc-0
+    ranked = copilot["ranked"]
+    # Every catalog copilot use case is scored, not only those the AI described.
+    assert len(ranked) == 10
+    # uc-0 has evidence; uc-1 (AI rated 5/5) has none -> uc-0 first, uc-1 AI rating capped at 3.
+    assert ranked[0]["use_case_id"] == "uc-0" and ranked[0]["score"] > 0
+    uc1 = next(r for r in ranked if r["use_case_id"] == "uc-1")
+    assert uc1["score"] == 0.0 and uc1["ai_rating"] == 3 and uc1["low_evidence"]
+    assert ranked[0]["score_detail"]["sources"] == 1 and ranked[0]["evidence_count"] == 3
     assert "Use case 2" in copilot["not_assessed"]
+    # AI-written blockers get the deterministic root-cause score and label.
+    blocker = copilot["blockers"][0]
+    assert blocker["score"] == 100.0 and blocker["strength"] == "strong"
+    assert blocker["evidence_sources"] == 1
 
 
 def test_industry_views_filter_unknown_ids_and_fall_back(tmp_home):
@@ -134,6 +139,8 @@ def test_render_and_publish_html(tmp_home):
         "connectors not enabled",
         "Risk &amp; Auditability",
         'id="e1"',
+        "How scores are calculated",
+        "AI rating",
     ):
         assert needle in html, needle
     assert "Executive summary" not in html

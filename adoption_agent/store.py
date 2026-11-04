@@ -19,6 +19,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import urlsplit, urlunsplit
 
+from . import scoring
 from .schemas import ClaimInput, RootCauseMappingInput, SourceInput
 
 _SCHEMA = """
@@ -316,6 +317,8 @@ class EvidenceStore:
                     "root_cause_id": root,
                     "claim_count": len(items),
                     "distinct_sources": len({i["source_id"] for i in items}),
+                    # Source-quality, recency and confidence weighted (see scoring.py).
+                    "evidence_score": scoring.weighted_evidence(items, use_confidence=True),
                     "vendor_share": round(
                         sum(i["vendor_affiliated"] for i in items) / len(items), 2
                     ),
@@ -374,6 +377,7 @@ class EvidenceStore:
                     "root_cause_id": root,
                     "claim_count": len(its),
                     "distinct_sources": len({i["source_id"] for i in its}),
+                    "evidence_score": scoring.weighted_evidence(its, use_confidence=True),
                     "examples": [
                         {
                             "claim_id": i["id"],

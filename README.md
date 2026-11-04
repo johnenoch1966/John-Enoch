@@ -94,6 +94,17 @@ LLMs handle judgement (search strategy, extraction, root-cause reasoning, synthe
 - `fetch_page` blocks non-public URLs, extracts readable HTML and PDF text, and truncates output to protect the context window.
 - Interfaces: a **CLI** (`run`, `render`, `stats`), **`adk web`** (exports `app`), a container entrypoint and a JSON report contract.
 
+### Ranking: transparent scoring
+Rankings come from a **deterministic formula** ([`scoring.py`](adoption_agent/scoring.py), weights in [`scoring.yaml`](adoption_agent/scoring.yaml)), not from the model's say-so.
+- **Claim weight:** each claim is weighted by **source quality** and **recency**:
+  - regulator or academic 1.0; analyst or consultancy 0.9; industry body 0.85; media 0.6; vendor 0.5
+  - vendor-affiliated material is capped at 0.5
+  - claims under 1 year old 1.0, falling to 0.4 for claims over 3 years old
+- **Distinct sources:** weights are summed over distinct sources, so one report counts once.
+- **Drivers and blockers:** root-cause evidence as a percentage of the strongest group in the same segment or industry.
+- **Use cases:** `100 x evidence^0.5 x (0.4 + 0.6 x positivity)`. Here *evidence* is the use case's weighted evidence relative to the best-covered use case in its segment, and *positivity* is the share of that evidence that comes from drivers.
+- The AI analysts name and explain the factors; the code ranks them. Every score has a hover breakdown on the page, and the report includes a *How scores are calculated* section. Change the weights and run `cli render` to re-rank without re-running research.
+
 ### Context & Memory
 - **Short-term memory:** session state passes data between stages (`use_case_catalog`, `evidence_digest`, `synthesis`, `critique`), with per-run `temp:` counters.
 - **Long-term memory:** the SQLite evidence store, the cached use-case catalog and the previous report. Researchers are told which URLs are already known, the synthesizer receives a summary of the previous report, and the publisher diffs against it.

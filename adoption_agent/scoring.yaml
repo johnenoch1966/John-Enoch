@@ -1,0 +1,44 @@
+# Transparent scoring model. Every ranked item in the report is scored from
+# the evidence with these weights, so rankings are reproducible and auditable.
+# Edit and run `python -m adoption_agent.cli render` to re-rank without
+# re-running any research.
+
+# How much one claim counts, by who published it.
+source_weights:
+  regulator: 1.0
+  academic: 1.0
+  analyst: 0.9
+  consultancy: 0.9
+  industry_body: 0.85
+  media: 0.6
+  vendor: 0.5
+  other: 0.5
+# Vendor-affiliated or sponsored material is capped at this weight,
+# whatever its source type (framing-bias discount).
+vendor_affiliated_cap: 0.5
+
+# Recency: weight by age of the publication (years before the scoring date).
+recency:
+  - {max_age_years: 1, weight: 1.0}
+  - {max_age_years: 2, weight: 0.8}
+  - {max_age_years: 3, weight: 0.6}
+  - {max_age_years: 99, weight: 0.4}
+unknown_date_weight: 0.7
+
+# Confidence of the root-cause mapping (applies to driver/blocker scores).
+confidence_weights:
+  high: 1.0
+  medium: 0.85
+  low: 0.7
+
+# Use-case score = 100 x evidence^evidence_exponent x
+#                  (balance_floor + (1 - balance_floor) x positivity)
+# evidence   = weighted evidence / best in segment (0-1)
+# positivity = driver share of weighted evidence (0-1)
+evidence_exponent: 0.5   # square root: diminishing returns for heavily covered topics
+balance_floor: 0.4       # a use case with only blockers keeps 40% of its evidence score
+
+# Strength labels derived from the 0-100 score.
+strength_bands:
+  strong: 66
+  moderate: 33
