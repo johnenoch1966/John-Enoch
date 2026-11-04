@@ -2264,44 +2264,31 @@
     "copilot": {
       "ranked": [
         {
-          "use_case_id": "email-triage-drafting",
-          "impact_score": 4,
-          "adoption_stage": "mainstream",
-          "value_lever": "Rapid response generation and message backlog management",
-          "key_blocker": "Generic phrasing and context blindness in multi-thread chains",
-          "evidence_ids": [
-            97,
-            98,
-            155,
-            275,
-            507
-          ],
-          "name": "Email Triage & Communication Drafting",
-          "prevalence_rank": 6,
-          "evidence_count": 18,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "meeting-summarization-action-items",
-          "impact_score": 4,
-          "adoption_stage": "mainstream",
-          "value_lever": "Immediate post-meeting administrative time compression and action tracking",
-          "key_blocker": "Participant consent friction and low nuance in complex dialogues",
-          "evidence_ids": [
-            97,
-            98,
-            155,
-            356,
-            505
-          ],
-          "name": "Meeting Summarization & Action Item Extraction",
-          "prevalence_rank": 1,
-          "evidence_count": 13,
-          "low_evidence": false
-        },
-        {
           "use_case_id": "enterprise-knowledge-search-qna",
-          "impact_score": 3,
+          "name": "Enterprise Knowledge Search & Multi-Repository Q&A",
+          "prevalence_rank": 3,
+          "score": 70.9,
+          "score_detail": {
+            "score": 70.9,
+            "evidence": 1.0,
+            "positivity": 0.515,
+            "weighted_drivers": 14.52,
+            "weighted_blockers": 13.68,
+            "claims": 64,
+            "sources": 40,
+            "vendor_share": 0.5,
+            "by_source_type": {
+              "vendor": 31,
+              "academic": 11,
+              "regulator": 10,
+              "consultancy": 5,
+              "analyst": 3,
+              "other": 2,
+              "industry_body": 1,
+              "media": 1
+            }
+          },
+          "ai_rating": 3,
           "adoption_stage": "scaling",
           "value_lever": "Reduced latency in cross-repository information retrieval and discovery",
           "key_blocker": "Overshared repository permissions and poor legacy document hygiene",
@@ -2312,32 +2299,34 @@
             186,
             239
           ],
-          "name": "Enterprise Knowledge Search & Multi-Repository Q&A",
-          "prevalence_rank": 3,
           "evidence_count": 64,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "document-report-drafting",
-          "impact_score": 3,
-          "adoption_stage": "scaling",
-          "value_lever": "Accelerated first-draft generation for structured corporate reports",
-          "key_blocker": "Hallucinations on technical source citations and formatting errors",
-          "evidence_ids": [
-            99,
-            187,
-            236,
-            284,
-            377
-          ],
-          "name": "Long-Form Document & Report Drafting",
-          "prevalence_rank": 7,
-          "evidence_count": 46,
-          "low_evidence": false
+          "low_evidence": false,
+          "assessed": true
         },
         {
           "use_case_id": "content-summarization-synthesis",
-          "impact_score": 3,
+          "name": "Cross-Document Summarization & Executive Briefing",
+          "prevalence_rank": 15,
+          "score": 58.2,
+          "score_detail": {
+            "score": 58.2,
+            "evidence": 0.417,
+            "positivity": 0.836,
+            "weighted_drivers": 9.16,
+            "weighted_blockers": 1.8,
+            "claims": 19,
+            "sources": 16,
+            "vendor_share": 0.37,
+            "by_source_type": {
+              "vendor": 7,
+              "academic": 3,
+              "regulator": 3,
+              "analyst": 3,
+              "industry_body": 2,
+              "other": 1
+            }
+          },
+          "ai_rating": 3,
           "adoption_stage": "scaling",
           "value_lever": "Rapid executive distillation of long multi-source document corpuses",
           "key_blocker": "Omission of subtle edge details in complex texts",
@@ -2348,14 +2337,151 @@
             308,
             419
           ],
-          "name": "Cross-Document Summarization & Executive Briefing",
-          "prevalence_rank": 15,
           "evidence_count": 19,
-          "low_evidence": false
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "document-report-drafting",
+          "name": "Long-Form Document & Report Drafting",
+          "prevalence_rank": 7,
+          "score": 57.9,
+          "score_detail": {
+            "score": 57.9,
+            "evidence": 0.667,
+            "positivity": 0.516,
+            "weighted_drivers": 11.35,
+            "weighted_blockers": 10.66,
+            "claims": 46,
+            "sources": 25,
+            "vendor_share": 0.26,
+            "by_source_type": {
+              "regulator": 11,
+              "vendor": 10,
+              "academic": 8,
+              "other": 6,
+              "analyst": 5,
+              "consultancy": 4,
+              "industry_body": 1,
+              "media": 1
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "scaling",
+          "value_lever": "Accelerated first-draft generation for structured corporate reports",
+          "key_blocker": "Hallucinations on technical source citations and formatting errors",
+          "evidence_ids": [
+            99,
+            187,
+            236,
+            284,
+            377
+          ],
+          "evidence_count": 46,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "meeting-summarization-action-items",
+          "name": "Meeting Summarization & Action Item Extraction",
+          "prevalence_rank": 1,
+          "score": 50.3,
+          "score_detail": {
+            "score": 50.3,
+            "evidence": 0.324,
+            "positivity": 0.806,
+            "weighted_drivers": 6.3,
+            "weighted_blockers": 1.52,
+            "claims": 13,
+            "sources": 12,
+            "vendor_share": 0.38,
+            "by_source_type": {
+              "vendor": 4,
+              "academic": 4,
+              "regulator": 4,
+              "consultancy": 1
+            }
+          },
+          "ai_rating": 4,
+          "adoption_stage": "mainstream",
+          "value_lever": "Immediate post-meeting administrative time compression and action tracking",
+          "key_blocker": "Participant consent friction and low nuance in complex dialogues",
+          "evidence_ids": [
+            97,
+            98,
+            155,
+            356,
+            505
+          ],
+          "evidence_count": 13,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "email-triage-drafting",
+          "name": "Email Triage & Communication Drafting",
+          "prevalence_rank": 6,
+          "score": 45.7,
+          "score_detail": {
+            "score": 45.7,
+            "evidence": 0.342,
+            "positivity": 0.635,
+            "weighted_drivers": 5.75,
+            "weighted_blockers": 3.3,
+            "claims": 18,
+            "sources": 14,
+            "vendor_share": 0.39,
+            "by_source_type": {
+              "vendor": 5,
+              "other": 4,
+              "academic": 3,
+              "analyst": 2,
+              "industry_body": 1,
+              "regulator": 1,
+              "media": 1,
+              "consultancy": 1
+            }
+          },
+          "ai_rating": 4,
+          "adoption_stage": "mainstream",
+          "value_lever": "Rapid response generation and message backlog management",
+          "key_blocker": "Generic phrasing and context blindness in multi-thread chains",
+          "evidence_ids": [
+            97,
+            98,
+            155,
+            275,
+            507
+          ],
+          "evidence_count": 18,
+          "low_evidence": false,
+          "assessed": true
         },
         {
           "use_case_id": "spreadsheet-data-analysis",
-          "impact_score": 2,
+          "name": "Spreadsheet Formula & Data Analysis Assistant",
+          "prevalence_rank": 11,
+          "score": 36.1,
+          "score_detail": {
+            "score": 36.1,
+            "evidence": 0.298,
+            "positivity": 0.437,
+            "weighted_drivers": 3.57,
+            "weighted_blockers": 4.6,
+            "claims": 12,
+            "sources": 11,
+            "vendor_share": 0.33,
+            "by_source_type": {
+              "vendor": 3,
+              "analyst": 3,
+              "regulator": 2,
+              "industry_body": 1,
+              "academic": 1,
+              "consultancy": 1,
+              "other": 1
+            }
+          },
+          "ai_rating": 2,
           "adoption_stage": "piloting",
           "value_lever": "Natural language formula generation and quick pivot structuring",
           "key_blocker": "High mathematical calculation error rate on unstructured tables",
@@ -2366,14 +2492,63 @@
             263,
             508
           ],
-          "name": "Spreadsheet Formula & Data Analysis Assistant",
-          "prevalence_rank": 11,
           "evidence_count": 12,
-          "low_evidence": false
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "executive-memo-speechwriting",
+          "name": "Executive Memo Drafting & Corporate Speechwriting",
+          "prevalence_rank": 46,
+          "score": 20.0,
+          "score_detail": {
+            "score": 20.0,
+            "evidence": 0.071,
+            "positivity": 0.581,
+            "weighted_drivers": 1.0,
+            "weighted_blockers": 0.72,
+            "claims": 2,
+            "sources": 2,
+            "vendor_share": 0.0,
+            "by_source_type": {
+              "academic": 1,
+              "consultancy": 1
+            }
+          },
+          "ai_rating": 1,
+          "adoption_stage": "experimenting",
+          "value_lever": "Ideation and speech structuring for executive leadership messaging",
+          "key_blocker": "Inability to replicate authentic executive voice and perspective",
+          "evidence_ids": [
+            262,
+            356,
+            670
+          ],
+          "evidence_count": 2,
+          "low_evidence": false,
+          "assessed": true
         },
         {
           "use_case_id": "presentation-slide-deck-generation",
-          "impact_score": 2,
+          "name": "Presentation & Slide Deck Generation",
+          "prevalence_rank": 14,
+          "score": 14.1,
+          "score_detail": {
+            "score": 14.1,
+            "evidence": 0.083,
+            "positivity": 0.15,
+            "weighted_drivers": 0.3,
+            "weighted_blockers": 1.7,
+            "claims": 3,
+            "sources": 3,
+            "vendor_share": 0.33,
+            "by_source_type": {
+              "vendor": 1,
+              "regulator": 1,
+              "consultancy": 1
+            }
+          },
+          "ai_rating": 2,
           "adoption_stage": "piloting",
           "value_lever": "Automated outline translation into presentation narrative frameworks",
           "key_blocker": "Branding template rigidness and uninspiring graphic composition",
@@ -2384,14 +2559,30 @@
             508,
             772
           ],
-          "name": "Presentation & Slide Deck Generation",
-          "prevalence_rank": 14,
           "evidence_count": 3,
-          "low_evidence": false
+          "low_evidence": false,
+          "assessed": true
         },
         {
           "use_case_id": "calendar-scheduling-meeting-prep",
-          "impact_score": 2,
+          "name": "Calendar Management & Meeting Preparation Briefings",
+          "prevalence_rank": 31,
+          "score": 8.9,
+          "score_detail": {
+            "score": 8.9,
+            "evidence": 0.05,
+            "positivity": 0.0,
+            "weighted_drivers": 0,
+            "weighted_blockers": 1.2,
+            "claims": 2,
+            "sources": 2,
+            "vendor_share": 0.5,
+            "by_source_type": {
+              "vendor": 1,
+              "regulator": 1
+            }
+          },
+          "ai_rating": 2,
           "adoption_stage": "experimenting",
           "value_lever": "Contextual dossier synthesis ahead of internal stakeholder meetings",
           "key_blocker": "Lack of dynamic calendar negotiation rights across organizations",
@@ -2399,49 +2590,235 @@
             543,
             772
           ],
-          "name": "Calendar Management & Meeting Preparation Briefings",
-          "prevalence_rank": 31,
           "evidence_count": 2,
-          "low_evidence": false
+          "low_evidence": false,
+          "assessed": true
         },
         {
           "use_case_id": "language-translation-localization-copilot",
-          "impact_score": 2,
+          "name": "Enterprise Communication Translation & Localization",
+          "prevalence_rank": 28,
+          "score": 0.0,
+          "score_detail": {
+            "score": 0.0,
+            "evidence": 0.0,
+            "positivity": 0.5,
+            "weighted_drivers": 0.0,
+            "weighted_blockers": 0.0,
+            "claims": 0,
+            "sources": 0,
+            "vendor_share": 0.0,
+            "by_source_type": {}
+          },
+          "ai_rating": 2,
           "adoption_stage": "piloting",
           "value_lever": "Near-instant localization of cross-border enterprise communications",
           "key_blocker": "Tone miscalibration in high-stakes regional corporate messaging",
           "evidence_ids": [
             270
           ],
-          "name": "Enterprise Communication Translation & Localization",
-          "prevalence_rank": 28,
           "evidence_count": 0,
-          "low_evidence": true
-        },
-        {
-          "use_case_id": "executive-memo-speechwriting",
-          "impact_score": 1,
-          "adoption_stage": "experimenting",
-          "value_lever": "Ideation and speech structuring for executive leadership messaging",
-          "key_blocker": "Inability to replicate authentic executive voice and perspective",
-          "evidence_ids": [
-            262,
-            356,
-            670
-          ],
-          "name": "Executive Memo Drafting & Corporate Speechwriting",
-          "prevalence_rank": 46,
-          "evidence_count": 2,
-          "low_evidence": false
+          "low_evidence": true,
+          "assessed": true
         }
       ],
-      "not_assessed": []
+      "not_assessed": [],
+      "drivers": [
+        {
+          "factor": "Individual administrative and search task compression",
+          "root_cause_id": "cost_roi",
+          "explanation": "Workers recover roughly thirty minutes daily from mundane drafting, summarizing, and internal data retrieval.",
+          "strength": "strong",
+          "evidence_ids": [
+            97,
+            99,
+            155,
+            236
+          ],
+          "ai_order": 1,
+          "score": 100.0,
+          "evidence_sources": 38,
+          "evidence_claims": 50,
+          "vendor_share": 0.4
+        },
+        {
+          "factor": "Grassroots employee enthusiasm and bottom-up pull",
+          "root_cause_id": "skills_change",
+          "explanation": "End users actively advocate for assistants to reduce day-to-day cognitive fatigue and routine typing chores.",
+          "strength": "moderate",
+          "evidence_ids": [
+            98,
+            189,
+            284,
+            531
+          ],
+          "ai_order": 2,
+          "score": 41.2,
+          "evidence_sources": 14,
+          "evidence_claims": 16,
+          "vendor_share": 0.31
+        },
+        {
+          "factor": "Native suite and EHR platform integration",
+          "root_cause_id": "integration_connectors",
+          "explanation": "Pre-built integration directly into daily office suites and electronic records removes deployment friction.",
+          "strength": "weak",
+          "evidence_ids": [
+            373,
+            934
+          ],
+          "ai_order": 4,
+          "score": 6.3,
+          "evidence_sources": 2,
+          "evidence_claims": 2,
+          "vendor_share": 0.5
+        },
+        {
+          "factor": "In-tenant enterprise security boundary protections",
+          "root_cause_id": "data_governance",
+          "explanation": "Commercial enterprise tenants guarantee that proprietary corporate text will not train public foundation models.",
+          "strength": "weak",
+          "evidence_ids": [
+            237,
+            265,
+            551
+          ],
+          "ai_order": 3,
+          "score": 5.3,
+          "evidence_sources": 3,
+          "evidence_claims": 3,
+          "vendor_share": 1.0
+        },
+        {
+          "factor": "Cognitive offloading in routine drafting tasks",
+          "root_cause_id": "model_quality",
+          "explanation": "Models reliably produce clean syntax and professional tone for general administrative communications.",
+          "strength": "weak",
+          "evidence_ids": [
+            377,
+            913
+          ],
+          "ai_order": 5,
+          "score": 2.4,
+          "evidence_sources": 1,
+          "evidence_claims": 2,
+          "vendor_share": 0.0
+        }
+      ],
+      "blockers": [
+        {
+          "factor": "Rapid post-launch employee engagement decay",
+          "root_cause_id": "skills_change",
+          "explanation": "Initial novelty fades quickly when workers receive inadequate continuous workflow redesign and habit coaching.",
+          "strength": "strong",
+          "evidence_ids": [
+            187,
+            188,
+            238,
+            248
+          ],
+          "ai_order": 2,
+          "score": 100.0,
+          "evidence_sources": 17,
+          "evidence_claims": 20,
+          "vendor_share": 0.3
+        },
+        {
+          "factor": "Performance collapse on jagged task frontiers",
+          "root_cause_id": "model_quality",
+          "explanation": "Assistants hallucinate when tasks cross into nuanced technical reasoning or non-standard corporate math.",
+          "strength": "strong",
+          "evidence_ids": [
+            157,
+            263,
+            385,
+            393
+          ],
+          "ai_order": 3,
+          "score": 79.7,
+          "evidence_sources": 12,
+          "evidence_claims": 14,
+          "vendor_share": 0.0
+        },
+        {
+          "factor": "Internal permission overexposure and data leakage",
+          "root_cause_id": "data_governance",
+          "explanation": "Copilot indexing exposes previously unmanaged sensitive files due to broken legacy enterprise permissions.",
+          "strength": "strong",
+          "evidence_ids": [
+            156,
+            186,
+            239
+          ],
+          "ai_order": 1,
+          "score": 75.9,
+          "evidence_sources": 14,
+          "evidence_claims": 19,
+          "vendor_share": 0.63
+        },
+        {
+          "factor": "Unclear financial return from microproductivity gains",
+          "root_cause_id": "cost_roi",
+          "explanation": "Diffused minute-level time savings fail to translate into tangible headcount or bottom-line P&L reduction.",
+          "strength": "weak",
+          "evidence_ids": [
+            271,
+            356,
+            506,
+            967
+          ],
+          "ai_order": 4,
+          "score": 19.9,
+          "evidence_sources": 4,
+          "evidence_claims": 4,
+          "vendor_share": 0.5
+        },
+        {
+          "factor": "OAuth sprawl and shadow AI leakage",
+          "root_cause_id": "security_identity",
+          "explanation": "Unvetted personal assistant plugins and unsanctioned browser extensions bypass tenant corporate perimeter controls.",
+          "strength": "weak",
+          "evidence_ids": [
+            240,
+            572,
+            773,
+            797
+          ],
+          "ai_order": 5,
+          "score": 17.4,
+          "evidence_sources": 4,
+          "evidence_claims": 4,
+          "vendor_share": 0.75
+        }
+      ]
     },
     "workflow": {
       "ranked": [
         {
           "use_case_id": "autonomous-customer-service-agents",
-          "impact_score": 5,
+          "name": "Autonomous Customer Service Voice & Chat Agents",
+          "prevalence_rank": 8,
+          "score": 75.0,
+          "score_detail": {
+            "score": 75.0,
+            "evidence": 1.0,
+            "positivity": 0.583,
+            "weighted_drivers": 26.29,
+            "weighted_blockers": 18.78,
+            "claims": 108,
+            "sources": 50,
+            "vendor_share": 0.33,
+            "by_source_type": {
+              "consultancy": 35,
+              "vendor": 28,
+              "media": 13,
+              "analyst": 11,
+              "industry_body": 9,
+              "regulator": 6,
+              "academic": 6
+            }
+          },
+          "ai_rating": 5,
           "adoption_stage": "scaling",
           "value_lever": "First-contact resolution deflection for routine inquiries at scale",
           "key_blocker": "Customer churn from ungraceful failures on multi-turn complaints",
@@ -2452,14 +2829,35 @@
             40,
             62
           ],
-          "name": "Autonomous Customer Service Voice & Chat Agents",
-          "prevalence_rank": 8,
           "evidence_count": 108,
-          "low_evidence": false
+          "low_evidence": false,
+          "assessed": true
         },
         {
           "use_case_id": "contact-center-agent-assist",
-          "impact_score": 5,
+          "name": "Contact Centre Real-Time Agent Assist",
+          "prevalence_rank": 4,
+          "score": 62.9,
+          "score_detail": {
+            "score": 62.9,
+            "evidence": 0.633,
+            "positivity": 0.652,
+            "weighted_drivers": 15.26,
+            "weighted_blockers": 8.14,
+            "claims": 52,
+            "sources": 30,
+            "vendor_share": 0.31,
+            "by_source_type": {
+              "consultancy": 13,
+              "vendor": 13,
+              "academic": 9,
+              "regulator": 8,
+              "analyst": 6,
+              "media": 2,
+              "industry_body": 1
+            }
+          },
+          "ai_rating": 5,
           "adoption_stage": "mainstream",
           "value_lever": "Real-time context retrieval, suggestion drafting, and handle time reduction",
           "key_blocker": "Human agent cognitive fatigue from dense on-screen recommendations",
@@ -2470,14 +2868,34 @@
             39,
             291
           ],
-          "name": "Contact Centre Real-Time Agent Assist",
-          "prevalence_rank": 4,
           "evidence_count": 52,
-          "low_evidence": false
+          "low_evidence": false,
+          "assessed": true
         },
         {
           "use_case_id": "supply-chain-demand-exception-management",
-          "impact_score": 5,
+          "name": "Supply Chain Exception & Disruption Management",
+          "prevalence_rank": 37,
+          "score": 55.0,
+          "score_detail": {
+            "score": 55.0,
+            "evidence": 0.406,
+            "positivity": 0.772,
+            "weighted_drivers": 10.61,
+            "weighted_blockers": 3.14,
+            "claims": 29,
+            "sources": 18,
+            "vendor_share": 0.24,
+            "by_source_type": {
+              "consultancy": 13,
+              "analyst": 4,
+              "academic": 4,
+              "industry_body": 3,
+              "media": 3,
+              "vendor": 2
+            }
+          },
+          "ai_rating": 5,
           "adoption_stage": "scaling",
           "value_lever": "Autonomous multi-echelon exception detection, rerouting, and disruption tracking",
           "key_blocker": "Unsynchronized supplier inventory data across fragmented EDI feeds",
@@ -2488,518 +2906,35 @@
             10,
             278
           ],
-          "name": "Supply Chain Exception & Disruption Management",
-          "prevalence_rank": 37,
           "evidence_count": 29,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "application-performance-monitoring-remediation",
-          "impact_score": 4,
-          "adoption_stage": "scaling",
-          "value_lever": "Telemetry correlation, root-cause identification, and automated service remediation",
-          "key_blocker": "Production destabilization risk from unverified automated rollback commands",
-          "evidence_ids": [
-            24,
-            73,
-            91,
-            109,
-            279
-          ],
-          "name": "AIOps Alert Correlation & Autonomous Incident Remediation",
-          "prevalence_rank": 29,
-          "evidence_count": 67,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "software-engineering-coding-agents",
-          "impact_score": 4,
-          "adoption_stage": "scaling",
-          "value_lever": "Contextual unit test creation, scaffolding, and boilerplate generation",
-          "key_blocker": "Developer mistrust regarding subtle logic bugs and license compliance",
-          "evidence_ids": [
-            44,
-            45,
-            145,
-            164,
-            322
-          ],
-          "name": "Software Engineering & Code Generation Agents",
-          "prevalence_rank": 2,
-          "evidence_count": 26,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "aml-alert-triage-investigation",
-          "impact_score": 4,
-          "adoption_stage": "scaling",
-          "value_lever": "Rapid false-positive reduction and SAR narrative draft generation",
-          "key_blocker": "Model governance mandates and strict regulatory auditability frameworks",
-          "evidence_ids": [
-            13,
-            58,
-            82,
-            83,
-            168
-          ],
-          "name": "Anti-Money Laundering (AML) Alert Triage & Transaction Monitoring",
-          "prevalence_rank": 21,
-          "evidence_count": 25,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "fraud-detection-investigation",
-          "impact_score": 4,
-          "adoption_stage": "scaling",
-          "value_lever": "Real-time anomaly identification and dynamic cross-account pattern synthesis",
-          "key_blocker": "Explainability demands from risk teams regarding autonomous transaction blocks",
-          "evidence_ids": [
-            12,
-            57,
-            82,
-            211,
-            278
-          ],
-          "name": "Financial Fraud Detection & Investigation",
-          "prevalence_rank": 18,
-          "evidence_count": 24,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "inventory-logistics-dispatch-optimization",
-          "impact_score": 4,
-          "adoption_stage": "scaling",
-          "value_lever": "Real-time stock rebalancing and route scheduling based on disruption alerts",
-          "key_blocker": "Fragmented warehouse management and transportation partner API silos",
-          "evidence_ids": [
-            1,
-            2,
-            3,
-            139,
-            278
-          ],
-          "name": "Inventory Allocation & Logistics Dispatch Agent",
-          "prevalence_rank": 45,
-          "evidence_count": 22,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "it-service-desk-support",
-          "impact_score": 4,
-          "adoption_stage": "scaling",
-          "value_lever": "Autonomous password reset, access grants, and routine ticket resolution",
-          "key_blocker": "Rigid legacy ticketing integrations and stale service catalog data",
-          "evidence_ids": [
-            126,
-            145,
-            227,
-            304,
-            334
-          ],
-          "name": "IT Service & Support Desk Autonomous Resolution",
-          "prevalence_rank": 5,
-          "evidence_count": 20,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "procurement-supplier-sourcing",
-          "impact_score": 4,
-          "adoption_stage": "piloting",
-          "value_lever": "Autonomous tail-spend negotiation, RFP distribution, and supplier benchmarking",
-          "key_blocker": "Supplier pushback against automated bidding bots and contract rigidity",
-          "evidence_ids": [
-            2,
-            8,
-            9,
-            10,
-            36
-          ],
-          "name": "Autonomous Procurement & Vendor Sourcing",
-          "prevalence_rank": 24,
-          "evidence_count": 17,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "accounts-payable-invoice-processing",
-          "impact_score": 4,
-          "adoption_stage": "scaling",
-          "value_lever": "Straight-through multi-line matching, GL coding, and fraud validation",
-          "key_blocker": "Complex unstructured paper exceptions and multi-entity approval policies",
-          "evidence_ids": [
-            11,
-            173,
-            174,
-            199,
-            412
-          ],
-          "name": "Accounts Payable & Invoice Processing Automation",
-          "prevalence_rank": 9,
-          "evidence_count": 8,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "post-call-summarization-crm-wrapup",
-          "impact_score": 4,
-          "adoption_stage": "mainstream",
-          "value_lever": "Automated call dispositioning, structured note generation, and CRM entry",
-          "key_blocker": "Incomplete entity extraction across fragmented telephony and CRM platforms",
-          "evidence_ids": [
-            7,
-            14,
-            29,
-            38,
-            397
-          ],
-          "name": "Post-Call Processing & CRM Wrap-Up Automation",
-          "prevalence_rank": 17,
-          "evidence_count": 8,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "secops-incident-triage-investigation",
-          "impact_score": 3,
-          "adoption_stage": "piloting",
-          "value_lever": "Threat signal correlation, SIEM alert prioritization, and indicator extraction",
-          "key_blocker": "Fear of automated adversarial prompt evasion or unauthorized port actions",
-          "evidence_ids": [
-            22,
-            24,
-            74,
-            158,
-            286
-          ],
-          "name": "SecOps Threat Detection & Incident Triage",
-          "prevalence_rank": 12,
-          "evidence_count": 50,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "field-service-technician-support",
-          "impact_score": 3,
-          "adoption_stage": "piloting",
-          "value_lever": "Multimodal equipment diagnostic guidance and real-time maintenance lookup",
-          "key_blocker": "Intermittent remote connectivity and unstructured legacy equipment manuals",
-          "evidence_ids": [
-            32,
-            253,
-            335,
-            387,
-            390
-          ],
-          "name": "Field Service & Technical Support Agent",
-          "prevalence_rank": 39,
-          "evidence_count": 27,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "customer-complaints-handling-resolution",
-          "impact_score": 3,
-          "adoption_stage": "piloting",
-          "value_lever": "Cross-system grievance aggregation and empathetic remediation drafting",
-          "key_blocker": "Statutory liability exposure under strict consumer protection oversight",
-          "evidence_ids": [
-            40,
-            52,
-            53,
-            62,
-            117
-          ],
-          "name": "Customer Complaints Handling & Dispute Resolution",
-          "prevalence_rank": 19,
-          "evidence_count": 27,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "billing-inquiry-payment-support",
-          "impact_score": 3,
-          "adoption_stage": "scaling",
-          "value_lever": "Automated payment arrangement negotiation and invoice ledger reconciliation",
-          "key_blocker": "Strict debt collection compliance and fair servicing statutory constraints",
-          "evidence_ids": [
-            52,
-            53,
-            61,
-            412,
-            502
-          ],
-          "name": "Customer Billing Inquiry & Payment Arrangement Agent",
-          "prevalence_rank": 41,
-          "evidence_count": 21,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "kyc-customer-onboarding",
-          "impact_score": 3,
-          "adoption_stage": "piloting",
-          "value_lever": "Institutional document verification, sanctions cross-checking, and data ingestion",
-          "key_blocker": "Data sovereignty constraints and legal liabilities for missed beneficial owners",
-          "evidence_ids": [
-            88,
-            90,
-            125,
-            210,
-            297
-          ],
-          "name": "KYC & Institutional Customer Onboarding",
-          "prevalence_rank": 16,
-          "evidence_count": 19,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "omnichannel-ticket-triage-routing",
-          "impact_score": 3,
-          "adoption_stage": "mainstream",
-          "value_lever": "Sentiment-based routing, intent tagging, and skill-based queue distribution",
-          "key_blocker": "Misclassification of multi-intent customer inquiries causing ticket bouncing",
-          "evidence_ids": [
-            6,
-            16,
-            31,
-            107,
-            293
-          ],
-          "name": "Omnichannel Customer Support Ticket Triage & Routing",
-          "prevalence_rank": 27,
-          "evidence_count": 17,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "legacy-code-modernization-migration",
-          "impact_score": 3,
-          "adoption_stage": "piloting",
-          "value_lever": "Automated COBOL/mainframe translation, documentation, and regression testing",
-          "key_blocker": "Absence of ground-truth test suites and unwritten business rules",
-          "evidence_ids": [
-            202,
-            203,
-            273,
-            382,
-            384
-          ],
-          "name": "Legacy Code Refactoring & Migration",
-          "prevalence_rank": 38,
-          "evidence_count": 16,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "hr-helpdesk-employee-self-service",
-          "impact_score": 3,
-          "adoption_stage": "scaling",
-          "value_lever": "Instant benefits interpretation, policy answers, and leave request logging",
-          "key_blocker": "Frequent HR policy changes and localized jurisdictional rule mismatches",
-          "evidence_ids": [
-            18,
-            19,
-            20,
-            454,
-            456
-          ],
-          "name": "HR Helpdesk & Employee Self-Service Support",
-          "prevalence_rank": 10,
-          "evidence_count": 15,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "code-review-pull-request-agents",
-          "impact_score": 3,
-          "adoption_stage": "piloting",
-          "value_lever": "Automated security vulnerability checks, syntax audits, and architectural linting",
-          "key_blocker": "High false-positive noise generating developer alert fatigue",
-          "evidence_ids": [
-            44,
-            45,
-            64,
-            165,
-            521
-          ],
-          "name": "Automated Code Review & Pull Request Verification",
-          "prevalence_rank": 13,
-          "evidence_count": 13,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "employee-onboarding-offboarding-orchestration",
-          "impact_score": 3,
-          "adoption_stage": "piloting",
-          "value_lever": "Multi-system account provisioning, hardware dispatch, and immediate deprovisioning",
-          "key_blocker": "Disjointed SaaS access control models and non-standard offboarding handoffs",
-          "evidence_ids": [
-            19,
-            67,
-            102,
-            110,
-            113
-          ],
-          "name": "Employee Onboarding & Offboarding Lifecycle Orchestration",
-          "prevalence_rank": 36,
-          "evidence_count": 12,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "financial-audit-reconciliation",
-          "impact_score": 3,
-          "adoption_stage": "piloting",
-          "value_lever": "Continuous ledger anomaly cross-checking and multi-currency transaction verification",
-          "key_blocker": "Audit committee requirements for complete mathematical determinism",
-          "evidence_ids": [
-            11,
-            49,
-            94,
-            224,
-            451
-          ],
-          "name": "Financial Reconciliation & Audit Trail Verification",
-          "prevalence_rank": 40,
-          "evidence_count": 11,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "insurance-claims-processing",
-          "impact_score": 3,
-          "adoption_stage": "piloting",
-          "value_lever": "Autonomous simple claim triage, document indexing, and payout calculation",
-          "key_blocker": "Regulatory scrutiny regarding bias and unverified damage adjudication",
-          "evidence_ids": [
-            71,
-            123,
-            136,
-            137,
-            291
-          ],
-          "name": "Insurance Claims Triage & Autonomous Adjudication",
-          "prevalence_rank": 22,
-          "evidence_count": 10,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "contract-lifecycle-review-analysis",
-          "impact_score": 3,
-          "adoption_stage": "piloting",
-          "value_lever": "Redlining indemnification variances and comparing clauses against standards",
-          "key_blocker": "General counsel risk aversion and black-box liability in legal reviews",
-          "evidence_ids": [
-            13,
-            75,
-            76,
-            349,
-            441
-          ],
-          "name": "Contract Lifecycle Review & Redlining",
-          "prevalence_rank": 23,
-          "evidence_count": 10,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "sales-proposal-rfp-automation",
-          "impact_score": 3,
-          "adoption_stage": "scaling",
-          "value_lever": "Contextual past-performance assembly and technical RFP question answering",
-          "key_blocker": "Stale technical repositories and high customization demands on complex bids",
-          "evidence_ids": [
-            54,
-            55,
-            170,
-            443,
-            697
-          ],
-          "name": "Enterprise Sales Proposal & Bid Response Generation",
-          "prevalence_rank": 30,
-          "evidence_count": 8,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "expense-report-audit-compliance",
-          "impact_score": 3,
-          "adoption_stage": "scaling",
-          "value_lever": "100% submission screening against corporate travel and entertainment policies",
-          "key_blocker": "False positive alerts on ambiguous executive business entertainment",
-          "evidence_ids": [
-            25,
-            26,
-            27,
-            28,
-            446
-          ],
-          "name": "Employee Travel & Expense (T&E) Audit Compliance",
-          "prevalence_rank": 34,
-          "evidence_count": 7,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "b2b-sales-lead-qualification",
-          "impact_score": 3,
-          "adoption_stage": "scaling",
-          "value_lever": "Inbound buyer intent enrichment, sizing, and personalized email outreach",
-          "key_blocker": "Prospect fatigue with synthetic messaging and degraded spam reputation",
-          "evidence_ids": [
-            179,
-            180,
-            318,
-            343,
-            628
-          ],
-          "name": "B2B Sales Prospecting & Lead Qualification Agent",
-          "prevalence_rank": 33,
-          "evidence_count": 7,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "knowledge-base-auto-maintenance",
-          "impact_score": 3,
-          "adoption_stage": "piloting",
-          "value_lever": "Synthesizing solved ticket threads into verified internal support documentation",
-          "key_blocker": "Siloed content ownership and lack of systematic review workflows",
-          "evidence_ids": [
-            79,
-            147,
-            209,
-            649,
-            688
-          ],
-          "name": "Customer Service Knowledge Base Article Generation & Maintenance",
-          "prevalence_rank": 48,
-          "evidence_count": 7,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "devops-ci-cd-pipeline-agents",
-          "impact_score": 3,
-          "adoption_stage": "piloting",
-          "value_lever": "Autonomous build failure triage, log parsing, and environment script fixes",
-          "key_blocker": "Risks of automated commits altering build configurations without review",
-          "evidence_ids": [
-            24,
-            44,
-            46,
-            470,
-            778
-          ],
-          "name": "DevOps CI/CD Pipeline & Build Troubleshooting Agents",
-          "prevalence_rank": 20,
-          "evidence_count": 6,
-          "low_evidence": false
-        },
-        {
-          "use_case_id": "customer-retention-churn-intervention",
-          "impact_score": 3,
-          "adoption_stage": "piloting",
-          "value_lever": "Proactive detection of usage decay and dynamic retention offer generation",
-          "key_blocker": "Disconnected CRM data and poor pricing incentive authority boundaries",
-          "evidence_ids": [
-            30,
-            116,
-            653,
-            695,
-            728
-          ],
-          "name": "Proactive Retention & Churn Prevention Outreach Agent",
-          "prevalence_rank": 47,
-          "evidence_count": 4,
-          "low_evidence": false
+          "low_evidence": false,
+          "assessed": true
         },
         {
           "use_case_id": "regulatory-compliance-reporting",
-          "impact_score": 2,
+          "name": "Regulatory Compliance Tracking & Automated Reporting",
+          "prevalence_rank": 32,
+          "score": 53.5,
+          "score_detail": {
+            "score": 53.5,
+            "evidence": 0.988,
+            "positivity": 0.23,
+            "weighted_drivers": 8.68,
+            "weighted_blockers": 29.06,
+            "claims": 69,
+            "sources": 42,
+            "vendor_share": 0.19,
+            "by_source_type": {
+              "regulator": 19,
+              "consultancy": 12,
+              "academic": 11,
+              "industry_body": 11,
+              "vendor": 10,
+              "analyst": 4,
+              "media": 2
+            }
+          },
+          "ai_rating": 2,
           "adoption_stage": "experimenting",
           "value_lever": "Scanning regulatory updates, mapping controls, and assembling filing drafts",
           "key_blocker": "Severe regulatory fines for automated filing omissions or errors",
@@ -3010,14 +2945,412 @@
             185,
             285
           ],
-          "name": "Regulatory Compliance Tracking & Automated Reporting",
-          "prevalence_rank": 32,
           "evidence_count": 69,
-          "low_evidence": false
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "secops-incident-triage-investigation",
+          "name": "SecOps Threat Detection & Incident Triage",
+          "prevalence_rank": 12,
+          "score": 49.3,
+          "score_detail": {
+            "score": 49.3,
+            "evidence": 0.597,
+            "positivity": 0.396,
+            "weighted_drivers": 9.96,
+            "weighted_blockers": 15.2,
+            "claims": 50,
+            "sources": 30,
+            "vendor_share": 0.42,
+            "by_source_type": {
+              "vendor": 16,
+              "industry_body": 10,
+              "academic": 7,
+              "analyst": 5,
+              "consultancy": 5,
+              "media": 4,
+              "regulator": 3
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "piloting",
+          "value_lever": "Threat signal correlation, SIEM alert prioritization, and indicator extraction",
+          "key_blocker": "Fear of automated adversarial prompt evasion or unauthorized port actions",
+          "evidence_ids": [
+            22,
+            24,
+            74,
+            158,
+            286
+          ],
+          "evidence_count": 50,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "fraud-detection-investigation",
+          "name": "Financial Fraud Detection & Investigation",
+          "prevalence_rank": 18,
+          "score": 45.9,
+          "score_detail": {
+            "score": 45.9,
+            "evidence": 0.38,
+            "positivity": 0.573,
+            "weighted_drivers": 7.25,
+            "weighted_blockers": 5.4,
+            "claims": 24,
+            "sources": 17,
+            "vendor_share": 0.58,
+            "by_source_type": {
+              "vendor": 11,
+              "regulator": 5,
+              "industry_body": 3,
+              "media": 3,
+              "academic": 2
+            }
+          },
+          "ai_rating": 4,
+          "adoption_stage": "scaling",
+          "value_lever": "Real-time anomaly identification and dynamic cross-account pattern synthesis",
+          "key_blocker": "Explainability demands from risk teams regarding autonomous transaction blocks",
+          "evidence_ids": [
+            12,
+            57,
+            82,
+            211,
+            278
+          ],
+          "evidence_count": 24,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "inventory-logistics-dispatch-optimization",
+          "name": "Inventory Allocation & Logistics Dispatch Agent",
+          "prevalence_rank": 45,
+          "score": 45.7,
+          "score_detail": {
+            "score": 45.7,
+            "evidence": 0.307,
+            "positivity": 0.709,
+            "weighted_drivers": 7.64,
+            "weighted_blockers": 3.14,
+            "claims": 22,
+            "sources": 14,
+            "vendor_share": 0.23,
+            "by_source_type": {
+              "consultancy": 7,
+              "analyst": 5,
+              "academic": 4,
+              "industry_body": 3,
+              "vendor": 2,
+              "media": 1
+            }
+          },
+          "ai_rating": 4,
+          "adoption_stage": "scaling",
+          "value_lever": "Real-time stock rebalancing and route scheduling based on disruption alerts",
+          "key_blocker": "Fragmented warehouse management and transportation partner API silos",
+          "evidence_ids": [
+            1,
+            2,
+            3,
+            139,
+            278
+          ],
+          "evidence_count": 22,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "billing-inquiry-payment-support",
+          "name": "Customer Billing Inquiry & Payment Arrangement Agent",
+          "prevalence_rank": 41,
+          "score": 45.1,
+          "score_detail": {
+            "score": 45.1,
+            "evidence": 0.311,
+            "positivity": 0.681,
+            "weighted_drivers": 7.67,
+            "weighted_blockers": 3.59,
+            "claims": 21,
+            "sources": 16,
+            "vendor_share": 0.29,
+            "by_source_type": {
+              "regulator": 6,
+              "vendor": 5,
+              "consultancy": 4,
+              "industry_body": 3,
+              "media": 2,
+              "academic": 1
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "scaling",
+          "value_lever": "Automated payment arrangement negotiation and invoice ledger reconciliation",
+          "key_blocker": "Strict debt collection compliance and fair servicing statutory constraints",
+          "evidence_ids": [
+            52,
+            53,
+            61,
+            412,
+            502
+          ],
+          "evidence_count": 21,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "application-performance-monitoring-remediation",
+          "name": "AIOps Alert Correlation & Autonomous Incident Remediation",
+          "prevalence_rank": 29,
+          "score": 44.4,
+          "score_detail": {
+            "score": 44.4,
+            "evidence": 0.444,
+            "positivity": 0.445,
+            "weighted_drivers": 9.74,
+            "weighted_blockers": 12.16,
+            "claims": 67,
+            "sources": 20,
+            "vendor_share": 0.3,
+            "by_source_type": {
+              "consultancy": 30,
+              "analyst": 19,
+              "vendor": 14,
+              "academic": 4
+            }
+          },
+          "ai_rating": 4,
+          "adoption_stage": "scaling",
+          "value_lever": "Telemetry correlation, root-cause identification, and automated service remediation",
+          "key_blocker": "Production destabilization risk from unverified automated rollback commands",
+          "evidence_ids": [
+            24,
+            73,
+            91,
+            109,
+            279
+          ],
+          "evidence_count": 67,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "aml-alert-triage-investigation",
+          "name": "Anti-Money Laundering (AML) Alert Triage & Transaction Monitoring",
+          "prevalence_rank": 21,
+          "score": 44.3,
+          "score_detail": {
+            "score": 44.3,
+            "evidence": 0.3,
+            "positivity": 0.682,
+            "weighted_drivers": 7.54,
+            "weighted_blockers": 3.52,
+            "claims": 25,
+            "sources": 13,
+            "vendor_share": 0.52,
+            "by_source_type": {
+              "vendor": 7,
+              "analyst": 4,
+              "regulator": 4,
+              "academic": 4,
+              "consultancy": 3,
+              "media": 3
+            }
+          },
+          "ai_rating": 4,
+          "adoption_stage": "scaling",
+          "value_lever": "Rapid false-positive reduction and SAR narrative draft generation",
+          "key_blocker": "Model governance mandates and strict regulatory auditability frameworks",
+          "evidence_ids": [
+            13,
+            58,
+            82,
+            83,
+            168
+          ],
+          "evidence_count": 25,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "field-service-technician-support",
+          "name": "Field Service & Technical Support Agent",
+          "prevalence_rank": 39,
+          "score": 42.7,
+          "score_detail": {
+            "score": 42.7,
+            "evidence": 0.294,
+            "positivity": 0.646,
+            "weighted_drivers": 8.18,
+            "weighted_blockers": 4.49,
+            "claims": 27,
+            "sources": 15,
+            "vendor_share": 0.3,
+            "by_source_type": {
+              "vendor": 8,
+              "consultancy": 7,
+              "industry_body": 6,
+              "media": 4,
+              "regulator": 2
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "piloting",
+          "value_lever": "Multimodal equipment diagnostic guidance and real-time maintenance lookup",
+          "key_blocker": "Intermittent remote connectivity and unstructured legacy equipment manuals",
+          "evidence_ids": [
+            32,
+            253,
+            335,
+            387,
+            390
+          ],
+          "evidence_count": 27,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "software-engineering-coding-agents",
+          "name": "Software Engineering & Code Generation Agents",
+          "prevalence_rank": 2,
+          "score": 41.5,
+          "score_detail": {
+            "score": 41.5,
+            "evidence": 0.336,
+            "positivity": 0.526,
+            "weighted_drivers": 7.03,
+            "weighted_blockers": 6.33,
+            "claims": 26,
+            "sources": 15,
+            "vendor_share": 0.19,
+            "by_source_type": {
+              "academic": 7,
+              "consultancy": 6,
+              "vendor": 5,
+              "industry_body": 3,
+              "analyst": 2,
+              "regulator": 2,
+              "other": 1
+            }
+          },
+          "ai_rating": 4,
+          "adoption_stage": "scaling",
+          "value_lever": "Contextual unit test creation, scaffolding, and boilerplate generation",
+          "key_blocker": "Developer mistrust regarding subtle logic bugs and license compliance",
+          "evidence_ids": [
+            44,
+            45,
+            145,
+            164,
+            322
+          ],
+          "evidence_count": 26,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "customer-complaints-handling-resolution",
+          "name": "Customer Complaints Handling & Dispute Resolution",
+          "prevalence_rank": 19,
+          "score": 40.0,
+          "score_detail": {
+            "score": 40.0,
+            "evidence": 0.468,
+            "positivity": 0.309,
+            "weighted_drivers": 4.66,
+            "weighted_blockers": 10.43,
+            "claims": 27,
+            "sources": 22,
+            "vendor_share": 0.22,
+            "by_source_type": {
+              "consultancy": 8,
+              "vendor": 6,
+              "regulator": 6,
+              "academic": 3,
+              "analyst": 2,
+              "media": 1,
+              "industry_body": 1
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "piloting",
+          "value_lever": "Cross-system grievance aggregation and empathetic remediation drafting",
+          "key_blocker": "Statutory liability exposure under strict consumer protection oversight",
+          "evidence_ids": [
+            40,
+            52,
+            53,
+            62,
+            117
+          ],
+          "evidence_count": 27,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "it-service-desk-support",
+          "name": "IT Service & Support Desk Autonomous Resolution",
+          "prevalence_rank": 5,
+          "score": 39.7,
+          "score_detail": {
+            "score": 39.7,
+            "evidence": 0.275,
+            "positivity": 0.597,
+            "weighted_drivers": 5.72,
+            "weighted_blockers": 3.86,
+            "claims": 20,
+            "sources": 14,
+            "vendor_share": 0.5,
+            "by_source_type": {
+              "vendor": 7,
+              "analyst": 4,
+              "industry_body": 4,
+              "consultancy": 4,
+              "academic": 1
+            }
+          },
+          "ai_rating": 4,
+          "adoption_stage": "scaling",
+          "value_lever": "Autonomous password reset, access grants, and routine ticket resolution",
+          "key_blocker": "Rigid legacy ticketing integrations and stale service catalog data",
+          "evidence_ids": [
+            126,
+            145,
+            227,
+            304,
+            334
+          ],
+          "evidence_count": 20,
+          "low_evidence": false,
+          "assessed": true
         },
         {
           "use_case_id": "vendor-contract-rfp-evaluation",
-          "impact_score": 2,
+          "name": "RFP Response Generation & Vendor Proposal Evaluation",
+          "prevalence_rank": 43,
+          "score": 38.5,
+          "score_detail": {
+            "score": 38.5,
+            "evidence": 0.305,
+            "positivity": 0.494,
+            "weighted_drivers": 5.97,
+            "weighted_blockers": 6.12,
+            "claims": 23,
+            "sources": 14,
+            "vendor_share": 0.17,
+            "by_source_type": {
+              "industry_body": 7,
+              "consultancy": 6,
+              "regulator": 4,
+              "academic": 3,
+              "vendor": 2,
+              "media": 1
+            }
+          },
+          "ai_rating": 2,
           "adoption_stage": "piloting",
           "value_lever": "Side-by-side compliance scoring and security questionnaire evaluation",
           "key_blocker": "Nuanced supplier pricing models and liability exclusions escaping extraction",
@@ -3028,14 +3361,179 @@
             361,
             380
           ],
-          "name": "RFP Response Generation & Vendor Proposal Evaluation",
-          "prevalence_rank": 43,
           "evidence_count": 23,
-          "low_evidence": false
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "b2b-sales-lead-qualification",
+          "name": "B2B Sales Prospecting & Lead Qualification Agent",
+          "prevalence_rank": 33,
+          "score": 37.5,
+          "score_detail": {
+            "score": 37.5,
+            "evidence": 0.141,
+            "positivity": 1.0,
+            "weighted_drivers": 4.24,
+            "weighted_blockers": 0,
+            "claims": 7,
+            "sources": 6,
+            "vendor_share": 0.14,
+            "by_source_type": {
+              "consultancy": 3,
+              "analyst": 3,
+              "media": 1
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "scaling",
+          "value_lever": "Inbound buyer intent enrichment, sizing, and personalized email outreach",
+          "key_blocker": "Prospect fatigue with synthetic messaging and degraded spam reputation",
+          "evidence_ids": [
+            179,
+            180,
+            318,
+            343,
+            628
+          ],
+          "evidence_count": 7,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "kyc-customer-onboarding",
+          "name": "KYC & Institutional Customer Onboarding",
+          "prevalence_rank": 16,
+          "score": 36.9,
+          "score_detail": {
+            "score": 36.9,
+            "evidence": 0.253,
+            "positivity": 0.555,
+            "weighted_drivers": 4.68,
+            "weighted_blockers": 3.75,
+            "claims": 19,
+            "sources": 12,
+            "vendor_share": 0.53,
+            "by_source_type": {
+              "analyst": 4,
+              "vendor": 4,
+              "consultancy": 3,
+              "media": 3,
+              "academic": 2,
+              "regulator": 2,
+              "industry_body": 1
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "piloting",
+          "value_lever": "Institutional document verification, sanctions cross-checking, and data ingestion",
+          "key_blocker": "Data sovereignty constraints and legal liabilities for missed beneficial owners",
+          "evidence_ids": [
+            88,
+            90,
+            125,
+            210,
+            297
+          ],
+          "evidence_count": 19,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "procurement-supplier-sourcing",
+          "name": "Autonomous Procurement & Vendor Sourcing",
+          "prevalence_rank": 24,
+          "score": 35.2,
+          "score_detail": {
+            "score": 35.2,
+            "evidence": 0.202,
+            "positivity": 0.638,
+            "weighted_drivers": 5.18,
+            "weighted_blockers": 2.94,
+            "claims": 17,
+            "sources": 8,
+            "vendor_share": 0.0,
+            "by_source_type": {
+              "consultancy": 12,
+              "media": 3,
+              "analyst": 1,
+              "academic": 1
+            }
+          },
+          "ai_rating": 4,
+          "adoption_stage": "piloting",
+          "value_lever": "Autonomous tail-spend negotiation, RFP distribution, and supplier benchmarking",
+          "key_blocker": "Supplier pushback against automated bidding bots and contract rigidity",
+          "evidence_ids": [
+            2,
+            8,
+            9,
+            10,
+            36
+          ],
+          "evidence_count": 17,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "omnichannel-ticket-triage-routing",
+          "name": "Omnichannel Customer Support Ticket Triage & Routing",
+          "prevalence_rank": 27,
+          "score": 33.3,
+          "score_detail": {
+            "score": 33.3,
+            "evidence": 0.262,
+            "positivity": 0.419,
+            "weighted_drivers": 3.6,
+            "weighted_blockers": 5.0,
+            "claims": 17,
+            "sources": 14,
+            "vendor_share": 0.41,
+            "by_source_type": {
+              "vendor": 6,
+              "consultancy": 5,
+              "media": 4,
+              "industry_body": 1,
+              "analyst": 1
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "mainstream",
+          "value_lever": "Sentiment-based routing, intent tagging, and skill-based queue distribution",
+          "key_blocker": "Misclassification of multi-intent customer inquiries causing ticket bouncing",
+          "evidence_ids": [
+            6,
+            16,
+            31,
+            107,
+            293
+          ],
+          "evidence_count": 17,
+          "low_evidence": false,
+          "assessed": true
         },
         {
           "use_case_id": "commercial-underwriting-assist",
-          "impact_score": 2,
+          "name": "Commercial Underwriting & Risk Assessment",
+          "prevalence_rank": 25,
+          "score": 32.7,
+          "score_detail": {
+            "score": 32.7,
+            "evidence": 0.236,
+            "positivity": 0.455,
+            "weighted_drivers": 4.5,
+            "weighted_blockers": 5.38,
+            "claims": 17,
+            "sources": 9,
+            "vendor_share": 0.0,
+            "by_source_type": {
+              "regulator": 6,
+              "analyst": 4,
+              "media": 4,
+              "academic": 3
+            }
+          },
+          "ai_rating": 2,
           "adoption_stage": "piloting",
           "value_lever": "Cross-portfolio loss run aggregation, exposure parsing, and submission triage",
           "key_blocker": "Skepticism over algorithmic risk assessment quality and lack of explainability",
@@ -3046,14 +3544,69 @@
             48,
             50
           ],
-          "name": "Commercial Underwriting & Risk Assessment",
-          "prevalence_rank": 25,
           "evidence_count": 17,
-          "low_evidence": false
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "insurance-claims-processing",
+          "name": "Insurance Claims Triage & Autonomous Adjudication",
+          "prevalence_rank": 22,
+          "score": 30.8,
+          "score_detail": {
+            "score": 30.8,
+            "evidence": 0.153,
+            "positivity": 0.646,
+            "weighted_drivers": 3.8,
+            "weighted_blockers": 2.08,
+            "claims": 10,
+            "sources": 6,
+            "vendor_share": 0.0,
+            "by_source_type": {
+              "regulator": 4,
+              "media": 4,
+              "analyst": 1,
+              "academic": 1
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "piloting",
+          "value_lever": "Autonomous simple claim triage, document indexing, and payout calculation",
+          "key_blocker": "Regulatory scrutiny regarding bias and unverified damage adjudication",
+          "evidence_ids": [
+            71,
+            123,
+            136,
+            137,
+            291
+          ],
+          "evidence_count": 10,
+          "low_evidence": false,
+          "assessed": true
         },
         {
           "use_case_id": "wealth-management-portfolio-rebalancing",
-          "impact_score": 2,
+          "name": "Investment Research & Portfolio Advisory Support",
+          "prevalence_rank": 49,
+          "score": 30.1,
+          "score_detail": {
+            "score": 30.1,
+            "evidence": 0.199,
+            "positivity": 0.459,
+            "weighted_drivers": 3.54,
+            "weighted_blockers": 4.17,
+            "claims": 14,
+            "sources": 8,
+            "vendor_share": 0.07,
+            "by_source_type": {
+              "regulator": 6,
+              "consultancy": 5,
+              "analyst": 1,
+              "vendor": 1,
+              "industry_body": 1
+            }
+          },
+          "ai_rating": 2,
           "adoption_stage": "experimenting",
           "value_lever": "Tax-loss harvesting identification and portfolio drift monitoring",
           "key_blocker": "Fiduciary liability, FINRA supervision rules, and client relationship sensitivity",
@@ -3064,32 +3617,71 @@
             96,
             290
           ],
-          "name": "Investment Research & Portfolio Advisory Support",
-          "prevalence_rank": 49,
           "evidence_count": 14,
-          "low_evidence": false
+          "low_evidence": false,
+          "assessed": true
         },
         {
-          "use_case_id": "talent-acquisition-candidate-screening",
-          "impact_score": 2,
+          "use_case_id": "legacy-code-modernization-migration",
+          "name": "Legacy Code Refactoring & Migration",
+          "prevalence_rank": 38,
+          "score": 29.9,
+          "score_detail": {
+            "score": 29.9,
+            "evidence": 0.187,
+            "positivity": 0.484,
+            "weighted_drivers": 3.64,
+            "weighted_blockers": 3.88,
+            "claims": 16,
+            "sources": 9,
+            "vendor_share": 0.19,
+            "by_source_type": {
+              "industry_body": 5,
+              "consultancy": 4,
+              "academic": 2,
+              "media": 2,
+              "regulator": 2,
+              "vendor": 1
+            }
+          },
+          "ai_rating": 3,
           "adoption_stage": "piloting",
-          "value_lever": "Automated resume parsing, initial qualification checks, and interview scheduling",
-          "key_blocker": "Algorithmic hiring bias regulations and workforce AI compliance mandates",
+          "value_lever": "Automated COBOL/mainframe translation, documentation, and regression testing",
+          "key_blocker": "Absence of ground-truth test suites and unwritten business rules",
           "evidence_ids": [
-            18,
-            19,
-            20,
-            423,
-            671
+            202,
+            203,
+            273,
+            382,
+            384
           ],
-          "name": "Talent Acquisition & Candidate Screening Agent",
-          "prevalence_rank": 26,
-          "evidence_count": 10,
-          "low_evidence": false
+          "evidence_count": 16,
+          "low_evidence": false,
+          "assessed": true
         },
         {
           "use_case_id": "cloud-infrastructure-finops-optimization",
-          "impact_score": 2,
+          "name": "Cloud Cost & Infrastructure Optimization (FinOps)",
+          "prevalence_rank": 44,
+          "score": 27.4,
+          "score_detail": {
+            "score": 27.4,
+            "evidence": 0.182,
+            "positivity": 0.405,
+            "weighted_drivers": 2.38,
+            "weighted_blockers": 3.5,
+            "claims": 9,
+            "sources": 8,
+            "vendor_share": 0.33,
+            "by_source_type": {
+              "consultancy": 3,
+              "academic": 3,
+              "vendor": 1,
+              "analyst": 1,
+              "regulator": 1
+            }
+          },
+          "ai_rating": 2,
           "adoption_stage": "piloting",
           "value_lever": "Autonomous unattached disk cleanup and right-sizing reserved instances",
           "key_blocker": "Engineering resistance to automated workload teardowns impacting uptime",
@@ -3100,32 +3692,385 @@
             332,
             604
           ],
-          "name": "Cloud Cost & Infrastructure Optimization (FinOps)",
-          "prevalence_rank": 44,
           "evidence_count": 9,
-          "low_evidence": false
+          "low_evidence": false,
+          "assessed": true
         },
         {
-          "use_case_id": "vulnerability-patch-management",
-          "impact_score": 2,
-          "adoption_stage": "experimenting",
-          "value_lever": "Contextual CVE exploitability analysis and automated patch pull-request generation",
-          "key_blocker": "Unintended production outage risks from untested autonomous package upgrades",
+          "use_case_id": "hr-helpdesk-employee-self-service",
+          "name": "HR Helpdesk & Employee Self-Service Support",
+          "prevalence_rank": 10,
+          "score": 27.2,
+          "score_detail": {
+            "score": 27.2,
+            "evidence": 0.151,
+            "positivity": 0.501,
+            "weighted_drivers": 3.54,
+            "weighted_blockers": 3.52,
+            "claims": 15,
+            "sources": 7,
+            "vendor_share": 0.33,
+            "by_source_type": {
+              "consultancy": 6,
+              "academic": 6,
+              "analyst": 3
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "scaling",
+          "value_lever": "Instant benefits interpretation, policy answers, and leave request logging",
+          "key_blocker": "Frequent HR policy changes and localized jurisdictional rule mismatches",
           "evidence_ids": [
-            73,
-            74,
-            120,
-            324,
-            609
+            18,
+            19,
+            20,
+            454,
+            456
           ],
-          "name": "Autonomous Vulnerability Scanning & Patch Management",
-          "prevalence_rank": 35,
-          "evidence_count": 5,
-          "low_evidence": false
+          "evidence_count": 15,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "code-review-pull-request-agents",
+          "name": "Automated Code Review & Pull Request Verification",
+          "prevalence_rank": 13,
+          "score": 27.0,
+          "score_detail": {
+            "score": 27.0,
+            "evidence": 0.154,
+            "positivity": 0.481,
+            "weighted_drivers": 3.62,
+            "weighted_blockers": 3.91,
+            "claims": 13,
+            "sources": 7,
+            "vendor_share": 0.31,
+            "by_source_type": {
+              "academic": 7,
+              "consultancy": 3,
+              "vendor": 2,
+              "industry_body": 1
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "piloting",
+          "value_lever": "Automated security vulnerability checks, syntax audits, and architectural linting",
+          "key_blocker": "High false-positive noise generating developer alert fatigue",
+          "evidence_ids": [
+            44,
+            45,
+            64,
+            165,
+            521
+          ],
+          "evidence_count": 13,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "post-call-summarization-crm-wrapup",
+          "name": "Post-Call Processing & CRM Wrap-Up Automation",
+          "prevalence_rank": 17,
+          "score": 26.1,
+          "score_detail": {
+            "score": 26.1,
+            "evidence": 0.119,
+            "positivity": 0.59,
+            "weighted_drivers": 2.3,
+            "weighted_blockers": 1.6,
+            "claims": 8,
+            "sources": 7,
+            "vendor_share": 0.62,
+            "by_source_type": {
+              "vendor": 3,
+              "media": 3,
+              "analyst": 1,
+              "consultancy": 1
+            }
+          },
+          "ai_rating": 4,
+          "adoption_stage": "mainstream",
+          "value_lever": "Automated call dispositioning, structured note generation, and CRM entry",
+          "key_blocker": "Incomplete entity extraction across fragmented telephony and CRM platforms",
+          "evidence_ids": [
+            7,
+            14,
+            29,
+            38,
+            397
+          ],
+          "evidence_count": 8,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "knowledge-base-auto-maintenance",
+          "name": "Customer Service Knowledge Base Article Generation & Maintenance",
+          "prevalence_rank": 48,
+          "score": 23.7,
+          "score_detail": {
+            "score": 23.7,
+            "evidence": 0.122,
+            "positivity": 0.462,
+            "weighted_drivers": 1.7,
+            "weighted_blockers": 1.98,
+            "claims": 7,
+            "sources": 7,
+            "vendor_share": 0.57,
+            "by_source_type": {
+              "vendor": 4,
+              "academic": 1,
+              "analyst": 1,
+              "industry_body": 1
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "piloting",
+          "value_lever": "Synthesizing solved ticket threads into verified internal support documentation",
+          "key_blocker": "Siloed content ownership and lack of systematic review workflows",
+          "evidence_ids": [
+            79,
+            147,
+            209,
+            649,
+            688
+          ],
+          "evidence_count": 7,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "talent-acquisition-candidate-screening",
+          "name": "Talent Acquisition & Candidate Screening Agent",
+          "prevalence_rank": 26,
+          "score": 23.5,
+          "score_detail": {
+            "score": 23.5,
+            "evidence": 0.131,
+            "positivity": 0.414,
+            "weighted_drivers": 2.16,
+            "weighted_blockers": 3.06,
+            "claims": 10,
+            "sources": 5,
+            "vendor_share": 0.0,
+            "by_source_type": {
+              "consultancy": 6,
+              "academic": 4
+            }
+          },
+          "ai_rating": 2,
+          "adoption_stage": "piloting",
+          "value_lever": "Automated resume parsing, initial qualification checks, and interview scheduling",
+          "key_blocker": "Algorithmic hiring bias regulations and workforce AI compliance mandates",
+          "evidence_ids": [
+            18,
+            19,
+            20,
+            423,
+            671
+          ],
+          "evidence_count": 10,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "customer-retention-churn-intervention",
+          "name": "Proactive Retention & Churn Prevention Outreach Agent",
+          "prevalence_rank": 47,
+          "score": 22.8,
+          "score_detail": {
+            "score": 22.8,
+            "evidence": 0.067,
+            "positivity": 0.802,
+            "weighted_drivers": 1.62,
+            "weighted_blockers": 0.4,
+            "claims": 4,
+            "sources": 4,
+            "vendor_share": 0.5,
+            "by_source_type": {
+              "vendor": 2,
+              "consultancy": 1,
+              "media": 1
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "piloting",
+          "value_lever": "Proactive detection of usage decay and dynamic retention offer generation",
+          "key_blocker": "Disconnected CRM data and poor pricing incentive authority boundaries",
+          "evidence_ids": [
+            30,
+            116,
+            653,
+            695,
+            728
+          ],
+          "evidence_count": 4,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "sales-proposal-rfp-automation",
+          "name": "Enterprise Sales Proposal & Bid Response Generation",
+          "prevalence_rank": 30,
+          "score": 22.7,
+          "score_detail": {
+            "score": 22.7,
+            "evidence": 0.077,
+            "positivity": 0.699,
+            "weighted_drivers": 2.32,
+            "weighted_blockers": 1.0,
+            "claims": 8,
+            "sources": 4,
+            "vendor_share": 0.38,
+            "by_source_type": {
+              "industry_body": 3,
+              "academic": 3,
+              "media": 1,
+              "consultancy": 1
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "scaling",
+          "value_lever": "Contextual past-performance assembly and technical RFP question answering",
+          "key_blocker": "Stale technical repositories and high customization demands on complex bids",
+          "evidence_ids": [
+            54,
+            55,
+            170,
+            443,
+            697
+          ],
+          "evidence_count": 8,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "expense-report-audit-compliance",
+          "name": "Employee Travel & Expense (T&E) Audit Compliance",
+          "prevalence_rank": 34,
+          "score": 22.6,
+          "score_detail": {
+            "score": 22.6,
+            "evidence": 0.103,
+            "positivity": 0.509,
+            "weighted_drivers": 2.38,
+            "weighted_blockers": 2.3,
+            "claims": 7,
+            "sources": 5,
+            "vendor_share": 0.29,
+            "by_source_type": {
+              "consultancy": 3,
+              "industry_body": 2,
+              "academic": 1,
+              "vendor": 1
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "scaling",
+          "value_lever": "100% submission screening against corporate travel and entertainment policies",
+          "key_blocker": "False positive alerts on ambiguous executive business entertainment",
+          "evidence_ids": [
+            25,
+            26,
+            27,
+            28,
+            446
+          ],
+          "evidence_count": 7,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "employee-onboarding-offboarding-orchestration",
+          "name": "Employee Onboarding & Offboarding Lifecycle Orchestration",
+          "prevalence_rank": 36,
+          "score": 22.4,
+          "score_detail": {
+            "score": 22.4,
+            "evidence": 0.13,
+            "positivity": 0.37,
+            "weighted_drivers": 2.3,
+            "weighted_blockers": 3.92,
+            "claims": 12,
+            "sources": 6,
+            "vendor_share": 0.17,
+            "by_source_type": {
+              "consultancy": 5,
+              "academic": 4,
+              "industry_body": 3
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "piloting",
+          "value_lever": "Multi-system account provisioning, hardware dispatch, and immediate deprovisioning",
+          "key_blocker": "Disjointed SaaS access control models and non-standard offboarding handoffs",
+          "evidence_ids": [
+            19,
+            67,
+            102,
+            110,
+            113
+          ],
+          "evidence_count": 12,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "financial-audit-reconciliation",
+          "name": "Financial Reconciliation & Audit Trail Verification",
+          "prevalence_rank": 40,
+          "score": 22.1,
+          "score_detail": {
+            "score": 22.1,
+            "evidence": 0.1,
+            "positivity": 0.5,
+            "weighted_drivers": 3.0,
+            "weighted_blockers": 3.0,
+            "claims": 11,
+            "sources": 5,
+            "vendor_share": 0.55,
+            "by_source_type": {
+              "vendor": 6,
+              "media": 3,
+              "regulator": 2
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "piloting",
+          "value_lever": "Continuous ledger anomaly cross-checking and multi-currency transaction verification",
+          "key_blocker": "Audit committee requirements for complete mathematical determinism",
+          "evidence_ids": [
+            11,
+            49,
+            94,
+            224,
+            451
+          ],
+          "evidence_count": 11,
+          "low_evidence": false,
+          "assessed": true
         },
         {
           "use_case_id": "voice-of-customer-sentiment-triage",
-          "impact_score": 2,
+          "name": "Voice-of-the-Customer (VoC) Sentiment Analysis & Escalation",
+          "prevalence_rank": 50,
+          "score": 20.8,
+          "score_detail": {
+            "score": 20.8,
+            "evidence": 0.092,
+            "positivity": 0.478,
+            "weighted_drivers": 1.32,
+            "weighted_blockers": 1.44,
+            "claims": 4,
+            "sources": 4,
+            "vendor_share": 0.0,
+            "by_source_type": {
+              "consultancy": 2,
+              "academic": 1,
+              "analyst": 1
+            }
+          },
+          "ai_rating": 2,
           "adoption_stage": "scaling",
           "value_lever": "Real-time tone monitoring across channels to escalate churn signals",
           "key_blocker": "Superficial sentiment tagging failing to trigger root-cause process changes",
@@ -3136,14 +4081,32 @@
             488,
             783
           ],
-          "name": "Voice-of-the-Customer (VoC) Sentiment Analysis & Escalation",
-          "prevalence_rank": 50,
           "evidence_count": 4,
-          "low_evidence": false
+          "low_evidence": false,
+          "assessed": true
         },
         {
           "use_case_id": "identity-access-management-governance",
-          "impact_score": 1,
+          "name": "Identity & Access Management (IAM) Request Provisioning",
+          "prevalence_rank": 42,
+          "score": 20.4,
+          "score_detail": {
+            "score": 20.4,
+            "evidence": 0.184,
+            "positivity": 0.126,
+            "weighted_drivers": 0.8,
+            "weighted_blockers": 5.53,
+            "claims": 9,
+            "sources": 8,
+            "vendor_share": 0.33,
+            "by_source_type": {
+              "academic": 3,
+              "vendor": 3,
+              "industry_body": 2,
+              "analyst": 1
+            }
+          },
+          "ai_rating": 1,
           "adoption_stage": "experimenting",
           "value_lever": "Machine identity cataloging, dormant role revocation, and peer entitlement review",
           "key_blocker": "Immature IAM tooling for non-human agent identities and credential delegation",
@@ -3154,13 +4117,326 @@
             348,
             481
           ],
-          "name": "Identity & Access Management (IAM) Request Provisioning",
-          "prevalence_rank": 42,
           "evidence_count": 9,
-          "low_evidence": false
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "accounts-payable-invoice-processing",
+          "name": "Accounts Payable & Invoice Processing Automation",
+          "prevalence_rank": 9,
+          "score": 19.6,
+          "score_detail": {
+            "score": 19.6,
+            "evidence": 0.063,
+            "positivity": 0.633,
+            "weighted_drivers": 1.9,
+            "weighted_blockers": 1.1,
+            "claims": 8,
+            "sources": 3,
+            "vendor_share": 0.5,
+            "by_source_type": {
+              "vendor": 4,
+              "media": 3,
+              "regulator": 1
+            }
+          },
+          "ai_rating": 4,
+          "adoption_stage": "scaling",
+          "value_lever": "Straight-through multi-line matching, GL coding, and fraud validation",
+          "key_blocker": "Complex unstructured paper exceptions and multi-entity approval policies",
+          "evidence_ids": [
+            11,
+            173,
+            174,
+            199,
+            412
+          ],
+          "evidence_count": 8,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "vulnerability-patch-management",
+          "name": "Autonomous Vulnerability Scanning & Patch Management",
+          "prevalence_rank": 35,
+          "score": 18.2,
+          "score_detail": {
+            "score": 18.2,
+            "evidence": 0.092,
+            "positivity": 0.336,
+            "weighted_drivers": 1.2,
+            "weighted_blockers": 2.37,
+            "claims": 5,
+            "sources": 4,
+            "vendor_share": 0.2,
+            "by_source_type": {
+              "academic": 2,
+              "vendor": 1,
+              "analyst": 1,
+              "industry_body": 1
+            }
+          },
+          "ai_rating": 2,
+          "adoption_stage": "experimenting",
+          "value_lever": "Contextual CVE exploitability analysis and automated patch pull-request generation",
+          "key_blocker": "Unintended production outage risks from untested autonomous package upgrades",
+          "evidence_ids": [
+            73,
+            74,
+            120,
+            324,
+            609
+          ],
+          "evidence_count": 5,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "devops-ci-cd-pipeline-agents",
+          "name": "DevOps CI/CD Pipeline & Build Troubleshooting Agents",
+          "prevalence_rank": 20,
+          "score": 17.8,
+          "score_detail": {
+            "score": 17.8,
+            "evidence": 0.083,
+            "positivity": 0.364,
+            "weighted_drivers": 1.2,
+            "weighted_blockers": 2.1,
+            "claims": 6,
+            "sources": 4,
+            "vendor_share": 0.5,
+            "by_source_type": {
+              "academic": 4,
+              "vendor": 1,
+              "analyst": 1
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "piloting",
+          "value_lever": "Autonomous build failure triage, log parsing, and environment script fixes",
+          "key_blocker": "Risks of automated commits altering build configurations without review",
+          "evidence_ids": [
+            24,
+            44,
+            46,
+            470,
+            778
+          ],
+          "evidence_count": 6,
+          "low_evidence": false,
+          "assessed": true
+        },
+        {
+          "use_case_id": "contract-lifecycle-review-analysis",
+          "name": "Contract Lifecycle Review & Redlining",
+          "prevalence_rank": 23,
+          "score": 12.8,
+          "score_detail": {
+            "score": 12.8,
+            "evidence": 0.04,
+            "positivity": 0.4,
+            "weighted_drivers": 0.8,
+            "weighted_blockers": 1.2,
+            "claims": 10,
+            "sources": 3,
+            "vendor_share": 1.0,
+            "by_source_type": {
+              "industry_body": 6,
+              "vendor": 4
+            }
+          },
+          "ai_rating": 3,
+          "adoption_stage": "piloting",
+          "value_lever": "Redlining indemnification variances and comparing clauses against standards",
+          "key_blocker": "General counsel risk aversion and black-box liability in legal reviews",
+          "evidence_ids": [
+            13,
+            75,
+            76,
+            349,
+            441
+          ],
+          "evidence_count": 10,
+          "low_evidence": false,
+          "assessed": true
         }
       ],
-      "not_assessed": []
+      "not_assessed": [],
+      "drivers": [
+        {
+          "factor": "Operational cycle compression and hard labor savings",
+          "root_cause_id": "cost_roi",
+          "explanation": "Autonomous agents eliminate manual paperwork backlogs, yielding double-digit operating cost reductions across back-office workflows.",
+          "strength": "strong",
+          "evidence_ids": [
+            2,
+            7,
+            8,
+            11
+          ],
+          "ai_order": 1,
+          "score": 100.0,
+          "evidence_sources": 158,
+          "evidence_claims": 217,
+          "vendor_share": 0.37
+        },
+        {
+          "factor": "C-suite commitment to operational model transformation",
+          "root_cause_id": "operating_model",
+          "explanation": "Executive leaders prioritize restructuring core departmental workflows from cost centers into scalable, autonomous business engines.",
+          "strength": "moderate",
+          "evidence_ids": [
+            10,
+            24,
+            30,
+            36
+          ],
+          "ai_order": 2,
+          "score": 46.5,
+          "evidence_sources": 75,
+          "evidence_claims": 86,
+          "vendor_share": 0.42
+        },
+        {
+          "factor": "Dynamic multi-turn reasoning and exception handling",
+          "root_cause_id": "model_quality",
+          "explanation": "LLMs dynamically resolve ambiguous cases and draft empathetic responses where rigid deterministic automation previously failed.",
+          "strength": "weak",
+          "evidence_ids": [
+            62,
+            82,
+            158,
+            222
+          ],
+          "ai_order": 4,
+          "score": 16.0,
+          "evidence_sources": 24,
+          "evidence_claims": 26,
+          "vendor_share": 0.27
+        },
+        {
+          "factor": "Frontline cognitive relief and skill dissemination",
+          "root_cause_id": "skills_change",
+          "explanation": "Augmenting human staff with contextual recommendations reduces fatigue and equalizes junior worker performance with top-tier peers.",
+          "strength": "weak",
+          "evidence_ids": [
+            3,
+            14,
+            39,
+            79
+          ],
+          "ai_order": 3,
+          "score": 14.7,
+          "evidence_sources": 22,
+          "evidence_claims": 28,
+          "vendor_share": 0.18
+        },
+        {
+          "factor": "Continuous 100% audit coverage and policy enforcement",
+          "root_cause_id": "risk_auditability",
+          "explanation": "Moving from manual sample-checking to real-time screening across every transaction slashes fraud and policy non-compliance.",
+          "strength": "weak",
+          "evidence_ids": [
+            25,
+            26,
+            27,
+            137
+          ],
+          "ai_order": 5,
+          "score": 7.4,
+          "evidence_sources": 13,
+          "evidence_claims": 18,
+          "vendor_share": 0.5
+        }
+      ],
+      "blockers": [
+        {
+          "factor": "Failure to redesign jobs and decision rights",
+          "root_cause_id": "operating_model",
+          "explanation": "Deploying agents into unadapted legacy processes without redefining employee authority prevents efficiency gains from reaching the bottom line.",
+          "strength": "strong",
+          "evidence_ids": [
+            1,
+            9,
+            17,
+            20
+          ],
+          "ai_order": 1,
+          "score": 100.0,
+          "evidence_sources": 53,
+          "evidence_claims": 60,
+          "vendor_share": 0.2
+        },
+        {
+          "factor": "Fragmented data sources and uncurated repositories",
+          "root_cause_id": "data_governance",
+          "explanation": "Siloed, inconsistent enterprise data and outdated internal knowledge bases undermine model grounding and straight-through reliability.",
+          "strength": "strong",
+          "evidence_ids": [
+            50,
+            90,
+            147,
+            181
+          ],
+          "ai_order": 2,
+          "score": 91.4,
+          "evidence_sources": 52,
+          "evidence_claims": 58,
+          "vendor_share": 0.4
+        },
+        {
+          "factor": "Mandatory regulatory scrutiny and statutory liability",
+          "root_cause_id": "regulatory_compliance",
+          "explanation": "Consumer protection agencies and financial authorities penalize automated errors in credit, claims, collections, and hiring decisions.",
+          "strength": "strong",
+          "evidence_ids": [
+            18,
+            52,
+            53,
+            58
+          ],
+          "ai_order": 3,
+          "score": 86.0,
+          "evidence_sources": 42,
+          "evidence_claims": 56,
+          "vendor_share": 0.11
+        },
+        {
+          "factor": "Hallucinations and domain decision accuracy skepticism",
+          "root_cause_id": "model_quality",
+          "explanation": "Erroneous calculations and unpredictable hallucinations prevent underwriters, clinicians, and risk committees from granting autonomous execution sign-off.",
+          "strength": "strong",
+          "evidence_ids": [
+            40,
+            43,
+            48,
+            117
+          ],
+          "ai_order": 4,
+          "score": 81.4,
+          "evidence_sources": 45,
+          "evidence_claims": 56,
+          "vendor_share": 0.34
+        },
+        {
+          "factor": "Brittle legacy system integration and fragmented APIs",
+          "root_cause_id": "integration_connectors",
+          "explanation": "Complex legacy enterprise architectures lack the bi-directional APIs required for autonomous agents to complete end-to-end tasks.",
+          "strength": "strong",
+          "evidence_ids": [
+            4,
+            6,
+            31,
+            42
+          ],
+          "ai_order": 5,
+          "score": 77.2,
+          "evidence_sources": 42,
+          "evidence_claims": 49,
+          "vendor_share": 0.31
+        }
+      ]
     }
   },
   "industry_views": [
@@ -3232,7 +4508,13 @@
             "evidence_ids": [
               41,
               47
-            ]
+            ],
+            "ai_order": 1,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 32,
+            "evidence_claims": 44,
+            "vendor_share": 0.36
           },
           {
             "point": "High straight-through resolution volume",
@@ -3240,7 +4522,13 @@
             "root_cause_id": "cost_roi",
             "evidence_ids": [
               60
-            ]
+            ],
+            "ai_order": 2,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 32,
+            "evidence_claims": 44,
+            "vendor_share": 0.36
           },
           {
             "point": "Straight-through underwriting workflow execution",
@@ -3250,7 +4538,13 @@
               51,
               184,
               193
-            ]
+            ],
+            "ai_order": 3,
+            "score": 33.3,
+            "strength": "moderate",
+            "evidence_sources": 10,
+            "evidence_claims": 11,
+            "vendor_share": 0.27
           },
           {
             "point": "Supervisory surveillance and compliance efficiency",
@@ -3260,7 +4554,13 @@
               57,
               94,
               129
-            ]
+            ],
+            "ai_order": 4,
+            "score": 27.5,
+            "strength": "weak",
+            "evidence_sources": 8,
+            "evidence_claims": 9,
+            "vendor_share": 0.22
           },
           {
             "point": "Lower repeat inquiries and improved risk detection",
@@ -3270,7 +4570,13 @@
               62,
               82,
               244
-            ]
+            ],
+            "ai_order": 5,
+            "score": 26.6,
+            "strength": "weak",
+            "evidence_sources": 7,
+            "evidence_claims": 8,
+            "vendor_share": 0.12
           }
         ],
         "blockers": [
@@ -3282,7 +4588,13 @@
               52,
               53,
               58
-            ]
+            ],
+            "ai_order": 1,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 20,
+            "evidence_claims": 30,
+            "vendor_share": 0.1
           },
           {
             "point": "Deficits in autonomous decision auditability",
@@ -3292,7 +4604,13 @@
               13,
               83,
               89
-            ]
+            ],
+            "ai_order": 2,
+            "score": 74.7,
+            "strength": "strong",
+            "evidence_sources": 14,
+            "evidence_claims": 17,
+            "vendor_share": 0.18
           },
           {
             "point": "Domain hallucination and quality inconsistency",
@@ -3302,7 +4620,13 @@
               43,
               48,
               191
-            ]
+            ],
+            "ai_order": 3,
+            "score": 49.6,
+            "strength": "moderate",
+            "evidence_sources": 9,
+            "evidence_claims": 10,
+            "vendor_share": 0.1
           },
           {
             "point": "Immature data governance across customer records",
@@ -3312,7 +4636,13 @@
               50,
               90,
               246
-            ]
+            ],
+            "ai_order": 4,
+            "score": 33.6,
+            "strength": "moderate",
+            "evidence_sources": 8,
+            "evidence_claims": 9,
+            "vendor_share": 0.56
           },
           {
             "point": "Complex legacy integration and orchestration hurdles",
@@ -3321,7 +4651,13 @@
             "evidence_ids": [
               6,
               31
-            ]
+            ],
+            "ai_order": 5,
+            "score": 22.0,
+            "strength": "weak",
+            "evidence_sources": 5,
+            "evidence_claims": 6,
+            "vendor_share": 0.33
           }
         ],
         "advice": [
@@ -3439,7 +4775,13 @@
             "evidence_ids": [
               308,
               391
-            ]
+            ],
+            "ai_order": 1,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 15,
+            "evidence_claims": 20,
+            "vendor_share": 0.25
           },
           {
             "point": "Operational cost reduction and revenue enhancement",
@@ -3447,7 +4789,13 @@
             "root_cause_id": "cost_roi",
             "evidence_ids": [
               396
-            ]
+            ],
+            "ai_order": 2,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 15,
+            "evidence_claims": 20,
+            "vendor_share": 0.25
           },
           {
             "point": "Autonomous tool utilization in medical records",
@@ -3457,7 +4805,13 @@
               676,
               679,
               699
-            ]
+            ],
+            "ai_order": 3,
+            "score": 28.5,
+            "strength": "weak",
+            "evidence_sources": 4,
+            "evidence_claims": 5,
+            "vendor_share": 0.0
           },
           {
             "point": "Enterprise clinical knowledge retrieval efficiency",
@@ -3466,7 +4820,13 @@
             "evidence_ids": [
               676,
               821
-            ]
+            ],
+            "ai_order": 4,
+            "score": 21.7,
+            "strength": "weak",
+            "evidence_sources": 4,
+            "evidence_claims": 4,
+            "vendor_share": 0.5
           },
           {
             "point": "Contact center cognitive relief for staff",
@@ -3475,7 +4835,13 @@
             "evidence_ids": [
               14,
               160
-            ]
+            ],
+            "ai_order": 5,
+            "score": 11.2,
+            "strength": "weak",
+            "evidence_sources": 2,
+            "evidence_claims": 2,
+            "vendor_share": 0.5
           }
         ],
         "blockers": [
@@ -3487,7 +4853,13 @@
               411,
               422,
               550
-            ]
+            ],
+            "ai_order": 1,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 10,
+            "evidence_claims": 12,
+            "vendor_share": 0.08
           },
           {
             "point": "Clinical distrust of generative medical advice",
@@ -3497,7 +4869,13 @@
               393,
               394,
               421
-            ]
+            ],
+            "ai_order": 2,
+            "score": 59.8,
+            "strength": "moderate",
+            "evidence_sources": 7,
+            "evidence_claims": 10,
+            "vendor_share": 0.1
           },
           {
             "point": "Patient data privacy and oversharing risks",
@@ -3507,7 +4885,13 @@
               310,
               763,
               888
-            ]
+            ],
+            "ai_order": 3,
+            "score": 51.9,
+            "strength": "moderate",
+            "evidence_sources": 6,
+            "evidence_claims": 6,
+            "vendor_share": 0.0
           },
           {
             "point": "EHR integration friction and legacy silos",
@@ -3517,7 +4901,13 @@
               309,
               398,
               439
-            ]
+            ],
+            "ai_order": 4,
+            "score": 43.5,
+            "strength": "moderate",
+            "evidence_sources": 5,
+            "evidence_claims": 5,
+            "vendor_share": 0.2
           },
           {
             "point": "Automation bias and cognitive delegation risks",
@@ -3527,7 +4917,13 @@
               392,
               420,
               704
-            ]
+            ],
+            "ai_order": 5,
+            "score": 38.4,
+            "strength": "moderate",
+            "evidence_sources": 5,
+            "evidence_claims": 6,
+            "vendor_share": 0.17
           }
         ],
         "advice": [
@@ -3646,7 +5042,28 @@
               2,
               8,
               204
-            ]
+            ],
+            "ai_order": 1,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 20,
+            "evidence_claims": 28,
+            "vendor_share": 0.32
+          },
+          {
+            "point": "Centralized technical knowledge retrieval",
+            "detail": "Field technicians query multi-repository engineering manuals to accelerate equipment diagnosis and repair.",
+            "root_cause_id": "cost_roi",
+            "evidence_ids": [
+              253,
+              648
+            ],
+            "ai_order": 5,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 20,
+            "evidence_claims": 28,
+            "vendor_share": 0.32
           },
           {
             "point": "Autonomous exception handling and renegotiation",
@@ -3655,7 +5072,13 @@
             "evidence_ids": [
               10,
               141
-            ]
+            ],
+            "ai_order": 2,
+            "score": 50.9,
+            "strength": "moderate",
+            "evidence_sources": 9,
+            "evidence_claims": 10,
+            "vendor_share": 0.2
           },
           {
             "point": "Convergence with shop-floor physical robotics",
@@ -3663,7 +5086,13 @@
             "root_cause_id": "operating_model",
             "evidence_ids": [
               405
-            ]
+            ],
+            "ai_order": 3,
+            "score": 50.9,
+            "strength": "moderate",
+            "evidence_sources": 9,
+            "evidence_claims": 10,
+            "vendor_share": 0.2
           },
           {
             "point": "Mitigating engineering and technician shortages",
@@ -3673,16 +5102,13 @@
               3,
               253,
               647
-            ]
-          },
-          {
-            "point": "Centralized technical knowledge retrieval",
-            "detail": "Field technicians query multi-repository engineering manuals to accelerate equipment diagnosis and repair.",
-            "root_cause_id": "cost_roi",
-            "evidence_ids": [
-              253,
-              648
-            ]
+            ],
+            "ai_order": 4,
+            "score": 27.3,
+            "strength": "weak",
+            "evidence_sources": 6,
+            "evidence_claims": 7,
+            "vendor_share": 0.43
           }
         ],
         "blockers": [
@@ -3694,7 +5120,13 @@
               1,
               9,
               366
-            ]
+            ],
+            "ai_order": 1,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 8,
+            "evidence_claims": 8,
+            "vendor_share": 0.12
           },
           {
             "point": "Patchwork legacy IT and OT integration",
@@ -3704,7 +5136,13 @@
               140,
               255,
               367
-            ]
+            ],
+            "ai_order": 2,
+            "score": 75.9,
+            "strength": "strong",
+            "evidence_sources": 7,
+            "evidence_claims": 7,
+            "vendor_share": 0.14
           },
           {
             "point": "Siloed and unstructured operational plant data",
@@ -3714,7 +5152,13 @@
               638,
               648,
               707
-            ]
+            ],
+            "ai_order": 3,
+            "score": 62.0,
+            "strength": "moderate",
+            "evidence_sources": 6,
+            "evidence_claims": 6,
+            "vendor_share": 0.33
           },
           {
             "point": "Frontline workforce resistance and literacy gaps",
@@ -3724,7 +5168,13 @@
               369,
               644,
               761
-            ]
+            ],
+            "ai_order": 4,
+            "score": 46.6,
+            "strength": "moderate",
+            "evidence_sources": 5,
+            "evidence_claims": 5,
+            "vendor_share": 0.4
           },
           {
             "point": "Cybersecurity and OT air-gapped sovereignty",
@@ -3734,7 +5184,13 @@
               408,
               646,
               873
-            ]
+            ],
+            "ai_order": 5,
+            "score": 44.5,
+            "strength": "moderate",
+            "evidence_sources": 5,
+            "evidence_claims": 5,
+            "vendor_share": 0.8
           }
         ],
         "advice": [
@@ -3852,7 +5308,28 @@
               2,
               8,
               60
-            ]
+            ],
+            "ai_order": 1,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 22,
+            "evidence_claims": 32,
+            "vendor_share": 0.41
+          },
+          {
+            "point": "Dynamic logistics and freight routing precision",
+            "detail": "Automated order orchestration minimizes fulfillment delay penalties across complex distribution networks.",
+            "root_cause_id": "cost_roi",
+            "evidence_ids": [
+              2,
+              204
+            ],
+            "ai_order": 5,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 22,
+            "evidence_claims": 32,
+            "vendor_share": 0.41
           },
           {
             "point": "Autonomous supply chain inventory optimization",
@@ -3862,7 +5339,13 @@
               10,
               141,
               278
-            ]
+            ],
+            "ai_order": 2,
+            "score": 55.7,
+            "strength": "moderate",
+            "evidence_sources": 13,
+            "evidence_claims": 14,
+            "vendor_share": 0.36
           },
           {
             "point": "Surging consumer adoption of shopping assistants",
@@ -3871,7 +5354,13 @@
             "evidence_ids": [
               307,
               312
-            ]
+            ],
+            "ai_order": 3,
+            "score": 30.7,
+            "strength": "weak",
+            "evidence_sources": 5,
+            "evidence_claims": 5,
+            "vendor_share": 0.0
           },
           {
             "point": "Low-code agent accessibility for business teams",
@@ -3879,39 +5368,16 @@
             "root_cause_id": "skills_change",
             "evidence_ids": [
               3
-            ]
-          },
-          {
-            "point": "Dynamic logistics and freight routing precision",
-            "detail": "Automated order orchestration minimizes fulfillment delay penalties across complex distribution networks.",
-            "root_cause_id": "cost_roi",
-            "evidence_ids": [
-              2,
-              204
-            ]
+            ],
+            "ai_order": 4,
+            "score": 30.7,
+            "strength": "weak",
+            "evidence_sources": 5,
+            "evidence_claims": 5,
+            "vendor_share": 0.0
           }
         ],
         "blockers": [
-          {
-            "point": "Low multi-turn execution and policy reliability",
-            "detail": "Autonomous agents suffer high failure rates when handling complex database reasoning, policies, and multi-turn orders.",
-            "root_cause_id": "model_quality",
-            "evidence_ids": [
-              448,
-              449,
-              578
-            ]
-          },
-          {
-            "point": "Fragmented commerce and customer data estates",
-            "detail": "Disconnected inventory, catalog, and CRM platforms prevent agents from obtaining unified real-time customer context.",
-            "root_cause_id": "integration_connectors",
-            "evidence_ids": [
-              140,
-              294,
-              339
-            ]
-          },
           {
             "point": "Customer insistence on human dispute escalation",
             "detail": "Shoppers demand human interaction for nuanced returns or complaints and reject rigid virtual bots.",
@@ -3920,17 +5386,13 @@
               306,
               338,
               341
-            ]
-          },
-          {
-            "point": "Unfavorable unit economics and query costs",
-            "detail": "High inference spend and computing loads per query cause pilot economics to falter in production.",
-            "root_cause_id": "cost_roi",
-            "evidence_ids": [
-              276,
-              573,
-              586
-            ]
+            ],
+            "ai_order": 3,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 4,
+            "evidence_claims": 5,
+            "vendor_share": 0.2
           },
           {
             "point": "Coordination complexity and bullwhip supply risks",
@@ -3940,7 +5402,61 @@
               1,
               9,
               817
-            ]
+            ],
+            "ai_order": 5,
+            "score": 99.4,
+            "strength": "strong",
+            "evidence_sources": 4,
+            "evidence_claims": 4,
+            "vendor_share": 0.0
+          },
+          {
+            "point": "Fragmented commerce and customer data estates",
+            "detail": "Disconnected inventory, catalog, and CRM platforms prevent agents from obtaining unified real-time customer context.",
+            "root_cause_id": "integration_connectors",
+            "evidence_ids": [
+              140,
+              294,
+              339
+            ],
+            "ai_order": 2,
+            "score": 94.8,
+            "strength": "strong",
+            "evidence_sources": 5,
+            "evidence_claims": 5,
+            "vendor_share": 0.2
+          },
+          {
+            "point": "Low multi-turn execution and policy reliability",
+            "detail": "Autonomous agents suffer high failure rates when handling complex database reasoning, policies, and multi-turn orders.",
+            "root_cause_id": "model_quality",
+            "evidence_ids": [
+              448,
+              449,
+              578
+            ],
+            "ai_order": 1,
+            "score": 88.4,
+            "strength": "strong",
+            "evidence_sources": 5,
+            "evidence_claims": 6,
+            "vendor_share": 0.5
+          },
+          {
+            "point": "Unfavorable unit economics and query costs",
+            "detail": "High inference spend and computing loads per query cause pilot economics to falter in production.",
+            "root_cause_id": "cost_roi",
+            "evidence_ids": [
+              276,
+              573,
+              586
+            ],
+            "ai_order": 4,
+            "score": 66.1,
+            "strength": "strong",
+            "evidence_sources": 3,
+            "evidence_claims": 4,
+            "vendor_share": 0.25
           }
         ],
         "advice": [
@@ -4055,7 +5571,13 @@
             "root_cause_id": "cost_roi",
             "evidence_ids": [
               128
-            ]
+            ],
+            "ai_order": 1,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 15,
+            "evidence_claims": 26,
+            "vendor_share": 0.19
           },
           {
             "point": "Predictive intent routing and churn prevention",
@@ -4064,7 +5586,13 @@
             "evidence_ids": [
               220,
               254
-            ]
+            ],
+            "ai_order": 2,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 15,
+            "evidence_claims": 26,
+            "vendor_share": 0.19
           },
           {
             "point": "Zero-touch autonomous network evolution",
@@ -4074,7 +5602,13 @@
               279,
               302,
               304
-            ]
+            ],
+            "ai_order": 3,
+            "score": 66.1,
+            "strength": "strong",
+            "evidence_sources": 10,
+            "evidence_claims": 14,
+            "vendor_share": 0.57
           },
           {
             "point": "Software engineering and test acceleration",
@@ -4083,7 +5617,13 @@
             "evidence_ids": [
               24,
               30
-            ]
+            ],
+            "ai_order": 4,
+            "score": 66.1,
+            "strength": "strong",
+            "evidence_sources": 10,
+            "evidence_claims": 14,
+            "vendor_share": 0.57
           },
           {
             "point": "Customer service cognitive load reduction",
@@ -4092,20 +5632,16 @@
             "evidence_ids": [
               14,
               39
-            ]
+            ],
+            "ai_order": 5,
+            "score": 24.5,
+            "strength": "weak",
+            "evidence_sources": 3,
+            "evidence_claims": 3,
+            "vendor_share": 0.0
           }
         ],
         "blockers": [
-          {
-            "point": "Restricted data access and governance deficits",
-            "detail": "Half of internal telecom data remains inaccessible to models due to absent unified governance.",
-            "root_cause_id": "data_governance",
-            "evidence_ids": [
-              282,
-              344,
-              345
-            ]
-          },
           {
             "point": "Stagnant proofs-of-concept and scaling inertia",
             "detail": "Over half of telecom projects stall in pilot phases due to enterprise operating model inertia.",
@@ -4114,7 +5650,13 @@
               320,
               333,
               527
-            ]
+            ],
+            "ai_order": 2,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 6,
+            "evidence_claims": 9,
+            "vendor_share": 0.0
           },
           {
             "point": "Domain model inaccuracies and compounding errors",
@@ -4124,7 +5666,29 @@
               280,
               350,
               357
-            ]
+            ],
+            "ai_order": 3,
+            "score": 91.6,
+            "strength": "strong",
+            "evidence_sources": 7,
+            "evidence_claims": 8,
+            "vendor_share": 0.25
+          },
+          {
+            "point": "Restricted data access and governance deficits",
+            "detail": "Half of internal telecom data remains inaccessible to models due to absent unified governance.",
+            "root_cause_id": "data_governance",
+            "evidence_ids": [
+              282,
+              344,
+              345
+            ],
+            "ai_order": 1,
+            "score": 81.1,
+            "strength": "strong",
+            "evidence_sources": 7,
+            "evidence_claims": 9,
+            "vendor_share": 0.67
           },
           {
             "point": "Internal AI engineering skills and review bottlenecks",
@@ -4134,7 +5698,13 @@
               281,
               322,
               522
-            ]
+            ],
+            "ai_order": 4,
+            "score": 77.8,
+            "strength": "strong",
+            "evidence_sources": 6,
+            "evidence_claims": 8,
+            "vendor_share": 0.25
           },
           {
             "point": "Vendor walled gardens and integration friction",
@@ -4144,7 +5714,13 @@
               255,
               358,
               636
-            ]
+            ],
+            "ai_order": 5,
+            "score": 66.7,
+            "strength": "strong",
+            "evidence_sources": 5,
+            "evidence_claims": 5,
+            "vendor_share": 0.2
           }
         ],
         "advice": [
@@ -4259,7 +5835,13 @@
             "evidence_ids": [
               155,
               161
-            ]
+            ],
+            "ai_order": 1,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 18,
+            "evidence_claims": 22,
+            "vendor_share": 0.09
           },
           {
             "point": "Predictive constituent routing and service assist",
@@ -4268,7 +5850,13 @@
             "evidence_ids": [
               132,
               161
-            ]
+            ],
+            "ai_order": 2,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 18,
+            "evidence_claims": 22,
+            "vendor_share": 0.09
           },
           {
             "point": "Autonomous constituent intake and inquiry resolution",
@@ -4278,7 +5866,13 @@
               351,
               352,
               723
-            ]
+            ],
+            "ai_order": 3,
+            "score": 32.6,
+            "strength": "weak",
+            "evidence_sources": 6,
+            "evidence_claims": 8,
+            "vendor_share": 0.38
           },
           {
             "point": "Reduced cognitive burden for caseworker interactions",
@@ -4287,7 +5881,13 @@
             "evidence_ids": [
               160,
               657
-            ]
+            ],
+            "ai_order": 4,
+            "score": 27.1,
+            "strength": "weak",
+            "evidence_sources": 4,
+            "evidence_claims": 4,
+            "vendor_share": 0.0
           },
           {
             "point": "High civil service drafting and synthesis utility",
@@ -4295,7 +5895,13 @@
             "root_cause_id": "skills_change",
             "evidence_ids": [
               821
-            ]
+            ],
+            "ai_order": 5,
+            "score": 27.1,
+            "strength": "weak",
+            "evidence_sources": 4,
+            "evidence_claims": 4,
+            "vendor_share": 0.0
           }
         ],
         "blockers": [
@@ -4307,7 +5913,13 @@
               274,
               354,
               361
-            ]
+            ],
+            "ai_order": 1,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 9,
+            "evidence_claims": 10,
+            "vendor_share": 0.1
           },
           {
             "point": "Sensitive data classification and oversharing risks",
@@ -4317,27 +5929,13 @@
               156,
               157,
               382
-            ]
-          },
-          {
-            "point": "Civil service training gaps and job anxiety",
-            "detail": "Ad-hoc training, trial-and-error onboarding, and workforce job security fears create cultural resistance.",
-            "root_cause_id": "skills_change",
-            "evidence_ids": [
-              378,
-              379,
-              724
-            ]
-          },
-          {
-            "point": "Statutory scrutiny and mandatory human oversight",
-            "detail": "Legal accountability mandates require strict human approvals before executing sensitive citizen casework decisions.",
-            "root_cause_id": "risk_auditability",
-            "evidence_ids": [
-              360,
-              600,
-              666
-            ]
+            ],
+            "ai_order": 2,
+            "score": 82.4,
+            "strength": "strong",
+            "evidence_sources": 7,
+            "evidence_claims": 8,
+            "vendor_share": 0.25
           },
           {
             "point": "Inefficient slide generation and spreadsheet reliability",
@@ -4347,7 +5945,45 @@
               772,
               793,
               806
-            ]
+            ],
+            "ai_order": 5,
+            "score": 54.0,
+            "strength": "moderate",
+            "evidence_sources": 4,
+            "evidence_claims": 5,
+            "vendor_share": 0.0
+          },
+          {
+            "point": "Civil service training gaps and job anxiety",
+            "detail": "Ad-hoc training, trial-and-error onboarding, and workforce job security fears create cultural resistance.",
+            "root_cause_id": "skills_change",
+            "evidence_ids": [
+              378,
+              379,
+              724
+            ],
+            "ai_order": 3,
+            "score": 48.8,
+            "strength": "moderate",
+            "evidence_sources": 4,
+            "evidence_claims": 6,
+            "vendor_share": 0.17
+          },
+          {
+            "point": "Statutory scrutiny and mandatory human oversight",
+            "detail": "Legal accountability mandates require strict human approvals before executing sensitive citizen casework decisions.",
+            "root_cause_id": "risk_auditability",
+            "evidence_ids": [
+              360,
+              600,
+              666
+            ],
+            "ai_order": 4,
+            "score": 36.6,
+            "strength": "moderate",
+            "evidence_sources": 4,
+            "evidence_claims": 5,
+            "vendor_share": 0.0
           }
         ],
         "advice": [
@@ -4462,7 +6098,13 @@
             "root_cause_id": "cost_roi",
             "evidence_ids": [
               254
-            ]
+            ],
+            "ai_order": 1,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 13,
+            "evidence_claims": 19,
+            "vendor_share": 0.16
           },
           {
             "point": "Engineering procedure drafting and knowledge acceleration",
@@ -4471,7 +6113,13 @@
             "evidence_ids": [
               387,
               390
-            ]
+            ],
+            "ai_order": 2,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 13,
+            "evidence_claims": 19,
+            "vendor_share": 0.16
           },
           {
             "point": "Augmenting grid operator cognitive vigilance",
@@ -4481,7 +6129,13 @@
               402,
               416,
               417
-            ]
+            ],
+            "ai_order": 3,
+            "score": 63.2,
+            "strength": "moderate",
+            "evidence_sources": 9,
+            "evidence_claims": 11,
+            "vendor_share": 0.18
           },
           {
             "point": "Capturing institutional knowledge for field technicians",
@@ -4491,7 +6145,13 @@
               253,
               596,
               625
-            ]
+            ],
+            "ai_order": 4,
+            "score": 20.1,
+            "strength": "weak",
+            "evidence_sources": 3,
+            "evidence_claims": 4,
+            "vendor_share": 0.25
           },
           {
             "point": "Machine-speed OT and IT cyber defense",
@@ -4501,7 +6161,13 @@
               561,
               566,
               972
-            ]
+            ],
+            "ai_order": 5,
+            "score": 18.2,
+            "strength": "weak",
+            "evidence_sources": 3,
+            "evidence_claims": 3,
+            "vendor_share": 0.33
           }
         ],
         "blockers": [
@@ -4513,7 +6179,13 @@
               386,
               388,
               389
-            ]
+            ],
+            "ai_order": 1,
+            "score": 100.0,
+            "strength": "strong",
+            "evidence_sources": 8,
+            "evidence_claims": 9,
+            "vendor_share": 0.22
           },
           {
             "point": "Physical safety risks and unverified actions",
@@ -4523,7 +6195,13 @@
               418,
               946,
               971
-            ]
+            ],
+            "ai_order": 2,
+            "score": 41.9,
+            "strength": "moderate",
+            "evidence_sources": 3,
+            "evidence_claims": 3,
+            "vendor_share": 0.0
           },
           {
             "point": "High-stakes hallucination risks and required verification",
@@ -4533,7 +6211,13 @@
               385,
               401,
               980
-            ]
+            ],
+            "ai_order": 3,
+            "score": 41.1,
+            "strength": "moderate",
+            "evidence_sources": 3,
+            "evidence_claims": 3,
+            "vendor_share": 0.0
           },
           {
             "point": "Operator cognitive overload and change friction",
@@ -4543,7 +6227,13 @@
               400,
               565,
               761
-            ]
+            ],
+            "ai_order": 4,
+            "score": 29.4,
+            "strength": "weak",
+            "evidence_sources": 3,
+            "evidence_claims": 3,
+            "vendor_share": 0.33
           },
           {
             "point": "Legacy SCADA and OT connectivity barriers",
@@ -4552,7 +6242,13 @@
             "evidence_ids": [
               6,
               255
-            ]
+            ],
+            "ai_order": 5,
+            "score": 13.7,
+            "strength": "weak",
+            "evidence_sources": 1,
+            "evidence_claims": 1,
+            "vendor_share": 0.0
           }
         ],
         "advice": [
@@ -4766,6 +6462,49 @@
       "total": 46
     }
   ],
+  "scoring": {
+    "source_weights": {
+      "regulator": 1.0,
+      "academic": 1.0,
+      "analyst": 0.9,
+      "consultancy": 0.9,
+      "industry_body": 0.85,
+      "media": 0.6,
+      "vendor": 0.5,
+      "other": 0.5
+    },
+    "vendor_affiliated_cap": 0.5,
+    "recency": [
+      {
+        "max_age_years": 1,
+        "weight": 1.0
+      },
+      {
+        "max_age_years": 2,
+        "weight": 0.8
+      },
+      {
+        "max_age_years": 3,
+        "weight": 0.6
+      },
+      {
+        "max_age_years": 99,
+        "weight": 0.4
+      }
+    ],
+    "unknown_date_weight": 0.7,
+    "confidence_weights": {
+      "high": 1.0,
+      "medium": 0.85,
+      "low": 0.7
+    },
+    "evidence_exponent": 0.5,
+    "balance_floor": 0.4,
+    "strength_bands": {
+      "strong": 66,
+      "moderate": 33
+    }
+  },
   "taxonomy": {
     "risk_auditability": "Risk & Auditability",
     "data_governance": "Data Governance & Privacy",
@@ -15676,10 +17415,5 @@
     "pii_masked_by_type": {},
     "vendor_source_share": 0.33
   },
-  "run_stats": {},
-  "approval": {
-    "approved": true,
-    "decided_by": "auto-approved by policy",
-    "summary": "- Copilot Segment: Desktop copilots offer rapid individual task compression but stall enterprise-wide over permission oversharing and usage decay.\n- Workflow Segment: Autonomous workflow agents achieve double-digit savings in high-volume back-offices requiring strict auditability.\n- Top Shifts: Back-office adoption solidifies around straight-through processing (AP matching, CRM wrap-up) while copilots face contract rationalization.\n- Regulatory Pressure: Consumer agencies have effectively frozen fully autonomous decisioning in high-stakes collections and dispute resolution.\n- Evidence Base: 7 industry profiles supported by 294 sources and 1,001 verified claims."
-  }
+  "run_stats": {}
 }
