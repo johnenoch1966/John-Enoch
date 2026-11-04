@@ -4135,7 +4135,7 @@
       document.querySelectorAll('.ind-panel').forEach(function (p) { p.classList.remove('active'); });
       btn.classList.add('active');
       document.getElementById('ind-' + btn.dataset.ind).classList.add('active');
-      history.replaceState(null, '', '#industry-' + btn.dataset.ind);
+      try { history.replaceState(null, '', '#industry-' + btn.dataset.ind); } catch (e) { /* sandboxed hosts (e.g. x20) */ }
     });
   });
   var m = location.hash.match(/^#industry-(.+)$/);
