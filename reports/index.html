@@ -38,6 +38,10 @@
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
   th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
   th { background: #f1f3f4; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; color: var(--muted); }
+  table.uc { table-layout: fixed; }
+  table.uc td { overflow-wrap: anywhere; }
+  .uc col.c-rank { width: 44px; } .uc col.c-name { width: 22%; } .uc col.c-score { width: 150px; }
+  .uc col.c-stage { width: 110px; } .uc col.c-ev { width: 15%; }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
@@ -102,6 +106,7 @@
 
 
 
+
 <header>
   <div class="hdr">
     <div>
@@ -144,49 +149,49 @@
 <!-- (ii) Use cases by industry -->
 <section id="by-industry">
   <h2>Top AI use cases by industry</h2>
-  <p class="sub">Most widely deployed agentic AI use cases per industry. <span class="badge seg-copilot">Copilot</span> = desktop assistant use &middot; <span class="badge seg-workflow">Workflow</span> = process-embedded agent.</p>
+  <p class="sub">Most widely deployed agentic AI use cases per industry, ranked by industry-specific weighted evidence. <span class="badge seg-copilot">Copilot</span> = desktop assistant use &middot; <span class="badge seg-workflow">Workflow</span> = process-embedded agent.</p>
   <div class="cards">
   
     <div class="card">
       <h4>Financial Services &amp; Insurance (FSI)</h4>
       <div class="meta">175 industry-specific claims</div>
-      <ol><li>Regulatory Compliance Tracking &amp; Automated Reporting <span class="badge seg-workflow">Workflow</span></li><li>Anti-Money Laundering (AML) Alert Triage &amp; Transaction Monitoring <span class="badge seg-workflow">Workflow</span></li><li>Financial Fraud Detection &amp; Investigation <span class="badge seg-workflow">Workflow</span></li><li>KYC &amp; Institutional Customer Onboarding <span class="badge seg-workflow">Workflow</span></li><li>Commercial Underwriting &amp; Risk Assessment <span class="badge seg-workflow">Workflow</span></li><li>Autonomous Customer Service Voice &amp; Chat Agents <span class="badge seg-workflow">Workflow</span></li><li>Investment Research &amp; Portfolio Advisory Support <span class="badge seg-workflow">Workflow</span></li><li>Contact Centre Real-Time Agent Assist <span class="badge seg-workflow">Workflow</span></li></ol>
+      <ol><li>Regulatory Compliance Tracking &amp; Automated Reporting <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(33)</span></li><li>Financial Fraud Detection &amp; Investigation <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(21)</span></li><li>Anti-Money Laundering (AML) Alert Triage &amp; Transaction Monitoring <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(25)</span></li><li>KYC &amp; Institutional Customer Onboarding <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(19)</span></li><li>Commercial Underwriting &amp; Risk Assessment <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(17)</span></li><li>Contact Centre Real-Time Agent Assist <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(14)</span></li><li>Investment Research &amp; Portfolio Advisory Support <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(14)</span></li><li>Enterprise Knowledge Search &amp; Multi-Repository Q&amp;A <span class="badge seg-copilot">Copilot</span> <span class="small muted" title="Industry-specific claims about this use case">(9)</span></li></ol>
     </div>
   
     <div class="card">
       <h4>Healthcare &amp; Life Sciences (HCLS)</h4>
       <div class="meta">88 industry-specific claims</div>
-      <ol><li>Regulatory Compliance Tracking &amp; Automated Reporting <span class="badge seg-workflow">Workflow</span></li><li>Enterprise Knowledge Search &amp; Multi-Repository Q&amp;A <span class="badge seg-copilot">Copilot</span></li><li>Cross-Document Summarization &amp; Executive Briefing <span class="badge seg-copilot">Copilot</span></li><li>Customer Billing Inquiry &amp; Payment Arrangement Agent <span class="badge seg-workflow">Workflow</span></li><li>Supply Chain Exception &amp; Disruption Management <span class="badge seg-workflow">Workflow</span></li><li>Long-Form Document &amp; Report Drafting <span class="badge seg-copilot">Copilot</span></li><li>Contact Centre Real-Time Agent Assist <span class="badge seg-workflow">Workflow</span></li><li>Meeting Summarization &amp; Action Item Extraction <span class="badge seg-copilot">Copilot</span></li></ol>
+      <ol><li>Regulatory Compliance Tracking &amp; Automated Reporting <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(21)</span></li><li>Enterprise Knowledge Search &amp; Multi-Repository Q&amp;A <span class="badge seg-copilot">Copilot</span> <span class="small muted" title="Industry-specific claims about this use case">(13)</span></li><li>Cross-Document Summarization &amp; Executive Briefing <span class="badge seg-copilot">Copilot</span> <span class="small muted" title="Industry-specific claims about this use case">(8)</span></li><li>Customer Billing Inquiry &amp; Payment Arrangement Agent <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(3)</span></li><li>Long-Form Document &amp; Report Drafting <span class="badge seg-copilot">Copilot</span> <span class="small muted" title="Industry-specific claims about this use case">(3)</span></li><li>Contact Centre Real-Time Agent Assist <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(2)</span></li><li>Meeting Summarization &amp; Action Item Extraction <span class="badge seg-copilot">Copilot</span> <span class="small muted" title="Industry-specific claims about this use case">(2)</span></li><li>Email Triage &amp; Communication Drafting <span class="badge seg-copilot">Copilot</span> <span class="small muted" title="Industry-specific claims about this use case">(1)</span></li></ol>
     </div>
   
     <div class="card">
       <h4>Manufacturing &amp; Automotive</h4>
       <div class="meta">91 industry-specific claims</div>
-      <ol><li>Supply Chain Exception &amp; Disruption Management <span class="badge seg-workflow">Workflow</span></li><li>Enterprise Knowledge Search &amp; Multi-Repository Q&amp;A <span class="badge seg-copilot">Copilot</span></li><li>Software Engineering &amp; Code Generation Agents <span class="badge seg-workflow">Workflow</span></li><li>Inventory Allocation &amp; Logistics Dispatch Agent <span class="badge seg-workflow">Workflow</span></li><li>SecOps Threat Detection &amp; Incident Triage <span class="badge seg-workflow">Workflow</span></li><li>Autonomous Procurement &amp; Vendor Sourcing <span class="badge seg-workflow">Workflow</span></li><li>Automated Code Review &amp; Pull Request Verification <span class="badge seg-workflow">Workflow</span></li><li>Field Service &amp; Technical Support Agent <span class="badge seg-workflow">Workflow</span></li></ol>
+      <ol><li>Supply Chain Exception &amp; Disruption Management <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(15)</span></li><li>Enterprise Knowledge Search &amp; Multi-Repository Q&amp;A <span class="badge seg-copilot">Copilot</span> <span class="small muted" title="Industry-specific claims about this use case">(14)</span></li><li>Software Engineering &amp; Code Generation Agents <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(13)</span></li><li>Inventory Allocation &amp; Logistics Dispatch Agent <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(10)</span></li><li>Autonomous Procurement &amp; Vendor Sourcing <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(5)</span></li><li>SecOps Threat Detection &amp; Incident Triage <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(6)</span></li><li>Automated Code Review &amp; Pull Request Verification <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(4)</span></li><li>IT Service &amp; Support Desk Autonomous Resolution <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(3)</span></li></ol>
     </div>
   
     <div class="card">
       <h4>Retail &amp; Consumer Goods</h4>
       <div class="meta">90 industry-specific claims</div>
-      <ol><li>Autonomous Customer Service Voice &amp; Chat Agents <span class="badge seg-workflow">Workflow</span></li><li>Inventory Allocation &amp; Logistics Dispatch Agent <span class="badge seg-workflow">Workflow</span></li><li>Supply Chain Exception &amp; Disruption Management <span class="badge seg-workflow">Workflow</span></li><li>Customer Complaints Handling &amp; Dispute Resolution <span class="badge seg-workflow">Workflow</span></li><li>Omnichannel Customer Support Ticket Triage &amp; Routing <span class="badge seg-workflow">Workflow</span></li><li>Autonomous Procurement &amp; Vendor Sourcing <span class="badge seg-workflow">Workflow</span></li><li>Spreadsheet Formula &amp; Data Analysis Assistant <span class="badge seg-copilot">Copilot</span></li><li>Financial Fraud Detection &amp; Investigation <span class="badge seg-workflow">Workflow</span></li></ol>
+      <ol><li>Autonomous Customer Service Voice &amp; Chat Agents <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(35)</span></li><li>Inventory Allocation &amp; Logistics Dispatch Agent <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(21)</span></li><li>Supply Chain Exception &amp; Disruption Management <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(20)</span></li><li>Customer Complaints Handling &amp; Dispute Resolution <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(10)</span></li><li>Spreadsheet Formula &amp; Data Analysis Assistant <span class="badge seg-copilot">Copilot</span> <span class="small muted" title="Industry-specific claims about this use case">(4)</span></li><li>Financial Fraud Detection &amp; Investigation <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(3)</span></li><li>Autonomous Procurement &amp; Vendor Sourcing <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(2)</span></li><li>Email Triage &amp; Communication Drafting <span class="badge seg-copilot">Copilot</span> <span class="small muted" title="Industry-specific claims about this use case">(3)</span></li></ol>
     </div>
   
     <div class="card">
       <h4>Telecom, Media &amp; Technology (TMT)</h4>
       <div class="meta">96 industry-specific claims</div>
-      <ol><li>AIOps Alert Correlation &amp; Autonomous Incident Remediation <span class="badge seg-workflow">Workflow</span></li><li>Autonomous Customer Service Voice &amp; Chat Agents <span class="badge seg-workflow">Workflow</span></li><li>Contact Centre Real-Time Agent Assist <span class="badge seg-workflow">Workflow</span></li><li>Software Engineering &amp; Code Generation Agents <span class="badge seg-workflow">Workflow</span></li><li>SecOps Threat Detection &amp; Incident Triage <span class="badge seg-workflow">Workflow</span></li><li>IT Service &amp; Support Desk Autonomous Resolution <span class="badge seg-workflow">Workflow</span></li><li>Cloud Cost &amp; Infrastructure Optimization (FinOps) <span class="badge seg-workflow">Workflow</span></li><li>Automated Code Review &amp; Pull Request Verification <span class="badge seg-workflow">Workflow</span></li></ol>
+      <ol><li>AIOps Alert Correlation &amp; Autonomous Incident Remediation <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(54)</span></li><li>Autonomous Customer Service Voice &amp; Chat Agents <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(24)</span></li><li>Contact Centre Real-Time Agent Assist <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(9)</span></li><li>Cloud Cost &amp; Infrastructure Optimization (FinOps) <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(6)</span></li><li>Software Engineering &amp; Code Generation Agents <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(9)</span></li><li>B2B Sales Prospecting &amp; Lead Qualification Agent <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(4)</span></li><li>IT Service &amp; Support Desk Autonomous Resolution <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(6)</span></li><li>SecOps Threat Detection &amp; Incident Triage <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(8)</span></li></ol>
     </div>
   
     <div class="card">
       <h4>Public Sector &amp; Government</h4>
       <div class="meta">84 industry-specific claims</div>
-      <ol><li>Long-Form Document &amp; Report Drafting <span class="badge seg-copilot">Copilot</span></li><li>Legacy Code Refactoring &amp; Migration <span class="badge seg-workflow">Workflow</span></li><li>RFP Response Generation &amp; Vendor Proposal Evaluation <span class="badge seg-workflow">Workflow</span></li><li>Email Triage &amp; Communication Drafting <span class="badge seg-copilot">Copilot</span></li><li>Enterprise Knowledge Search &amp; Multi-Repository Q&amp;A <span class="badge seg-copilot">Copilot</span></li><li>Cross-Document Summarization &amp; Executive Briefing <span class="badge seg-copilot">Copilot</span></li><li>Spreadsheet Formula &amp; Data Analysis Assistant <span class="badge seg-copilot">Copilot</span></li><li>Meeting Summarization &amp; Action Item Extraction <span class="badge seg-copilot">Copilot</span></li></ol>
+      <ol><li>Long-Form Document &amp; Report Drafting <span class="badge seg-copilot">Copilot</span> <span class="small muted" title="Industry-specific claims about this use case">(21)</span></li><li>Legacy Code Refactoring &amp; Migration <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(14)</span></li><li>RFP Response Generation &amp; Vendor Proposal Evaluation <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(13)</span></li><li>Enterprise Knowledge Search &amp; Multi-Repository Q&amp;A <span class="badge seg-copilot">Copilot</span> <span class="small muted" title="Industry-specific claims about this use case">(8)</span></li><li>Spreadsheet Formula &amp; Data Analysis Assistant <span class="badge seg-copilot">Copilot</span> <span class="small muted" title="Industry-specific claims about this use case">(5)</span></li><li>Email Triage &amp; Communication Drafting <span class="badge seg-copilot">Copilot</span> <span class="small muted" title="Industry-specific claims about this use case">(8)</span></li><li>Meeting Summarization &amp; Action Item Extraction <span class="badge seg-copilot">Copilot</span> <span class="small muted" title="Industry-specific claims about this use case">(4)</span></li><li>Cross-Document Summarization &amp; Executive Briefing <span class="badge seg-copilot">Copilot</span> <span class="small muted" title="Industry-specific claims about this use case">(5)</span></li></ol>
     </div>
   
     <div class="card">
       <h4>Energy &amp; Utilities</h4>
       <div class="meta">67 industry-specific claims</div>
-      <ol><li>Field Service &amp; Technical Support Agent <span class="badge seg-workflow">Workflow</span></li><li>SecOps Threat Detection &amp; Incident Triage <span class="badge seg-workflow">Workflow</span></li><li>Regulatory Compliance Tracking &amp; Automated Reporting <span class="badge seg-workflow">Workflow</span></li><li>Autonomous Customer Service Voice &amp; Chat Agents <span class="badge seg-workflow">Workflow</span></li><li>Customer Billing Inquiry &amp; Payment Arrangement Agent <span class="badge seg-workflow">Workflow</span></li><li>IT Service &amp; Support Desk Autonomous Resolution <span class="badge seg-workflow">Workflow</span></li><li>Omnichannel Customer Support Ticket Triage &amp; Routing <span class="badge seg-workflow">Workflow</span></li><li>Customer Complaints Handling &amp; Dispute Resolution <span class="badge seg-workflow">Workflow</span></li></ol>
+      <ol><li>Regulatory Compliance Tracking &amp; Automated Reporting <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(12)</span></li><li>Field Service &amp; Technical Support Agent <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(20)</span></li><li>SecOps Threat Detection &amp; Incident Triage <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(15)</span></li><li>Autonomous Customer Service Voice &amp; Chat Agents <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(9)</span></li><li>Customer Billing Inquiry &amp; Payment Arrangement Agent <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(4)</span></li><li>IT Service &amp; Support Desk Autonomous Resolution <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(2)</span></li><li>Customer Complaints Handling &amp; Dispute Resolution <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(1)</span></li><li>Post-Call Processing &amp; CRM Wrap-Up Automation <span class="badge seg-workflow">Workflow</span> <span class="small muted" title="Industry-specific claims about this use case">(1)</span></li></ol>
     </div>
   
   </div>
@@ -198,8 +203,9 @@
   <h2>Copilot / desktop agentic assistants <span class="badge seg-copilot">Copilot</span></h2>
   <p class="sub">Gemini, Microsoft 365 Copilot, Claude, ChatGPT Enterprise used across the workforce. Use cases ranked by realised business impact.</p>
   <p class="headline"><strong>Desktop copilots offer immediate personal task compression but stall at scale across enterprises over data exposure and habit decay.</strong></p>
-  <table>
-    <tr><th>#</th><th>Use case</th><th title="0-100, computed from weighted evidence; see How scores are calculated">Score</th><th>Adoption stage</th><th>Main value</th><th>Main blocker</th><th>Evidence</th></tr>
+  <table class="uc">
+    <colgroup><col class="c-rank"><col class="c-name"><col class="c-score"><col class="c-stage"><col><col><col class="c-ev"></colgroup>
+<tr><th>#</th><th>Use case</th><th title="0-100, computed from weighted evidence; see How scores are calculated">Score</th><th>Adoption stage</th><th>Main value</th><th>Main blocker</th><th>Evidence</th></tr>
     
     
     <tr>
@@ -210,7 +216,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Reduced latency in cross-repository information retrieval and discovery</td>
       <td class="muted">Overshared repository permissions and poor legacy document hygiene</td>
-      <td class="small">40 sources &middot; 64 claims <a class="cite" href="#e99">[99]</a><a class="cite" href="#e155">[155]</a><a class="cite" href="#e156">[156]</a><a class="cite" href="#e186">[186]</a></td>
+      <td class="small">40 sources &middot; 64 claims <a class="cite" href="#e372">[372]</a><a class="cite" href="#e820">[820]</a><a class="cite" href="#e821">[821]</a><a class="cite" href="#e822">[822]</a></td>
     </tr>
     
     
@@ -222,7 +228,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Rapid executive distillation of long multi-source document corpuses</td>
       <td class="muted">Omission of subtle edge details in complex texts</td>
-      <td class="small">16 sources &middot; 19 claims <a class="cite" href="#e157">[157]</a><a class="cite" href="#e239">[239]</a><a class="cite" href="#e263">[263]</a><a class="cite" href="#e308">[308]</a></td>
+      <td class="small">16 sources &middot; 19 claims <a class="cite" href="#e308">[308]</a><a class="cite" href="#e419">[419]</a></td>
     </tr>
     
     
@@ -234,7 +240,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Accelerated first-draft generation for structured corporate reports</td>
       <td class="muted">Hallucinations on technical source citations and formatting errors</td>
-      <td class="small">25 sources &middot; 46 claims <a class="cite" href="#e99">[99]</a><a class="cite" href="#e187">[187]</a><a class="cite" href="#e236">[236]</a><a class="cite" href="#e284">[284]</a></td>
+      <td class="small">25 sources &middot; 46 claims <a class="cite" href="#e284">[284]</a><a class="cite" href="#e377">[377]</a></td>
     </tr>
     
     
@@ -246,7 +252,7 @@
       <td><span class="badge st-mainstream">mainstream</span></td>
       <td>Immediate post-meeting administrative time compression and action tracking</td>
       <td class="muted">Participant consent friction and low nuance in complex dialogues</td>
-      <td class="small">12 sources &middot; 13 claims <a class="cite" href="#e97">[97]</a><a class="cite" href="#e98">[98]</a><a class="cite" href="#e155">[155]</a><a class="cite" href="#e356">[356]</a></td>
+      <td class="small">12 sources &middot; 13 claims <a class="cite" href="#e356">[356]</a><a class="cite" href="#e505">[505]</a></td>
     </tr>
     
     
@@ -258,7 +264,7 @@
       <td><span class="badge st-mainstream">mainstream</span></td>
       <td>Rapid response generation and message backlog management</td>
       <td class="muted">Generic phrasing and context blindness in multi-thread chains</td>
-      <td class="small">14 sources &middot; 18 claims <a class="cite" href="#e97">[97]</a><a class="cite" href="#e98">[98]</a><a class="cite" href="#e155">[155]</a><a class="cite" href="#e275">[275]</a></td>
+      <td class="small">14 sources &middot; 18 claims <a class="cite" href="#e275">[275]</a><a class="cite" href="#e507">[507]</a></td>
     </tr>
     
     
@@ -270,7 +276,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Natural language formula generation and quick pivot structuring</td>
       <td class="muted">High mathematical calculation error rate on unstructured tables</td>
-      <td class="small">11 sources &middot; 12 claims <a class="cite" href="#e97">[97]</a><a class="cite" href="#e157">[157]</a><a class="cite" href="#e238">[238]</a><a class="cite" href="#e263">[263]</a></td>
+      <td class="small">11 sources &middot; 12 claims <a class="cite" href="#e508">[508]</a></td>
     </tr>
     
     
@@ -282,7 +288,7 @@
       <td><span class="badge st-experimenting">experimenting</span></td>
       <td>Ideation and speech structuring for executive leadership messaging</td>
       <td class="muted">Inability to replicate authentic executive voice and perspective</td>
-      <td class="small">2 sources &middot; 2 claims <a class="cite" href="#e262">[262]</a><a class="cite" href="#e356">[356]</a><a class="cite" href="#e670">[670]</a></td>
+      <td class="small">2 sources &middot; 2 claims <a class="cite" href="#e356">[356]</a><a class="cite" href="#e670">[670]</a></td>
     </tr>
     
     
@@ -294,7 +300,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Automated outline translation into presentation narrative frameworks</td>
       <td class="muted">Branding template rigidness and uninspiring graphic composition</td>
-      <td class="small">3 sources &middot; 3 claims <a class="cite" href="#e188">[188]</a><a class="cite" href="#e238">[238]</a><a class="cite" href="#e262">[262]</a><a class="cite" href="#e508">[508]</a></td>
+      <td class="small">3 sources &middot; 3 claims <a class="cite" href="#e508">[508]</a><a class="cite" href="#e772">[772]</a></td>
     </tr>
     
     
@@ -356,8 +362,9 @@
   <h2>Workflow-specific agents <span class="badge seg-workflow">Workflow</span></h2>
   <p class="sub">Agents embedded in business processes (KYC, claims, service desk, complaints, contact centre, ...). Use cases ranked by realised business impact.</p>
   <p class="headline"><strong>Autonomous workflow agents drive double-digit operational savings in high-volume back-offices but require deep process redesign and strict auditability.</strong></p>
-  <table>
-    <tr><th>#</th><th>Use case</th><th title="0-100, computed from weighted evidence; see How scores are calculated">Score</th><th>Adoption stage</th><th>Main value</th><th>Main blocker</th><th>Evidence</th></tr>
+  <table class="uc">
+    <colgroup><col class="c-rank"><col class="c-name"><col class="c-score"><col class="c-stage"><col><col><col class="c-ev"></colgroup>
+<tr><th>#</th><th>Use case</th><th title="0-100, computed from weighted evidence; see How scores are calculated">Score</th><th>Adoption stage</th><th>Main value</th><th>Main blocker</th><th>Evidence</th></tr>
     
     
     <tr>
@@ -368,7 +375,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>First-contact resolution deflection for routine inquiries at scale</td>
       <td class="muted">Customer churn from ungraceful failures on multi-turn complaints</td>
-      <td class="small">50 sources &middot; 108 claims <a class="cite" href="#e4">[4]</a><a class="cite" href="#e6">[6]</a><a class="cite" href="#e7">[7]</a><a class="cite" href="#e40">[40]</a></td>
+      <td class="small">50 sources &middot; 108 claims <a class="cite" href="#e502">[502]</a><a class="cite" href="#e503">[503]</a><a class="cite" href="#e504">[504]</a><a class="cite" href="#e305">[305]</a></td>
     </tr>
     
     
@@ -380,7 +387,7 @@
       <td><span class="badge st-mainstream">mainstream</span></td>
       <td>Real-time context retrieval, suggestion drafting, and handle time reduction</td>
       <td class="muted">Human agent cognitive fatigue from dense on-screen recommendations</td>
-      <td class="small">30 sources &middot; 52 claims <a class="cite" href="#e5">[5]</a><a class="cite" href="#e14">[14]</a><a class="cite" href="#e29">[29]</a><a class="cite" href="#e39">[39]</a></td>
+      <td class="small">30 sources &middot; 52 claims <a class="cite" href="#e291">[291]</a></td>
     </tr>
     
     
@@ -392,7 +399,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Autonomous multi-echelon exception detection, rerouting, and disruption tracking</td>
       <td class="muted">Unsynchronized supplier inventory data across fragmented EDI feeds</td>
-      <td class="small">18 sources &middot; 29 claims <a class="cite" href="#e1">[1]</a><a class="cite" href="#e2">[2]</a><a class="cite" href="#e3">[3]</a><a class="cite" href="#e10">[10]</a></td>
+      <td class="small">18 sources &middot; 29 claims <a class="cite" href="#e278">[278]</a></td>
     </tr>
     
     
@@ -404,7 +411,7 @@
       <td><span class="badge st-experimenting">experimenting</span></td>
       <td>Scanning regulatory updates, mapping controls, and assembling filing drafts</td>
       <td class="muted">Severe regulatory fines for automated filing omissions or errors</td>
-      <td class="small">42 sources &middot; 69 claims <a class="cite" href="#e12">[12]</a><a class="cite" href="#e57">[57]</a><a class="cite" href="#e58">[58]</a><a class="cite" href="#e185">[185]</a></td>
+      <td class="small">42 sources &middot; 69 claims <a class="cite" href="#e285">[285]</a></td>
     </tr>
     
     
@@ -416,7 +423,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Threat signal correlation, SIEM alert prioritization, and indicator extraction</td>
       <td class="muted">Fear of automated adversarial prompt evasion or unauthorized port actions</td>
-      <td class="small">30 sources &middot; 50 claims <a class="cite" href="#e22">[22]</a><a class="cite" href="#e24">[24]</a><a class="cite" href="#e74">[74]</a><a class="cite" href="#e158">[158]</a></td>
+      <td class="small">30 sources &middot; 50 claims <a class="cite" href="#e286">[286]</a></td>
     </tr>
     
     
@@ -428,7 +435,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Real-time anomaly identification and dynamic cross-account pattern synthesis</td>
       <td class="muted">Explainability demands from risk teams regarding autonomous transaction blocks</td>
-      <td class="small">17 sources &middot; 24 claims <a class="cite" href="#e12">[12]</a><a class="cite" href="#e57">[57]</a><a class="cite" href="#e82">[82]</a><a class="cite" href="#e211">[211]</a></td>
+      <td class="small">17 sources &middot; 24 claims <a class="cite" href="#e278">[278]</a></td>
     </tr>
     
     
@@ -440,7 +447,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Real-time stock rebalancing and route scheduling based on disruption alerts</td>
       <td class="muted">Fragmented warehouse management and transportation partner API silos</td>
-      <td class="small">14 sources &middot; 22 claims <a class="cite" href="#e1">[1]</a><a class="cite" href="#e2">[2]</a><a class="cite" href="#e3">[3]</a><a class="cite" href="#e139">[139]</a></td>
+      <td class="small">14 sources &middot; 22 claims <a class="cite" href="#e278">[278]</a></td>
     </tr>
     
     
@@ -452,7 +459,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Automated payment arrangement negotiation and invoice ledger reconciliation</td>
       <td class="muted">Strict debt collection compliance and fair servicing statutory constraints</td>
-      <td class="small">16 sources &middot; 21 claims <a class="cite" href="#e52">[52]</a><a class="cite" href="#e53">[53]</a><a class="cite" href="#e61">[61]</a><a class="cite" href="#e412">[412]</a></td>
+      <td class="small">16 sources &middot; 21 claims <a class="cite" href="#e412">[412]</a><a class="cite" href="#e502">[502]</a></td>
     </tr>
     
     
@@ -464,7 +471,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Telemetry correlation, root-cause identification, and automated service remediation</td>
       <td class="muted">Production destabilization risk from unverified automated rollback commands</td>
-      <td class="small">20 sources &middot; 67 claims <a class="cite" href="#e24">[24]</a><a class="cite" href="#e73">[73]</a><a class="cite" href="#e91">[91]</a><a class="cite" href="#e109">[109]</a></td>
+      <td class="small">20 sources &middot; 67 claims <a class="cite" href="#e279">[279]</a></td>
     </tr>
     
     
@@ -476,7 +483,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Rapid false-positive reduction and SAR narrative draft generation</td>
       <td class="muted">Model governance mandates and strict regulatory auditability frameworks</td>
-      <td class="small">13 sources &middot; 25 claims <a class="cite" href="#e13">[13]</a><a class="cite" href="#e58">[58]</a><a class="cite" href="#e82">[82]</a><a class="cite" href="#e83">[83]</a></td>
+      <td class="small">13 sources &middot; 25 claims <a class="cite" href="#e809">[809]</a><a class="cite" href="#e810">[810]</a><a class="cite" href="#e814">[814]</a><a class="cite" href="#e815">[815]</a></td>
     </tr>
     
     
@@ -488,7 +495,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Multimodal equipment diagnostic guidance and real-time maintenance lookup</td>
       <td class="muted">Intermittent remote connectivity and unstructured legacy equipment manuals</td>
-      <td class="small">15 sources &middot; 27 claims <a class="cite" href="#e32">[32]</a><a class="cite" href="#e253">[253]</a><a class="cite" href="#e335">[335]</a><a class="cite" href="#e387">[387]</a></td>
+      <td class="small">15 sources &middot; 27 claims <a class="cite" href="#e335">[335]</a><a class="cite" href="#e387">[387]</a><a class="cite" href="#e390">[390]</a></td>
     </tr>
     
     
@@ -500,11 +507,12 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Contextual unit test creation, scaffolding, and boilerplate generation</td>
       <td class="muted">Developer mistrust regarding subtle logic bugs and license compliance</td>
-      <td class="small">15 sources &middot; 26 claims <a class="cite" href="#e44">[44]</a><a class="cite" href="#e45">[45]</a><a class="cite" href="#e145">[145]</a><a class="cite" href="#e164">[164]</a></td>
+      <td class="small">15 sources &middot; 26 claims <a class="cite" href="#e322">[322]</a></td>
     </tr>
     
-    </table><details><summary>Show 28 more use cases</summary><table>
-    <tr><th>#</th><th>Use case</th><th title="0-100, computed from weighted evidence; see How scores are calculated">Score</th><th>Adoption stage</th><th>Main value</th><th>Main blocker</th><th>Evidence</th></tr>
+    </table><details><summary>Show 28 more use cases</summary><table class="uc">
+    <colgroup><col class="c-rank"><col class="c-name"><col class="c-score"><col class="c-stage"><col><col><col class="c-ev"></colgroup>
+<tr><th>#</th><th>Use case</th><th title="0-100, computed from weighted evidence; see How scores are calculated">Score</th><th>Adoption stage</th><th>Main value</th><th>Main blocker</th><th>Evidence</th></tr>
     <tr>
       <td class="rank">13</td>
       <td><strong>Customer Complaints Handling &amp; Dispute Resolution</strong></td>
@@ -513,7 +521,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Cross-system grievance aggregation and empathetic remediation drafting</td>
       <td class="muted">Statutory liability exposure under strict consumer protection oversight</td>
-      <td class="small">22 sources &middot; 27 claims <a class="cite" href="#e40">[40]</a><a class="cite" href="#e52">[52]</a><a class="cite" href="#e53">[53]</a><a class="cite" href="#e62">[62]</a></td>
+      <td class="small">22 sources &middot; 27 claims <a class="cite" href="#e502">[502]</a><a class="cite" href="#e503">[503]</a><a class="cite" href="#e504">[504]</a><a class="cite" href="#e306">[306]</a></td>
     </tr>
     
     
@@ -525,7 +533,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Autonomous password reset, access grants, and routine ticket resolution</td>
       <td class="muted">Rigid legacy ticketing integrations and stale service catalog data</td>
-      <td class="small">14 sources &middot; 20 claims <a class="cite" href="#e126">[126]</a><a class="cite" href="#e145">[145]</a><a class="cite" href="#e227">[227]</a><a class="cite" href="#e304">[304]</a></td>
+      <td class="small">14 sources &middot; 20 claims <a class="cite" href="#e304">[304]</a><a class="cite" href="#e334">[334]</a></td>
     </tr>
     
     
@@ -537,7 +545,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Side-by-side compliance scoring and security questionnaire evaluation</td>
       <td class="muted">Nuanced supplier pricing models and liability exclusions escaping extraction</td>
-      <td class="small">14 sources &middot; 23 claims <a class="cite" href="#e54">[54]</a><a class="cite" href="#e56">[56]</a><a class="cite" href="#e151">[151]</a><a class="cite" href="#e361">[361]</a></td>
+      <td class="small">14 sources &middot; 23 claims <a class="cite" href="#e361">[361]</a><a class="cite" href="#e380">[380]</a></td>
     </tr>
     
     
@@ -549,7 +557,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Inbound buyer intent enrichment, sizing, and personalized email outreach</td>
       <td class="muted">Prospect fatigue with synthetic messaging and degraded spam reputation</td>
-      <td class="small">6 sources &middot; 7 claims <a class="cite" href="#e179">[179]</a><a class="cite" href="#e180">[180]</a><a class="cite" href="#e318">[318]</a><a class="cite" href="#e343">[343]</a></td>
+      <td class="small">6 sources &middot; 7 claims <a class="cite" href="#e318">[318]</a><a class="cite" href="#e343">[343]</a><a class="cite" href="#e628">[628]</a></td>
     </tr>
     
     
@@ -561,7 +569,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Institutional document verification, sanctions cross-checking, and data ingestion</td>
       <td class="muted">Data sovereignty constraints and legal liabilities for missed beneficial owners</td>
-      <td class="small">12 sources &middot; 19 claims <a class="cite" href="#e88">[88]</a><a class="cite" href="#e90">[90]</a><a class="cite" href="#e125">[125]</a><a class="cite" href="#e210">[210]</a></td>
+      <td class="small">12 sources &middot; 19 claims <a class="cite" href="#e297">[297]</a></td>
     </tr>
     
     
@@ -573,7 +581,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Autonomous tail-spend negotiation, RFP distribution, and supplier benchmarking</td>
       <td class="muted">Supplier pushback against automated bidding bots and contract rigidity</td>
-      <td class="small">8 sources &middot; 17 claims <a class="cite" href="#e2">[2]</a><a class="cite" href="#e8">[8]</a><a class="cite" href="#e9">[9]</a><a class="cite" href="#e10">[10]</a></td>
+      <td class="small">8 sources &middot; 17 claims <a class="cite" href="#e403">[403]</a><a class="cite" href="#e735">[735]</a><a class="cite" href="#e736">[736]</a><a class="cite" href="#e737">[737]</a></td>
     </tr>
     
     
@@ -585,7 +593,7 @@
       <td><span class="badge st-mainstream">mainstream</span></td>
       <td>Sentiment-based routing, intent tagging, and skill-based queue distribution</td>
       <td class="muted">Misclassification of multi-intent customer inquiries causing ticket bouncing</td>
-      <td class="small">14 sources &middot; 17 claims <a class="cite" href="#e6">[6]</a><a class="cite" href="#e16">[16]</a><a class="cite" href="#e31">[31]</a><a class="cite" href="#e107">[107]</a></td>
+      <td class="small">14 sources &middot; 17 claims <a class="cite" href="#e293">[293]</a></td>
     </tr>
     
     
@@ -597,7 +605,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Cross-portfolio loss run aggregation, exposure parsing, and submission triage</td>
       <td class="muted">Skepticism over algorithmic risk assessment quality and lack of explainability</td>
-      <td class="small">9 sources &middot; 17 claims <a class="cite" href="#e13">[13]</a><a class="cite" href="#e41">[41]</a><a class="cite" href="#e43">[43]</a><a class="cite" href="#e48">[48]</a></td>
+      <td class="small">9 sources &middot; 17 claims <a class="cite" href="#e718">[718]</a><a class="cite" href="#e809">[809]</a><a class="cite" href="#e810">[810]</a><a class="cite" href="#e628">[628]</a></td>
     </tr>
     
     
@@ -609,7 +617,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Autonomous simple claim triage, document indexing, and payout calculation</td>
       <td class="muted">Regulatory scrutiny regarding bias and unverified damage adjudication</td>
-      <td class="small">6 sources &middot; 10 claims <a class="cite" href="#e71">[71]</a><a class="cite" href="#e123">[123]</a><a class="cite" href="#e136">[136]</a><a class="cite" href="#e137">[137]</a></td>
+      <td class="small">6 sources &middot; 10 claims <a class="cite" href="#e291">[291]</a></td>
     </tr>
     
     
@@ -621,7 +629,7 @@
       <td><span class="badge st-experimenting">experimenting</span></td>
       <td>Tax-loss harvesting identification and portfolio drift monitoring</td>
       <td class="muted">Fiduciary liability, FINRA supervision rules, and client relationship sensitivity</td>
-      <td class="small">8 sources &middot; 14 claims <a class="cite" href="#e58">[58]</a><a class="cite" href="#e59">[59]</a><a class="cite" href="#e94">[94]</a><a class="cite" href="#e96">[96]</a></td>
+      <td class="small">8 sources &middot; 14 claims <a class="cite" href="#e290">[290]</a></td>
     </tr>
     
     
@@ -633,7 +641,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Automated COBOL/mainframe translation, documentation, and regression testing</td>
       <td class="muted">Absence of ground-truth test suites and unwritten business rules</td>
-      <td class="small">9 sources &middot; 16 claims <a class="cite" href="#e202">[202]</a><a class="cite" href="#e203">[203]</a><a class="cite" href="#e273">[273]</a><a class="cite" href="#e382">[382]</a></td>
+      <td class="small">9 sources &middot; 16 claims <a class="cite" href="#e273">[273]</a><a class="cite" href="#e382">[382]</a><a class="cite" href="#e384">[384]</a></td>
     </tr>
     
     
@@ -645,7 +653,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Autonomous unattached disk cleanup and right-sizing reserved instances</td>
       <td class="muted">Engineering resistance to automated workload teardowns impacting uptime</td>
-      <td class="small">8 sources &middot; 9 claims <a class="cite" href="#e93">[93]</a><a class="cite" href="#e100">[100]</a><a class="cite" href="#e215">[215]</a><a class="cite" href="#e332">[332]</a></td>
+      <td class="small">8 sources &middot; 9 claims <a class="cite" href="#e332">[332]</a><a class="cite" href="#e604">[604]</a></td>
     </tr>
     
     
@@ -657,7 +665,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Instant benefits interpretation, policy answers, and leave request logging</td>
       <td class="muted">Frequent HR policy changes and localized jurisdictional rule mismatches</td>
-      <td class="small">7 sources &middot; 15 claims <a class="cite" href="#e18">[18]</a><a class="cite" href="#e19">[19]</a><a class="cite" href="#e20">[20]</a><a class="cite" href="#e454">[454]</a></td>
+      <td class="small">7 sources &middot; 15 claims <a class="cite" href="#e454">[454]</a><a class="cite" href="#e456">[456]</a></td>
     </tr>
     
     
@@ -669,7 +677,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Automated security vulnerability checks, syntax audits, and architectural linting</td>
       <td class="muted">High false-positive noise generating developer alert fatigue</td>
-      <td class="small">7 sources &middot; 13 claims <a class="cite" href="#e44">[44]</a><a class="cite" href="#e45">[45]</a><a class="cite" href="#e64">[64]</a><a class="cite" href="#e165">[165]</a></td>
+      <td class="small">7 sources &middot; 13 claims <a class="cite" href="#e521">[521]</a></td>
     </tr>
     
     
@@ -681,7 +689,7 @@
       <td><span class="badge st-mainstream">mainstream</span></td>
       <td>Automated call dispositioning, structured note generation, and CRM entry</td>
       <td class="muted">Incomplete entity extraction across fragmented telephony and CRM platforms</td>
-      <td class="small">7 sources &middot; 8 claims <a class="cite" href="#e7">[7]</a><a class="cite" href="#e14">[14]</a><a class="cite" href="#e29">[29]</a><a class="cite" href="#e38">[38]</a></td>
+      <td class="small">7 sources &middot; 8 claims <a class="cite" href="#e397">[397]</a></td>
     </tr>
     
     
@@ -693,7 +701,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Synthesizing solved ticket threads into verified internal support documentation</td>
       <td class="muted">Siloed content ownership and lack of systematic review workflows</td>
-      <td class="small">7 sources &middot; 7 claims <a class="cite" href="#e79">[79]</a><a class="cite" href="#e147">[147]</a><a class="cite" href="#e209">[209]</a><a class="cite" href="#e649">[649]</a></td>
+      <td class="small">7 sources &middot; 7 claims <a class="cite" href="#e649">[649]</a><a class="cite" href="#e688">[688]</a></td>
     </tr>
     
     
@@ -705,7 +713,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Automated resume parsing, initial qualification checks, and interview scheduling</td>
       <td class="muted">Algorithmic hiring bias regulations and workforce AI compliance mandates</td>
-      <td class="small">5 sources &middot; 10 claims <a class="cite" href="#e18">[18]</a><a class="cite" href="#e19">[19]</a><a class="cite" href="#e20">[20]</a><a class="cite" href="#e423">[423]</a></td>
+      <td class="small">5 sources &middot; 10 claims <a class="cite" href="#e423">[423]</a><a class="cite" href="#e671">[671]</a></td>
     </tr>
     
     
@@ -717,7 +725,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Proactive detection of usage decay and dynamic retention offer generation</td>
       <td class="muted">Disconnected CRM data and poor pricing incentive authority boundaries</td>
-      <td class="small">4 sources &middot; 4 claims <a class="cite" href="#e30">[30]</a><a class="cite" href="#e116">[116]</a><a class="cite" href="#e653">[653]</a><a class="cite" href="#e695">[695]</a></td>
+      <td class="small">4 sources &middot; 4 claims <a class="cite" href="#e653">[653]</a><a class="cite" href="#e695">[695]</a><a class="cite" href="#e728">[728]</a></td>
     </tr>
     
     
@@ -729,7 +737,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Contextual past-performance assembly and technical RFP question answering</td>
       <td class="muted">Stale technical repositories and high customization demands on complex bids</td>
-      <td class="small">4 sources &middot; 8 claims <a class="cite" href="#e54">[54]</a><a class="cite" href="#e55">[55]</a><a class="cite" href="#e170">[170]</a><a class="cite" href="#e443">[443]</a></td>
+      <td class="small">4 sources &middot; 8 claims <a class="cite" href="#e443">[443]</a><a class="cite" href="#e697">[697]</a></td>
     </tr>
     
     
@@ -741,7 +749,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>100% submission screening against corporate travel and entertainment policies</td>
       <td class="muted">False positive alerts on ambiguous executive business entertainment</td>
-      <td class="small">5 sources &middot; 7 claims <a class="cite" href="#e25">[25]</a><a class="cite" href="#e26">[26]</a><a class="cite" href="#e27">[27]</a><a class="cite" href="#e28">[28]</a></td>
+      <td class="small">5 sources &middot; 7 claims <a class="cite" href="#e446">[446]</a></td>
     </tr>
     
     
@@ -753,7 +761,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Multi-system account provisioning, hardware dispatch, and immediate deprovisioning</td>
       <td class="muted">Disjointed SaaS access control models and non-standard offboarding handoffs</td>
-      <td class="small">6 sources &middot; 12 claims <a class="cite" href="#e19">[19]</a><a class="cite" href="#e67">[67]</a><a class="cite" href="#e102">[102]</a><a class="cite" href="#e110">[110]</a></td>
+      <td class="small">6 sources &middot; 12 claims <a class="cite" href="#e737">[737]</a><a class="cite" href="#e454">[454]</a><a class="cite" href="#e455">[455]</a><a class="cite" href="#e456">[456]</a></td>
     </tr>
     
     
@@ -765,7 +773,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Continuous ledger anomaly cross-checking and multi-currency transaction verification</td>
       <td class="muted">Audit committee requirements for complete mathematical determinism</td>
-      <td class="small">5 sources &middot; 11 claims <a class="cite" href="#e11">[11]</a><a class="cite" href="#e49">[49]</a><a class="cite" href="#e94">[94]</a><a class="cite" href="#e224">[224]</a></td>
+      <td class="small">5 sources &middot; 11 claims <a class="cite" href="#e451">[451]</a></td>
     </tr>
     
     
@@ -777,7 +785,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Real-time tone monitoring across channels to escalate churn signals</td>
       <td class="muted">Superficial sentiment tagging failing to trigger root-cause process changes</td>
-      <td class="small">4 sources &middot; 4 claims <a class="cite" href="#e80">[80]</a><a class="cite" href="#e256">[256]</a><a class="cite" href="#e465">[465]</a><a class="cite" href="#e488">[488]</a></td>
+      <td class="small">4 sources &middot; 4 claims <a class="cite" href="#e465">[465]</a><a class="cite" href="#e488">[488]</a><a class="cite" href="#e783">[783]</a></td>
     </tr>
     
     
@@ -789,7 +797,7 @@
       <td><span class="badge st-experimenting">experimenting</span></td>
       <td>Machine identity cataloging, dormant role revocation, and peer entitlement review</td>
       <td class="muted">Immature IAM tooling for non-human agent identities and credential delegation</td>
-      <td class="small">8 sources &middot; 9 claims <a class="cite" href="#e22">[22]</a><a class="cite" href="#e23">[23]</a><a class="cite" href="#e337">[337]</a><a class="cite" href="#e348">[348]</a></td>
+      <td class="small">8 sources &middot; 9 claims <a class="cite" href="#e337">[337]</a><a class="cite" href="#e348">[348]</a><a class="cite" href="#e481">[481]</a></td>
     </tr>
     
     
@@ -801,7 +809,7 @@
       <td><span class="badge st-scaling">scaling</span></td>
       <td>Straight-through multi-line matching, GL coding, and fraud validation</td>
       <td class="muted">Complex unstructured paper exceptions and multi-entity approval policies</td>
-      <td class="small">3 sources &middot; 8 claims <a class="cite" href="#e11">[11]</a><a class="cite" href="#e173">[173]</a><a class="cite" href="#e174">[174]</a><a class="cite" href="#e199">[199]</a></td>
+      <td class="small">3 sources &middot; 8 claims <a class="cite" href="#e412">[412]</a></td>
     </tr>
     
     
@@ -813,7 +821,7 @@
       <td><span class="badge st-experimenting">experimenting</span></td>
       <td>Contextual CVE exploitability analysis and automated patch pull-request generation</td>
       <td class="muted">Unintended production outage risks from untested autonomous package upgrades</td>
-      <td class="small">4 sources &middot; 5 claims <a class="cite" href="#e73">[73]</a><a class="cite" href="#e74">[74]</a><a class="cite" href="#e120">[120]</a><a class="cite" href="#e324">[324]</a></td>
+      <td class="small">4 sources &middot; 5 claims <a class="cite" href="#e324">[324]</a><a class="cite" href="#e609">[609]</a></td>
     </tr>
     
     
@@ -825,7 +833,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Autonomous build failure triage, log parsing, and environment script fixes</td>
       <td class="muted">Risks of automated commits altering build configurations without review</td>
-      <td class="small">4 sources &middot; 6 claims <a class="cite" href="#e24">[24]</a><a class="cite" href="#e44">[44]</a><a class="cite" href="#e46">[46]</a><a class="cite" href="#e470">[470]</a></td>
+      <td class="small">4 sources &middot; 6 claims <a class="cite" href="#e470">[470]</a><a class="cite" href="#e778">[778]</a></td>
     </tr>
     
     
@@ -837,7 +845,7 @@
       <td><span class="badge st-piloting">piloting</span></td>
       <td>Redlining indemnification variances and comparing clauses against standards</td>
       <td class="muted">General counsel risk aversion and black-box liability in legal reviews</td>
-      <td class="small">3 sources &middot; 10 claims <a class="cite" href="#e13">[13]</a><a class="cite" href="#e75">[75]</a><a class="cite" href="#e76">[76]</a><a class="cite" href="#e349">[349]</a></td>
+      <td class="small">3 sources &middot; 10 claims <a class="cite" href="#e349">[349]</a><a class="cite" href="#e441">[441]</a></td>
     </tr>
     
   </table></details>
@@ -877,7 +885,7 @@
   <h2>Industry deep-dive</h2>
   <p class="sub">Pick an industry to see its top 5 adoption drivers, top 5 blockers and the 5 actions most associated with success.</p>
   <div class="picker" role="tablist">
-    <button type="button" data-ind="fsi" class="active" role="tab">FSI</button><button type="button" data-ind="hcls" class="" role="tab">HCLS</button><button type="button" data-ind="manufacturing" class="" role="tab">Manufacturing &amp; Automotive</button><button type="button" data-ind="retail_cpg" class="" role="tab">Retail &amp; Consumer Goods</button><button type="button" data-ind="tmt" class="" role="tab">TMT</button><button type="button" data-ind="public_sector" class="" role="tab">Public Sector &amp; Government</button><button type="button" data-ind="energy_utilities" class="" role="tab">Energy &amp; Utilities</button>
+    <button type="button" data-ind="fsi" class="active" role="tab" aria-selected="true" aria-controls="ind-fsi" title="Financial Services &amp; Insurance (FSI)">FSI</button><button type="button" data-ind="hcls" class="" role="tab" aria-selected="false" aria-controls="ind-hcls" title="Healthcare &amp; Life Sciences (HCLS)">HCLS</button><button type="button" data-ind="manufacturing" class="" role="tab" aria-selected="false" aria-controls="ind-manufacturing" title="Manufacturing &amp; Automotive">Manufacturing &amp; Automotive</button><button type="button" data-ind="retail_cpg" class="" role="tab" aria-selected="false" aria-controls="ind-retail_cpg" title="Retail &amp; Consumer Goods">Retail &amp; Consumer Goods</button><button type="button" data-ind="tmt" class="" role="tab" aria-selected="false" aria-controls="ind-tmt" title="Telecom, Media &amp; Technology (TMT)">TMT</button><button type="button" data-ind="public_sector" class="" role="tab" aria-selected="false" aria-controls="ind-public_sector" title="Public Sector &amp; Government">Public Sector &amp; Government</button><button type="button" data-ind="energy_utilities" class="" role="tab" aria-selected="false" aria-controls="ind-energy_utilities" title="Energy &amp; Utilities">Energy &amp; Utilities</button>
   </div>
   
   <div class="ind-panel active" id="ind-fsi" role="tabpanel">
@@ -887,7 +895,7 @@
       <span class="small muted">(175 industry-specific claims)</span></p>
     <div class="grid3">
       <div><div class="panel-head ph-good">Top 5 adoption drivers</div>
-        <ol class="list good"><li><b>Operational cycle time reduction <span class="badge strong" title="44 claims from 32 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Underwriting decision times drop from days to minutes while complex administration tasks are sharply reduced.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e41">[41]</a><a class="cite" href="#e47">[47]</a></li><li><b>High straight-through resolution volume <span class="badge strong" title="44 claims from 32 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Autonomous chat agents resolve millions of customer interactions without manual staff capacity.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e60">[60]</a></li><li><b>Straight-through underwriting workflow execution <span class="badge moderate" title="11 claims from 10 sources (weighted by source quality, recency and mapping confidence)">33 &middot; moderate</span></b><span class="small muted">Autonomous orchestration enables instant quoting and binding for low-complexity policy submissions.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e51">[51]</a><a class="cite" href="#e184">[184]</a><a class="cite" href="#e193">[193]</a></li><li><b>Supervisory surveillance and compliance efficiency <span class="badge weak" title="9 claims from 8 sources (weighted by source quality, recency and mapping confidence)">28 &middot; weak</span></b><span class="small muted">Regulatory bodies and institutions leverage automated surveillance to track complex financial crime operations.</span> <span class="badge rc">Regulatory &amp; Compliance</span> <a class="cite" href="#e57">[57]</a><a class="cite" href="#e94">[94]</a><a class="cite" href="#e129">[129]</a></li><li><b>Lower repeat inquiries and improved risk detection <span class="badge weak" title="8 claims from 7 sources (weighted by source quality, recency and mapping confidence)">27 &middot; weak</span></b><span class="small muted">Accurate agent resolutions reduce customer churn risk and multiply financial risk detection efficacy.</span> <span class="badge rc">Model Quality &amp; Reliability</span> <a class="cite" href="#e62">[62]</a><a class="cite" href="#e82">[82]</a><a class="cite" href="#e244">[244]</a></li></ol></div>
+        <ol class="list good"><li><b>Operational cycle time reduction <span class="badge strong" title="Shares the Cost &amp; ROI Clarity theme (theme score 100; 44 claims from 32 sources) with other factors here; this factor&#39;s cited evidence carries 83% of it">83 &middot; strong</span></b><span class="small muted">Underwriting decision times drop from days to minutes while complex administration tasks are sharply reduced.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e41">[41]</a><a class="cite" href="#e47">[47]</a></li><li><b>Straight-through underwriting workflow execution <span class="badge moderate" title="11 claims from 10 sources (weighted by source quality, recency and mapping confidence)">33 &middot; moderate</span></b><span class="small muted">Autonomous orchestration enables instant quoting and binding for low-complexity policy submissions.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e51">[51]</a><a class="cite" href="#e184">[184]</a><a class="cite" href="#e193">[193]</a></li><li><b>Supervisory surveillance and compliance efficiency <span class="badge weak" title="9 claims from 8 sources (weighted by source quality, recency and mapping confidence)">28 &middot; weak</span></b><span class="small muted">Regulatory bodies and institutions leverage automated surveillance to track complex financial crime operations.</span> <span class="badge rc">Regulatory &amp; Compliance</span> <a class="cite" href="#e57">[57]</a><a class="cite" href="#e94">[94]</a><a class="cite" href="#e129">[129]</a></li><li><b>Lower repeat inquiries and improved risk detection <span class="badge weak" title="8 claims from 7 sources (weighted by source quality, recency and mapping confidence)">27 &middot; weak</span></b><span class="small muted">Accurate agent resolutions reduce customer churn risk and multiply financial risk detection efficacy.</span> <span class="badge rc">Model Quality &amp; Reliability</span> <a class="cite" href="#e62">[62]</a><a class="cite" href="#e82">[82]</a><a class="cite" href="#e244">[244]</a></li><li><b>High straight-through resolution volume <span class="badge weak" title="Shares the Cost &amp; ROI Clarity theme (theme score 100; 44 claims from 32 sources) with other factors here; this factor&#39;s cited evidence carries 17% of it">17 &middot; weak</span></b><span class="small muted">Autonomous chat agents resolve millions of customer interactions without manual staff capacity.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e60">[60]</a></li></ol></div>
       <div><div class="panel-head ph-bad">Top 5 blockers</div>
         <ol class="list bad"><li><b>Consumer protection and liability scrutiny <span class="badge strong" title="30 claims from 20 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Enforcement agencies penalize automated servicing errors across consumer credit, payments, and dispute handling.</span> <span class="badge rc">Regulatory &amp; Compliance</span> <a class="cite" href="#e52">[52]</a><a class="cite" href="#e53">[53]</a><a class="cite" href="#e58">[58]</a></li><li><b>Deficits in autonomous decision auditability <span class="badge strong" title="17 claims from 14 sources (weighted by source quality, recency and mapping confidence)">75 &middot; strong</span></b><span class="small muted">Risk committees withhold autonomous execution approval due to transparency gaps and strict accountability rules.</span> <span class="badge rc">Risk &amp; Auditability</span> <a class="cite" href="#e13">[13]</a><a class="cite" href="#e83">[83]</a><a class="cite" href="#e89">[89]</a></li><li><b>Domain hallucination and quality inconsistency <span class="badge moderate" title="10 claims from 9 sources (weighted by source quality, recency and mapping confidence)">50 &middot; moderate</span></b><span class="small muted">High hallucination rates and technical limits in complex financial cases require mandatory human verification.</span> <span class="badge rc">Model Quality &amp; Reliability</span> <a class="cite" href="#e43">[43]</a><a class="cite" href="#e48">[48]</a><a class="cite" href="#e191">[191]</a></li><li><b>Immature data governance across customer records <span class="badge moderate" title="9 claims from 8 sources (weighted by source quality, recency and mapping confidence)">34 &middot; moderate</span></b><span class="small muted">Nascent governance frameworks and data residency concerns restrict agent access to live customer data.</span> <span class="badge rc">Data Governance &amp; Privacy</span> <a class="cite" href="#e50">[50]</a><a class="cite" href="#e90">[90]</a><a class="cite" href="#e246">[246]</a></li><li><b>Complex legacy integration and orchestration hurdles <span class="badge weak" title="6 claims from 5 sources (weighted by source quality, recency and mapping confidence)">22 &middot; weak</span></b><span class="small muted">Disparate core banking and mainframe platforms impede fluid agent tool calling across silos.</span> <span class="badge rc">Integration &amp; Systems Access</span> <a class="cite" href="#e6">[6]</a><a class="cite" href="#e31">[31]</a></li></ol></div>
       <div><div class="panel-head ph-act">Advice: 5 actions to drive success</div>
@@ -903,7 +911,7 @@
       <span class="small muted">(88 industry-specific claims)</span></p>
     <div class="grid3">
       <div><div class="panel-head ph-good">Top 5 adoption drivers</div>
-        <ol class="list good"><li><b>Alleviating administrative burden on clinicians <span class="badge strong" title="20 claims from 15 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Physicians and nursing staff deploy automation to counter surging caseloads and documentation exhaustion.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e308">[308]</a><a class="cite" href="#e391">[391]</a></li><li><b>Operational cost reduction and revenue enhancement <span class="badge strong" title="20 claims from 15 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Health organizations achieve measurable savings and operational throughput by deploying clinical and administrative tools.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e396">[396]</a></li><li><b>Autonomous tool utilization in medical records <span class="badge weak" title="5 claims from 4 sources (weighted by source quality, recency and mapping confidence)">28 &middot; weak</span></b><span class="small muted">Agents orchestrate complex tasks across clinical systems through persistent memory and specialized medical tooling.</span> <span class="badge rc">Model Quality &amp; Reliability</span> <a class="cite" href="#e676">[676]</a><a class="cite" href="#e679">[679]</a><a class="cite" href="#e699">[699]</a></li><li><b>Enterprise clinical knowledge retrieval efficiency <span class="badge weak" title="4 claims from 4 sources (weighted by source quality, recency and mapping confidence)">22 &middot; weak</span></b><span class="small muted">Synthesizing disparate protocol guidelines into instant answers accelerates research and treatment drafting.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e676">[676]</a><a class="cite" href="#e821">[821]</a></li><li><b>Contact center cognitive relief for staff <span class="badge weak" title="2 claims from 2 sources (weighted by source quality, recency and mapping confidence)">11 &middot; weak</span></b><span class="small muted">Real-time agent assist deflects repetitive patient routing and scheduling inquiries during call surges.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e14">[14]</a><a class="cite" href="#e160">[160]</a></li></ol></div>
+        <ol class="list good"><li><b>Alleviating administrative burden on clinicians <span class="badge strong" title="Shares the Cost &amp; ROI Clarity theme (theme score 100; 20 claims from 15 sources) with other factors here; this factor&#39;s cited evidence carries 72% of it">72 &middot; strong</span></b><span class="small muted">Physicians and nursing staff deploy automation to counter surging caseloads and documentation exhaustion.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e308">[308]</a><a class="cite" href="#e391">[391]</a></li><li><b>Autonomous tool utilization in medical records <span class="badge weak" title="5 claims from 4 sources (weighted by source quality, recency and mapping confidence)">28 &middot; weak</span></b><span class="small muted">Agents orchestrate complex tasks across clinical systems through persistent memory and specialized medical tooling.</span> <span class="badge rc">Model Quality &amp; Reliability</span> <a class="cite" href="#e676">[676]</a><a class="cite" href="#e679">[679]</a><a class="cite" href="#e699">[699]</a></li><li><b>Operational cost reduction and revenue enhancement <span class="badge weak" title="Shares the Cost &amp; ROI Clarity theme (theme score 100; 20 claims from 15 sources) with other factors here; this factor&#39;s cited evidence carries 28% of it">28 &middot; weak</span></b><span class="small muted">Health organizations achieve measurable savings and operational throughput by deploying clinical and administrative tools.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e396">[396]</a></li><li><b>Enterprise clinical knowledge retrieval efficiency <span class="badge weak" title="4 claims from 4 sources (weighted by source quality, recency and mapping confidence)">22 &middot; weak</span></b><span class="small muted">Synthesizing disparate protocol guidelines into instant answers accelerates research and treatment drafting.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e676">[676]</a><a class="cite" href="#e821">[821]</a></li><li><b>Contact center cognitive relief for staff <span class="badge weak" title="2 claims from 2 sources (weighted by source quality, recency and mapping confidence)">11 &middot; weak</span></b><span class="small muted">Real-time agent assist deflects repetitive patient routing and scheduling inquiries during call surges.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e14">[14]</a><a class="cite" href="#e160">[160]</a></li></ol></div>
       <div><div class="panel-head ph-bad">Top 5 blockers</div>
         <ol class="list bad"><li><b>Rigid medical device and software regulations <span class="badge strong" title="12 claims from 10 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Health authorities mandate comprehensive modification protocols, human rights evaluations, and pre-deployment auditing.</span> <span class="badge rc">Regulatory &amp; Compliance</span> <a class="cite" href="#e411">[411]</a><a class="cite" href="#e422">[422]</a><a class="cite" href="#e550">[550]</a></li><li><b>Clinical distrust of generative medical advice <span class="badge moderate" title="10 claims from 7 sources (weighted by source quality, recency and mapping confidence)">60 &middot; moderate</span></b><span class="small muted">Clinicians question reliability when outputs risk unverified assertions or flawed clinical recommendations.</span> <span class="badge rc">Model Quality &amp; Reliability</span> <a class="cite" href="#e393">[393]</a><a class="cite" href="#e394">[394]</a><a class="cite" href="#e421">[421]</a></li><li><b>Patient data privacy and oversharing risks <span class="badge moderate" title="6 claims from 6 sources (weighted by source quality, recency and mapping confidence)">52 &middot; moderate</span></b><span class="small muted">Strict patient privacy mandates and broad permission access complicate grounding agents on EHR repositories.</span> <span class="badge rc">Data Governance &amp; Privacy</span> <a class="cite" href="#e310">[310]</a><a class="cite" href="#e763">[763]</a><a class="cite" href="#e888">[888]</a></li><li><b>EHR integration friction and legacy silos <span class="badge moderate" title="5 claims from 5 sources (weighted by source quality, recency and mapping confidence)">44 &middot; moderate</span></b><span class="small muted">Lack of standardized API integration into dominant medical record platforms creates severe deployment friction.</span> <span class="badge rc">Integration &amp; Systems Access</span> <a class="cite" href="#e309">[309]</a><a class="cite" href="#e398">[398]</a><a class="cite" href="#e439">[439]</a></li><li><b>Automation bias and cognitive delegation risks <span class="badge moderate" title="6 claims from 5 sources (weighted by source quality, recency and mapping confidence)">38 &middot; moderate</span></b><span class="small muted">Uneven clinician adoption and risks of overlooking automated diagnostic errors impede full rollout.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e392">[392]</a><a class="cite" href="#e420">[420]</a><a class="cite" href="#e704">[704]</a></li></ol></div>
       <div><div class="panel-head ph-act">Advice: 5 actions to drive success</div>
@@ -919,7 +927,7 @@
       <span class="small muted">(91 industry-specific claims)</span></p>
     <div class="grid3">
       <div><div class="panel-head ph-good">Top 5 adoption drivers</div>
-        <ol class="list good"><li><b>Substantial supply chain productivity and savings <span class="badge strong" title="28 claims from 20 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Autonomous logistics and procurement agents compress sourcing cycles and cut transportation spend.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e2">[2]</a><a class="cite" href="#e8">[8]</a><a class="cite" href="#e204">[204]</a></li><li><b>Centralized technical knowledge retrieval <span class="badge strong" title="28 claims from 20 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Field technicians query multi-repository engineering manuals to accelerate equipment diagnosis and repair.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e253">[253]</a><a class="cite" href="#e648">[648]</a></li><li><b>Autonomous exception handling and renegotiation <span class="badge moderate" title="10 claims from 9 sources (weighted by source quality, recency and mapping confidence)">51 &middot; moderate</span></b><span class="small muted">Self-directed agents continuously orchestrate supplier renegotiations and resolve freight bottlenecks dynamically.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e10">[10]</a><a class="cite" href="#e141">[141]</a></li><li><b>Convergence with shop-floor physical robotics <span class="badge moderate" title="10 claims from 9 sources (weighted by source quality, recency and mapping confidence)">51 &middot; moderate</span></b><span class="small muted">Agentic AI integrates with industrial robotics to manage unstructured factory floor operations.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e405">[405]</a></li><li><b>Mitigating engineering and technician shortages <span class="badge weak" title="7 claims from 6 sources (weighted by source quality, recency and mapping confidence)">27 &middot; weak</span></b><span class="small muted">Enterprises deploy low-code agent platforms to augment frontline engineers amid widespread manufacturing retirements.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e3">[3]</a><a class="cite" href="#e253">[253]</a><a class="cite" href="#e647">[647]</a></li></ol></div>
+        <ol class="list good"><li><b>Substantial supply chain productivity and savings <span class="badge strong" title="Shares the Cost &amp; ROI Clarity theme (theme score 100; 28 claims from 20 sources) with other factors here; this factor&#39;s cited evidence carries 78% of it">78 &middot; strong</span></b><span class="small muted">Autonomous logistics and procurement agents compress sourcing cycles and cut transportation spend.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e2">[2]</a><a class="cite" href="#e8">[8]</a><a class="cite" href="#e204">[204]</a></li><li><b>Autonomous exception handling and renegotiation <span class="badge weak" title="Shares the Leadership, Ownership &amp; Operating Model theme (theme score 51; 10 claims from 9 sources) with other factors here; this factor&#39;s cited evidence carries 59% of it">30 &middot; weak</span></b><span class="small muted">Self-directed agents continuously orchestrate supplier renegotiations and resolve freight bottlenecks dynamically.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e10">[10]</a><a class="cite" href="#e141">[141]</a></li><li><b>Mitigating engineering and technician shortages <span class="badge weak" title="7 claims from 6 sources (weighted by source quality, recency and mapping confidence)">27 &middot; weak</span></b><span class="small muted">Enterprises deploy low-code agent platforms to augment frontline engineers amid widespread manufacturing retirements.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e3">[3]</a><a class="cite" href="#e253">[253]</a><a class="cite" href="#e647">[647]</a></li><li><b>Centralized technical knowledge retrieval <span class="badge weak" title="Shares the Cost &amp; ROI Clarity theme (theme score 100; 28 claims from 20 sources) with other factors here; this factor&#39;s cited evidence carries 22% of it">22 &middot; weak</span></b><span class="small muted">Field technicians query multi-repository engineering manuals to accelerate equipment diagnosis and repair.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e253">[253]</a><a class="cite" href="#e648">[648]</a></li><li><b>Convergence with shop-floor physical robotics <span class="badge weak" title="Shares the Leadership, Ownership &amp; Operating Model theme (theme score 51; 10 claims from 9 sources) with other factors here; this factor&#39;s cited evidence carries 41% of it">21 &middot; weak</span></b><span class="small muted">Agentic AI integrates with industrial robotics to manage unstructured factory floor operations.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e405">[405]</a></li></ol></div>
       <div><div class="panel-head ph-bad">Top 5 blockers</div>
         <ol class="list bad"><li><b>Lagging organizational redesign and decision governance <span class="badge strong" title="8 claims from 8 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Manufacturers struggle to scale pilots because job roles and operational decision rights remain unaligned.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e1">[1]</a><a class="cite" href="#e9">[9]</a><a class="cite" href="#e366">[366]</a></li><li><b>Patchwork legacy IT and OT integration <span class="badge strong" title="7 claims from 7 sources (weighted by source quality, recency and mapping confidence)">76 &middot; strong</span></b><span class="small muted">Fragmented incumbent shop-floor point solutions and low baseline automation prevent autonomous orchestration.</span> <span class="badge rc">Integration &amp; Systems Access</span> <a class="cite" href="#e140">[140]</a><a class="cite" href="#e255">[255]</a><a class="cite" href="#e367">[367]</a></li><li><b>Siloed and unstructured operational plant data <span class="badge moderate" title="6 claims from 6 sources (weighted by source quality, recency and mapping confidence)">62 &middot; moderate</span></b><span class="small muted">Vital engineering logs and maintenance records remain trapped in disconnected, specialized legacy formats.</span> <span class="badge rc">Data Governance &amp; Privacy</span> <a class="cite" href="#e638">[638]</a><a class="cite" href="#e648">[648]</a><a class="cite" href="#e707">[707]</a></li><li><b>Frontline workforce resistance and literacy gaps <span class="badge moderate" title="5 claims from 5 sources (weighted by source quality, recency and mapping confidence)">47 &middot; moderate</span></b><span class="small muted">Frontline plant workers resist rigid automated troubleshooting frameworks and lack digital literacy.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e369">[369]</a><a class="cite" href="#e644">[644]</a><a class="cite" href="#e761">[761]</a></li><li><b>Cybersecurity and OT air-gapped sovereignty <span class="badge moderate" title="5 claims from 5 sources (weighted by source quality, recency and mapping confidence)">44 &middot; moderate</span></b><span class="small muted">Connected plant architectures elevate industrial cyber intrusion risks, requiring on-premises execution controls.</span> <span class="badge rc">Security &amp; Identity</span> <a class="cite" href="#e408">[408]</a><a class="cite" href="#e646">[646]</a><a class="cite" href="#e873">[873]</a></li></ol></div>
       <div><div class="panel-head ph-act">Advice: 5 actions to drive success</div>
@@ -935,7 +943,7 @@
       <span class="small muted">(90 industry-specific claims)</span></p>
     <div class="grid3">
       <div><div class="panel-head ph-good">Top 5 adoption drivers</div>
-        <ol class="list good"><li><b>Massive customer service capacity and savings <span class="badge strong" title="32 claims from 22 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Straight-through customer service agents deflect millions of chats, liberating hundreds of customer service FTEs.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e2">[2]</a><a class="cite" href="#e8">[8]</a><a class="cite" href="#e60">[60]</a></li><li><b>Dynamic logistics and freight routing precision <span class="badge strong" title="32 claims from 22 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Automated order orchestration minimizes fulfillment delay penalties across complex distribution networks.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e2">[2]</a><a class="cite" href="#e204">[204]</a></li><li><b>Autonomous supply chain inventory optimization <span class="badge moderate" title="14 claims from 13 sources (weighted by source quality, recency and mapping confidence)">56 &middot; moderate</span></b><span class="small muted">Retailers prioritize agents across demand allocation, fraud mitigation, and supplier negotiations.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e10">[10]</a><a class="cite" href="#e141">[141]</a><a class="cite" href="#e278">[278]</a></li><li><b>Surging consumer adoption of shopping assistants <span class="badge weak" title="5 claims from 5 sources (weighted by source quality, recency and mapping confidence)">31 &middot; weak</span></b><span class="small muted">Shoppers increasingly seek conversational AI assistants for pre-purchase discovery, deal evaluation, and product reviews.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e307">[307]</a><a class="cite" href="#e312">[312]</a></li><li><b>Low-code agent accessibility for business teams <span class="badge weak" title="5 claims from 5 sources (weighted by source quality, recency and mapping confidence)">31 &middot; weak</span></b><span class="small muted">Embedded business software enables rapid deployment of autonomous support flows without deep engineering.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e3">[3]</a></li></ol></div>
+        <ol class="list good"><li><b>Massive customer service capacity and savings <span class="badge moderate" title="Shares the Cost &amp; ROI Clarity theme (theme score 100; 32 claims from 22 sources) with other factors here; this factor&#39;s cited evidence carries 59% of it">59 &middot; moderate</span></b><span class="small muted">Straight-through customer service agents deflect millions of chats, liberating hundreds of customer service FTEs.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e2">[2]</a><a class="cite" href="#e8">[8]</a><a class="cite" href="#e60">[60]</a></li><li><b>Autonomous supply chain inventory optimization <span class="badge moderate" title="14 claims from 13 sources (weighted by source quality, recency and mapping confidence)">56 &middot; moderate</span></b><span class="small muted">Retailers prioritize agents across demand allocation, fraud mitigation, and supplier negotiations.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e10">[10]</a><a class="cite" href="#e141">[141]</a><a class="cite" href="#e278">[278]</a></li><li><b>Dynamic logistics and freight routing precision <span class="badge moderate" title="Shares the Cost &amp; ROI Clarity theme (theme score 100; 32 claims from 22 sources) with other factors here; this factor&#39;s cited evidence carries 41% of it">41 &middot; moderate</span></b><span class="small muted">Automated order orchestration minimizes fulfillment delay penalties across complex distribution networks.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e2">[2]</a><a class="cite" href="#e204">[204]</a></li><li><b>Surging consumer adoption of shopping assistants <span class="badge weak" title="Shares the Skills, Trust &amp; Change Management theme (theme score 31; 5 claims from 5 sources) with other factors here; this factor&#39;s cited evidence carries 66% of it">20 &middot; weak</span></b><span class="small muted">Shoppers increasingly seek conversational AI assistants for pre-purchase discovery, deal evaluation, and product reviews.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e307">[307]</a><a class="cite" href="#e312">[312]</a></li><li><b>Low-code agent accessibility for business teams <span class="badge weak" title="Shares the Skills, Trust &amp; Change Management theme (theme score 31; 5 claims from 5 sources) with other factors here; this factor&#39;s cited evidence carries 34% of it">10 &middot; weak</span></b><span class="small muted">Embedded business software enables rapid deployment of autonomous support flows without deep engineering.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e3">[3]</a></li></ol></div>
       <div><div class="panel-head ph-bad">Top 5 blockers</div>
         <ol class="list bad"><li><b>Customer insistence on human dispute escalation <span class="badge strong" title="5 claims from 4 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Shoppers demand human interaction for nuanced returns or complaints and reject rigid virtual bots.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e306">[306]</a><a class="cite" href="#e338">[338]</a><a class="cite" href="#e341">[341]</a></li><li><b>Coordination complexity and bullwhip supply risks <span class="badge strong" title="4 claims from 4 sources (weighted by source quality, recency and mapping confidence)">99 &middot; strong</span></b><span class="small muted">Autonomous agents across inventory tiers risk triggering unintended oscillation and bullwhip distortions.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e1">[1]</a><a class="cite" href="#e9">[9]</a><a class="cite" href="#e817">[817]</a></li><li><b>Fragmented commerce and customer data estates <span class="badge strong" title="5 claims from 5 sources (weighted by source quality, recency and mapping confidence)">95 &middot; strong</span></b><span class="small muted">Disconnected inventory, catalog, and CRM platforms prevent agents from obtaining unified real-time customer context.</span> <span class="badge rc">Integration &amp; Systems Access</span> <a class="cite" href="#e140">[140]</a><a class="cite" href="#e294">[294]</a><a class="cite" href="#e339">[339]</a></li><li><b>Low multi-turn execution and policy reliability <span class="badge strong" title="6 claims from 5 sources (weighted by source quality, recency and mapping confidence)">88 &middot; strong</span></b><span class="small muted">Autonomous agents suffer high failure rates when handling complex database reasoning, policies, and multi-turn orders.</span> <span class="badge rc">Model Quality &amp; Reliability</span> <a class="cite" href="#e448">[448]</a><a class="cite" href="#e449">[449]</a><a class="cite" href="#e578">[578]</a></li><li><b>Unfavorable unit economics and query costs <span class="badge strong" title="4 claims from 3 sources (weighted by source quality, recency and mapping confidence)">66 &middot; strong</span></b><span class="small muted">High inference spend and computing loads per query cause pilot economics to falter in production.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e276">[276]</a><a class="cite" href="#e573">[573]</a><a class="cite" href="#e586">[586]</a></li></ol></div>
       <div><div class="panel-head ph-act">Advice: 5 actions to drive success</div>
@@ -951,7 +959,7 @@
       <span class="small muted">(96 industry-specific claims)</span></p>
     <div class="grid3">
       <div><div class="panel-head ph-good">Top 5 adoption drivers</div>
-        <ol class="list good"><li><b>Alert noise collapse and automated remediation <span class="badge strong" title="26 claims from 15 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">AIOps platforms compress billions of network alerts, driving down customer-impacting operational outages.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e128">[128]</a></li><li><b>Predictive intent routing and churn prevention <span class="badge strong" title="26 claims from 15 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Anticipating incoming call reasons avoids field dispatches and prevents customer defections at scale.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e220">[220]</a><a class="cite" href="#e254">[254]</a></li><li><b>Zero-touch autonomous network evolution <span class="badge strong" title="14 claims from 10 sources (weighted by source quality, recency and mapping confidence)">66 &middot; strong</span></b><span class="small muted">Telecom operators actively trial autonomous cross-domain network operations to manage infrastructure scale.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e279">[279]</a><a class="cite" href="#e302">[302]</a><a class="cite" href="#e304">[304]</a></li><li><b>Software engineering and test acceleration <span class="badge strong" title="14 claims from 10 sources (weighted by source quality, recency and mapping confidence)">66 &middot; strong</span></b><span class="small muted">Autonomous coding agents accelerate feature development and automated code review pipelines across developer organizations.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e24">[24]</a><a class="cite" href="#e30">[30]</a></li><li><b>Customer service cognitive load reduction <span class="badge weak" title="3 claims from 3 sources (weighted by source quality, recency and mapping confidence)">24 &middot; weak</span></b><span class="small muted">Real-time copilots equip frontline support staff with contextual answers during complicated subscriber interactions.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e14">[14]</a><a class="cite" href="#e39">[39]</a></li></ol></div>
+        <ol class="list good"><li><b>Predictive intent routing and churn prevention <span class="badge strong" title="Shares the Cost &amp; ROI Clarity theme (theme score 100; 26 claims from 15 sources) with other factors here; this factor&#39;s cited evidence carries 76% of it">76 &middot; strong</span></b><span class="small muted">Anticipating incoming call reasons avoids field dispatches and prevents customer defections at scale.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e220">[220]</a><a class="cite" href="#e254">[254]</a></li><li><b>Zero-touch autonomous network evolution <span class="badge moderate" title="Shares the Leadership, Ownership &amp; Operating Model theme (theme score 66; 14 claims from 10 sources) with other factors here; this factor&#39;s cited evidence carries 60% of it">40 &middot; moderate</span></b><span class="small muted">Telecom operators actively trial autonomous cross-domain network operations to manage infrastructure scale.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e279">[279]</a><a class="cite" href="#e302">[302]</a><a class="cite" href="#e304">[304]</a></li><li><b>Software engineering and test acceleration <span class="badge weak" title="Shares the Leadership, Ownership &amp; Operating Model theme (theme score 66; 14 claims from 10 sources) with other factors here; this factor&#39;s cited evidence carries 40% of it">26 &middot; weak</span></b><span class="small muted">Autonomous coding agents accelerate feature development and automated code review pipelines across developer organizations.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e24">[24]</a><a class="cite" href="#e30">[30]</a></li><li><b>Customer service cognitive load reduction <span class="badge weak" title="3 claims from 3 sources (weighted by source quality, recency and mapping confidence)">24 &middot; weak</span></b><span class="small muted">Real-time copilots equip frontline support staff with contextual answers during complicated subscriber interactions.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e14">[14]</a><a class="cite" href="#e39">[39]</a></li><li><b>Alert noise collapse and automated remediation <span class="badge weak" title="Shares the Cost &amp; ROI Clarity theme (theme score 100; 26 claims from 15 sources) with other factors here; this factor&#39;s cited evidence carries 24% of it">24 &middot; weak</span></b><span class="small muted">AIOps platforms compress billions of network alerts, driving down customer-impacting operational outages.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e128">[128]</a></li></ol></div>
       <div><div class="panel-head ph-bad">Top 5 blockers</div>
         <ol class="list bad"><li><b>Stagnant proofs-of-concept and scaling inertia <span class="badge strong" title="9 claims from 6 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Over half of telecom projects stall in pilot phases due to enterprise operating model inertia.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e320">[320]</a><a class="cite" href="#e333">[333]</a><a class="cite" href="#e527">[527]</a></li><li><b>Domain model inaccuracies and compounding errors <span class="badge strong" title="8 claims from 7 sources (weighted by source quality, recency and mapping confidence)">92 &middot; strong</span></b><span class="small muted">Operators struggle to achieve acceptable accuracy when multi-step agents encounter complex network configurations.</span> <span class="badge rc">Model Quality &amp; Reliability</span> <a class="cite" href="#e280">[280]</a><a class="cite" href="#e350">[350]</a><a class="cite" href="#e357">[357]</a></li><li><b>Restricted data access and governance deficits <span class="badge strong" title="9 claims from 7 sources (weighted by source quality, recency and mapping confidence)">81 &middot; strong</span></b><span class="small muted">Half of internal telecom data remains inaccessible to models due to absent unified governance.</span> <span class="badge rc">Data Governance &amp; Privacy</span> <a class="cite" href="#e282">[282]</a><a class="cite" href="#e344">[344]</a><a class="cite" href="#e345">[345]</a></li><li><b>Internal AI engineering skills and review bottlenecks <span class="badge strong" title="8 claims from 6 sources (weighted by source quality, recency and mapping confidence)">78 &middot; strong</span></b><span class="small muted">Severe talent shortages and developer review backlogs delay downstream adoption of agent-generated code.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e281">[281]</a><a class="cite" href="#e322">[322]</a><a class="cite" href="#e522">[522]</a></li><li><b>Vendor walled gardens and integration friction <span class="badge strong" title="5 claims from 5 sources (weighted by source quality, recency and mapping confidence)">67 &middot; strong</span></b><span class="small muted">Proprietary software barriers and siloed legacy systems undermine multi-agent interoperability across ecosystems.</span> <span class="badge rc">Integration &amp; Systems Access</span> <a class="cite" href="#e255">[255]</a><a class="cite" href="#e358">[358]</a><a class="cite" href="#e636">[636]</a></li></ol></div>
       <div><div class="panel-head ph-act">Advice: 5 actions to drive success</div>
@@ -967,7 +975,7 @@
       <span class="small muted">(84 industry-specific claims)</span></p>
     <div class="grid3">
       <div><div class="panel-head ph-good">Top 5 adoption drivers</div>
-        <ol class="list good"><li><b>Administrative task time savings for civil servants <span class="badge strong" title="22 claims from 18 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Staff reclaim daily administrative hours across routine briefing retrieval and document drafting tasks.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e155">[155]</a><a class="cite" href="#e161">[161]</a></li><li><b>Predictive constituent routing and service assist <span class="badge strong" title="22 claims from 18 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Voice and chat automation speeds constituent inquiry resolutions while elevating citizen satisfaction metrics.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e132">[132]</a><a class="cite" href="#e161">[161]</a></li><li><b>Autonomous constituent intake and inquiry resolution <span class="badge weak" title="8 claims from 6 sources (weighted by source quality, recency and mapping confidence)">33 &middot; weak</span></b><span class="small muted">Public agencies deploy autonomous agents to cut constituent inquiry resolution cycles drastically.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e351">[351]</a><a class="cite" href="#e352">[352]</a><a class="cite" href="#e723">[723]</a></li><li><b>Reduced cognitive burden for caseworker interactions <span class="badge weak" title="4 claims from 4 sources (weighted by source quality, recency and mapping confidence)">27 &middot; weak</span></b><span class="small muted">Frontline caseworkers experience lower cognitive fatigue when assisted by contextual knowledge retrieval copilots.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e160">[160]</a><a class="cite" href="#e657">[657]</a></li><li><b>High civil service drafting and synthesis utility <span class="badge weak" title="4 claims from 4 sources (weighted by source quality, recency and mapping confidence)">27 &middot; weak</span></b><span class="small muted">Public sector knowledge workers widely utilize copilots for legislative briefing drafting and summarization.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e821">[821]</a></li></ol></div>
+        <ol class="list good"><li><b>Administrative task time savings for civil servants <span class="badge moderate" title="Shares the Cost &amp; ROI Clarity theme (theme score 100; 22 claims from 18 sources) with other factors here; this factor&#39;s cited evidence carries 54% of it">54 &middot; moderate</span></b><span class="small muted">Staff reclaim daily administrative hours across routine briefing retrieval and document drafting tasks.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e155">[155]</a><a class="cite" href="#e161">[161]</a></li><li><b>Predictive constituent routing and service assist <span class="badge moderate" title="Shares the Cost &amp; ROI Clarity theme (theme score 100; 22 claims from 18 sources) with other factors here; this factor&#39;s cited evidence carries 46% of it">46 &middot; moderate</span></b><span class="small muted">Voice and chat automation speeds constituent inquiry resolutions while elevating citizen satisfaction metrics.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e132">[132]</a><a class="cite" href="#e161">[161]</a></li><li><b>Autonomous constituent intake and inquiry resolution <span class="badge weak" title="8 claims from 6 sources (weighted by source quality, recency and mapping confidence)">33 &middot; weak</span></b><span class="small muted">Public agencies deploy autonomous agents to cut constituent inquiry resolution cycles drastically.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e351">[351]</a><a class="cite" href="#e352">[352]</a><a class="cite" href="#e723">[723]</a></li><li><b>Reduced cognitive burden for caseworker interactions <span class="badge weak" title="Shares the Skills, Trust &amp; Change Management theme (theme score 27; 4 claims from 4 sources) with other factors here; this factor&#39;s cited evidence carries 57% of it">16 &middot; weak</span></b><span class="small muted">Frontline caseworkers experience lower cognitive fatigue when assisted by contextual knowledge retrieval copilots.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e160">[160]</a><a class="cite" href="#e657">[657]</a></li><li><b>High civil service drafting and synthesis utility <span class="badge weak" title="Shares the Skills, Trust &amp; Change Management theme (theme score 27; 4 claims from 4 sources) with other factors here; this factor&#39;s cited evidence carries 43% of it">12 &middot; weak</span></b><span class="small muted">Public sector knowledge workers widely utilize copilots for legislative briefing drafting and summarization.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e821">[821]</a></li></ol></div>
       <div><div class="panel-head ph-bad">Top 5 blockers</div>
         <ol class="list bad"><li><b>Lack of executive sponsorship and procurement guidance <span class="badge strong" title="10 claims from 9 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Deficient acquisition guidelines and absent senior leadership support delay enterprise public sector adoption.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e274">[274]</a><a class="cite" href="#e354">[354]</a><a class="cite" href="#e361">[361]</a></li><li><b>Sensitive data classification and oversharing risks <span class="badge strong" title="8 claims from 7 sources (weighted by source quality, recency and mapping confidence)">82 &middot; strong</span></b><span class="small muted">Permissions exposure and privacy hazards prevent grounding agents across classified public repositories.</span> <span class="badge rc">Data Governance &amp; Privacy</span> <a class="cite" href="#e156">[156]</a><a class="cite" href="#e157">[157]</a><a class="cite" href="#e382">[382]</a></li><li><b>Inefficient slide generation and spreadsheet reliability <span class="badge moderate" title="5 claims from 4 sources (weighted by source quality, recency and mapping confidence)">54 &middot; moderate</span></b><span class="small muted">Subpar quality in data synthesis and mandatory manual editing erode net civil service time savings.</span> <span class="badge rc">Model Quality &amp; Reliability</span> <a class="cite" href="#e772">[772]</a><a class="cite" href="#e793">[793]</a><a class="cite" href="#e806">[806]</a></li><li><b>Civil service training gaps and job anxiety <span class="badge moderate" title="6 claims from 4 sources (weighted by source quality, recency and mapping confidence)">49 &middot; moderate</span></b><span class="small muted">Ad-hoc training, trial-and-error onboarding, and workforce job security fears create cultural resistance.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e378">[378]</a><a class="cite" href="#e379">[379]</a><a class="cite" href="#e724">[724]</a></li><li><b>Statutory scrutiny and mandatory human oversight <span class="badge moderate" title="5 claims from 4 sources (weighted by source quality, recency and mapping confidence)">37 &middot; moderate</span></b><span class="small muted">Legal accountability mandates require strict human approvals before executing sensitive citizen casework decisions.</span> <span class="badge rc">Risk &amp; Auditability</span> <a class="cite" href="#e360">[360]</a><a class="cite" href="#e600">[600]</a><a class="cite" href="#e666">[666]</a></li></ol></div>
       <div><div class="panel-head ph-act">Advice: 5 actions to drive success</div>
@@ -983,7 +991,7 @@
       <span class="small muted">(67 industry-specific claims)</span></p>
     <div class="grid3">
       <div><div class="panel-head ph-good">Top 5 adoption drivers</div>
-        <ol class="list good"><li><b>Field dispatch avoidance and call deflection <span class="badge strong" title="19 claims from 13 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Utilities prioritize AI assistance to avoid costly physical truck rolls and resolve customer inquiries remotely.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e254">[254]</a></li><li><b>Engineering procedure drafting and knowledge acceleration <span class="badge strong" title="19 claims from 13 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Utility operators deploy generative tools to accelerate capital planning and technical procedure retrieval.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e387">[387]</a><a class="cite" href="#e390">[390]</a></li><li><b>Augmenting grid operator cognitive vigilance <span class="badge moderate" title="11 claims from 9 sources (weighted by source quality, recency and mapping confidence)">63 &middot; moderate</span></b><span class="small muted">Surging grid complexity from distributed energy resources and weather demands automated violation detection.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e402">[402]</a><a class="cite" href="#e416">[416]</a><a class="cite" href="#e417">[417]</a></li><li><b>Capturing institutional knowledge for field technicians <span class="badge weak" title="4 claims from 3 sources (weighted by source quality, recency and mapping confidence)">20 &middot; weak</span></b><span class="small muted">Agentic platforms preserve retiring technician knowledge and uplift analytical confidence among junior utility crews.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e253">[253]</a><a class="cite" href="#e596">[596]</a><a class="cite" href="#e625">[625]</a></li><li><b>Machine-speed OT and IT cyber defense <span class="badge weak" title="3 claims from 3 sources (weighted by source quality, recency and mapping confidence)">18 &middot; weak</span></b><span class="small muted">Automated security agents detect and mitigate rapid cyber intrusions across critical infrastructure environments.</span> <span class="badge rc">Security &amp; Identity</span> <a class="cite" href="#e561">[561]</a><a class="cite" href="#e566">[566]</a><a class="cite" href="#e972">[972]</a></li></ol></div>
+        <ol class="list good"><li><b>Engineering procedure drafting and knowledge acceleration <span class="badge strong" title="Shares the Cost &amp; ROI Clarity theme (theme score 100; 19 claims from 13 sources) with other factors here; this factor&#39;s cited evidence carries 71% of it">71 &middot; strong</span></b><span class="small muted">Utility operators deploy generative tools to accelerate capital planning and technical procedure retrieval.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e387">[387]</a><a class="cite" href="#e390">[390]</a></li><li><b>Augmenting grid operator cognitive vigilance <span class="badge moderate" title="11 claims from 9 sources (weighted by source quality, recency and mapping confidence)">63 &middot; moderate</span></b><span class="small muted">Surging grid complexity from distributed energy resources and weather demands automated violation detection.</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <a class="cite" href="#e402">[402]</a><a class="cite" href="#e416">[416]</a><a class="cite" href="#e417">[417]</a></li><li><b>Field dispatch avoidance and call deflection <span class="badge weak" title="Shares the Cost &amp; ROI Clarity theme (theme score 100; 19 claims from 13 sources) with other factors here; this factor&#39;s cited evidence carries 29% of it">29 &middot; weak</span></b><span class="small muted">Utilities prioritize AI assistance to avoid costly physical truck rolls and resolve customer inquiries remotely.</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <a class="cite" href="#e254">[254]</a></li><li><b>Capturing institutional knowledge for field technicians <span class="badge weak" title="4 claims from 3 sources (weighted by source quality, recency and mapping confidence)">20 &middot; weak</span></b><span class="small muted">Agentic platforms preserve retiring technician knowledge and uplift analytical confidence among junior utility crews.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e253">[253]</a><a class="cite" href="#e596">[596]</a><a class="cite" href="#e625">[625]</a></li><li><b>Machine-speed OT and IT cyber defense <span class="badge weak" title="3 claims from 3 sources (weighted by source quality, recency and mapping confidence)">18 &middot; weak</span></b><span class="small muted">Automated security agents detect and mitigate rapid cyber intrusions across critical infrastructure environments.</span> <span class="badge rc">Security &amp; Identity</span> <a class="cite" href="#e561">[561]</a><a class="cite" href="#e566">[566]</a><a class="cite" href="#e972">[972]</a></li></ol></div>
       <div><div class="panel-head ph-bad">Top 5 blockers</div>
         <ol class="list bad"><li><b>Unprepared operational data and retrieval corruption <span class="badge strong" title="9 claims from 8 sources (weighted by source quality, recency and mapping confidence)">100 &middot; strong</span></b><span class="small muted">Inconsistent data quality and vulnerability to irrelevant technical documents block reliable enterprise grounding.</span> <span class="badge rc">Data Governance &amp; Privacy</span> <a class="cite" href="#e386">[386]</a><a class="cite" href="#e388">[388]</a><a class="cite" href="#e389">[389]</a></li><li><b>Physical safety risks and unverified actions <span class="badge moderate" title="3 claims from 3 sources (weighted by source quality, recency and mapping confidence)">42 &middot; moderate</span></b><span class="small muted">Fears of operational errors causing equipment damage or blackouts prevent fully autonomous active control.</span> <span class="badge rc">Risk &amp; Auditability</span> <a class="cite" href="#e418">[418]</a><a class="cite" href="#e946">[946]</a><a class="cite" href="#e971">[971]</a></li><li><b>High-stakes hallucination risks and required verification <span class="badge moderate" title="3 claims from 3 sources (weighted by source quality, recency and mapping confidence)">41 &middot; moderate</span></b><span class="small muted">Model errors in utility operating procedures force extensive human expert checking before execution.</span> <span class="badge rc">Model Quality &amp; Reliability</span> <a class="cite" href="#e385">[385]</a><a class="cite" href="#e401">[401]</a><a class="cite" href="#e980">[980]</a></li><li><b>Operator cognitive overload and change friction <span class="badge weak" title="3 claims from 3 sources (weighted by source quality, recency and mapping confidence)">29 &middot; weak</span></b><span class="small muted">Technicians resist rigid automated scripts while control-room operators risk task-switching distraction.</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <a class="cite" href="#e400">[400]</a><a class="cite" href="#e565">[565]</a><a class="cite" href="#e761">[761]</a></li><li><b>Legacy SCADA and OT connectivity barriers <span class="badge weak" title="1 claims from 1 sources (weighted by source quality, recency and mapping confidence)">14 &middot; weak</span></b><span class="small muted">Interfacing modern agents with air-gapped, decades-old SCADA networks presents severe architectural friction.</span> <span class="badge rc">Integration &amp; Systems Access</span> <a class="cite" href="#e6">[6]</a><a class="cite" href="#e255">[255]</a></li></ol></div>
       <div><div class="panel-head ph-act">Advice: 5 actions to drive success</div>
@@ -1119,12 +1127,12 @@
         <tr><td>regulator</td><td>1.0</td></tr><tr><td>academic</td><td>1.0</td></tr><tr><td>analyst</td><td>0.9</td></tr><tr><td>consultancy</td><td>0.9</td></tr><tr><td>industry body</td><td>0.85</td></tr><tr><td>media</td><td>0.6</td></tr><tr><td>vendor</td><td>0.5</td></tr><tr><td>other</td><td>0.5</td></tr>
         <tr><td>vendor-affiliated (any type)</td><td>max 0.5</td></tr>
       </table>
-      <p class="small muted">Recency: &amp;le;1 yr &rarr; 1.0; &amp;le;2 yr &rarr; 0.8; &amp;le;3 yr &rarr; 0.6; &amp;gt;3 yr &rarr; 0.4.</p>
+      <p class="small muted">Recency: ≤1 yr → 1.0; ≤2 yr → 0.8; ≤3 yr → 0.6; &gt;3 yr → 0.4.</p>
     </div>
     <div>
       <h3>2. Weights are combined into scores (0&ndash;100)</h3>
       <p class="small"><b>Weighted evidence</b> = sum over <em>distinct sources</em> of each source's strongest claim, so one report counts once.</p>
-      <p class="small"><b>Drivers &amp; blockers:</b> weighted evidence of the root-cause group, as a % of the strongest group in the same segment or industry. Labels: strong &ge; 66, moderate &ge; 33, else weak.</p>
+      <p class="small"><b>Drivers &amp; blockers:</b> weighted evidence of the root-cause group, as a % of the strongest group in the same segment or industry. If several listed factors share one root cause, that score is split between them in proportion to the evidence each cites, so it is never counted twice. Labels: strong &ge; 66, moderate &ge; 33, else weak.</p>
       <p class="small"><b>Use cases:</b> score = 100 &times; evidence<sup>0.5</sup> &times; (0.4 + 0.6 &times; positivity), where <em>evidence</em> is weighted evidence as a share of the best-covered use case in the segment and <em>positivity</em> is the drivers' share of weighted evidence. The square root dampens heavily covered topics; well-evidenced use cases with mostly positive evidence rank highest.</p>
       <p class="small muted">Hover any score for its breakdown. The "AI rating" (1&ndash;5) is the analyst's qualitative view, shown for context only.</p>
     </div>
@@ -1139,7 +1147,7 @@
   <p class="small"><strong>Privacy:</strong> personal data (emails, phone numbers, payment cards, IBANs, national ID numbers, IP addresses,
   credentials in URLs) is masked before content reaches the model, before evidence is stored and before anything is logged.
   No PII found in the current evidence base.</p>
-  <details><summary>All cited evidence (330 claims)</summary>
+  <details><summary>All cited evidence (346 claims)</summary>
   <table>
     <tr><th>#</th><th>Claim</th><th>Source</th><th>Root cause / industries</th></tr>
     
@@ -2709,6 +2717,15 @@
          <span class="badge moderate">vendor</span></td>
       <td class="small"><span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <br><span class="muted">tmt</span></td></tr>
     
+    <tr id="e305"><td>305</td>
+      <td><span class="badge new">inhibitor</span> <span class="badge seg-workflow">Workflow</span>
+        <strong>Consumer demand for operational boundaries, transparency, and data privacy controls</strong> <em class="small">(76% want clear rules before an AI assistant acts; 71% concerned about data use)</em>
+        <blockquote class="small">One-quarter (25%) of consumers have already used Gen AI shopping tools in 2025, while a further 31% plan to use them in the future. Yet control and transparency remain critical: 76% want clear rules for when an AI assistant acts, and 71% are concerned about how Gen AI tools use their data.</blockquote></td>
+      <td class="small"><a href="https://www.capgemini.com/us-en/insights/research-library/what-matters-to-todays-consumer-2026" target="_blank" rel="noopener">What matters to today&#39;s consumer 2026</a><br>
+        <span class="muted">Capgemini Research Institute &middot; 2026-01 &middot; consultancy</span>
+        </td>
+      <td class="small"><span class="badge rc">Risk &amp; Auditability</span> <span class="badge rc">Data Governance &amp; Privacy</span> <br><span class="muted">retail_cpg</span></td></tr>
+    
     <tr id="e306"><td>306</td>
       <td><span class="badge new">inhibitor</span> <span class="badge seg-workflow">Workflow</span>
         <strong>Customer preference for human-in-the-loop support during high-stakes or complex service interactions</strong> <em class="small">(74% value human support during in-store service; 66% during purchase decisions)</em>
@@ -3033,6 +3050,15 @@
         </td>
       <td class="small"><span class="badge rc">Skills, Trust &amp; Change Management</span> <br><span class="muted">manufacturing</span></td></tr>
     
+    <tr id="e372"><td>372</td>
+      <td><span class="badge strong">driver</span> <span class="badge seg-workflow">Workflow</span>
+        <strong>EHR-integrated generative AI deployment momentum</strong> <em class="small">(31.5% currently using, 24.7% planning within 1 year)</em>
+        <blockquote class="small">Overall, 762 hospitals (weighted percentage, 31.5%) were early adopters of generative AI in 2024, 540 (weighted percentage, 24.7%) were fast followers, and 872 (weighted percentage, 43.7%) were delayed adopters.</blockquote></td>
+      <td class="small"><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC12701511" target="_blank" rel="noopener">Uptake of Generative AI Integrated With Electronic Health Records in US Hospitals</a><br>
+        <span class="muted">JAMA Network Open &middot; 2025-12 &middot; academic</span>
+        </td>
+      <td class="small"><span class="badge rc">Integration &amp; Systems Access</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <br><span class="muted">hcls</span></td></tr>
+    
     <tr id="e373"><td>373</td>
       <td><span class="badge strong">driver</span> <span class="badge seg-copilot">Copilot</span>
         <strong>native EHR vendor platform integration</strong> <em class="small">(21.9 percentage points higher likelihood for Epic users)</em>
@@ -3240,6 +3266,15 @@
         </td>
       <td class="small"><span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <br><span class="muted">energy_utilities</span></td></tr>
     
+    <tr id="e403"><td>403</td>
+      <td><span class="badge strong">driver</span> <span class="badge seg-workflow">Workflow</span>
+        <strong>Agentic AI autonomous reasoning and execution across supply chain disruption, knowledge capture, and uptime maintenance</strong> <em class="small">(80% plan to invest 20% or more of improvement budgets in smart manufacturing)</em>
+        <blockquote class="small">Through its ability to reason, plan, and take autonomous action, agentic artificial intelligence is also poised to elevate smart manufacturing and operations. Industry adoption is likely to grow considerably in the next few years. Agentic AI can help add substantial value from the back office to production to the front office by helping manufacturers: Identify and engage alternative suppliers in response to supply chain disruptions; Capture institutional knowledge from retiring employees and make jobs more attractive to younger generations; Maximize production uptime with autonomously generated shift handover reports and work instructions; Improve customer experience by simplifying and accelerating equipment repair.</blockquote></td>
+      <td class="small"><a href="https://www.deloitte.com/us/en/insights/industry/manufacturing-industrial-products/manufacturing-industry-outlook.html" target="_blank" rel="noopener">2026 Manufacturing Industry Outlook</a><br>
+        <span class="muted">Deloitte Insights &middot; 2025-11 &middot; consultancy</span>
+        </td>
+      <td class="small"><span class="badge rc">Cost &amp; ROI Clarity</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <br><span class="muted">manufacturing</span></td></tr>
+    
     <tr id="e405"><td>405</td>
       <td><span class="badge strong">driver</span> <span class="badge seg-workflow">Workflow</span>
         <strong>Convergence of agentic AI with physical robotics for unstructured factory floor operations</strong> <em class="small">(22% plan to use physical AI in two years, up from 9%)</em>
@@ -3420,6 +3455,15 @@
         </td>
       <td class="small"><span class="badge rc">Cost &amp; ROI Clarity</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <br><span class="muted">cross_industry</span></td></tr>
     
+    <tr id="e455"><td>455</td>
+      <td><span class="badge new">inhibitor</span> <span class="badge seg-workflow">Workflow</span>
+        <strong>cybersecurity concerns and cross-application workflow connectivity</strong> <em class="small">(34% cite cybersecurity; 19% cite connecting agents across applications)</em>
+        <blockquote class="small">When we look at the top-ranked challenges survey respondents cited (34% each), they strike us mostly as safe excuses. Cybersecurity concerns? AI agents can be made secure. Cost? A well-designed implementation can pay for itself... The real challenges that we see are those that were ranked at the bottom of the list and are rooted in organizational change: the ability to connect AI agents across applications and workflows (19%), organizational change to keep pace with AI (17%) and employee adoption (14%).</blockquote></td>
+      <td class="small"><a href="https://www.pwc.com/us/en/tech-effect/ai-analytics/ai-agent-survey.html" target="_blank" rel="noopener">PwC&#39;s AI Agent Survey: Key Trends About AI Agents in the Enterprise</a><br>
+        <span class="muted">PwC &middot; 2025-05 &middot; consultancy</span>
+        </td>
+      <td class="small"><span class="badge rc">Security &amp; Identity</span> <span class="badge rc">Integration &amp; Systems Access</span> <span class="badge rc">Skills, Trust &amp; Change Management</span> <br><span class="muted">cross_industry</span></td></tr>
+    
     <tr id="e456"><td>456</td>
       <td><span class="badge new">inhibitor</span> <span class="badge seg-workflow">Workflow</span>
         <strong>trust deficit in high-stakes use cases</strong>
@@ -3473,6 +3517,24 @@
         <span class="muted">Financial Conduct Authority &middot; 2026-10 &middot; regulator</span>
         </td>
       <td class="small"><span class="badge rc">Regulatory &amp; Compliance</span> <span class="badge rc">Risk &amp; Auditability</span> <br><span class="muted">fsi</span></td></tr>
+    
+    <tr id="e503"><td>503</td>
+      <td><span class="badge new">inhibitor</span> <span class="badge seg-workflow">Workflow</span>
+        <strong>Deploying automated customer journeys without sufficient testing, excluding vulnerable consumers, and retrofitting governance post-deployment</strong>
+        <blockquote class="small">But we have seen poor practice too: firms developing AI tools without a clearly defined need, excluding vulnerable consumers by default, overstating capabilities, or deploying automated customer journeys without sufficient testing... But we have also seen firms retrofit governance after technology has already been deployed or fail to adapt monitoring as systems change.</blockquote></td>
+      <td class="small"><a href="https://www.fca.org.uk/news/speeches/building-future-finance-age-ai" target="_blank" rel="noopener">Building the future of finance in the age of AI</a><br>
+        <span class="muted">Financial Conduct Authority &middot; 2026-10 &middot; regulator</span>
+        </td>
+      <td class="small"><span class="badge rc">Regulatory &amp; Compliance</span> <span class="badge rc">Risk &amp; Auditability</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <br><span class="muted">fsi</span></td></tr>
+    
+    <tr id="e504"><td>504</td>
+      <td><span class="badge new">inhibitor</span> <span class="badge seg-workflow">Workflow</span>
+        <strong>Regulatory mandates for personal senior manager accountability, human oversight triggers, and operational resilience fallback plans</strong> <em class="small">(86% of UK financial firms use AI)</em>
+        <blockquote class="small">Firms need clear accountability, risk-based controls, human oversight, escalation triggers, and senior managers personally accountable for AI systems... stress-test AI systems. Plan for failure. Maintain fallback options. Understand supplier concentrations and dependencies, including reliance on a single model.</blockquote></td>
+      <td class="small"><a href="https://www.fca.org.uk/news/speeches/building-future-finance-age-ai" target="_blank" rel="noopener">Building the future of finance in the age of AI</a><br>
+        <span class="muted">Financial Conduct Authority &middot; 2026-10 &middot; regulator</span>
+        </td>
+      <td class="small"><span class="badge rc">Regulatory &amp; Compliance</span> <span class="badge rc">Risk &amp; Auditability</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <br><span class="muted">fsi</span></td></tr>
     
     <tr id="e505"><td>505</td>
       <td><span class="badge strong">driver</span> <span class="badge seg-copilot">Copilot</span>
@@ -3888,6 +3950,15 @@
         </td>
       <td class="small"><span class="badge rc">Data Governance &amp; Privacy</span> <span class="badge rc">Integration &amp; Systems Access</span> <br><span class="muted">manufacturing</span></td></tr>
     
+    <tr id="e718"><td>718</td>
+      <td><span class="badge strong">driver</span> <span class="badge seg-workflow">Workflow</span>
+        <strong>Functional decomposition of insurance operations into domain-specialized autonomous agents</strong>
+        <blockquote class="small">The architecture decomposes the firm into multiple specialised agents, each representing distinct functional domains such as capital management, underwriting, claims processing, compliance, fraud detection, and client interaction.</blockquote></td>
+      <td class="small"><a href="https://arxiv.org/abs/2609.27636" target="_blank" rel="noopener">Multi-Agent AI Architecture for Regulated Insurers: A generic AI framework under Solvency II and the AI Act in Austria and Germany</a><br>
+        <span class="muted">arXiv &middot; 2026-09 &middot; academic</span>
+        </td>
+      <td class="small"><span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <br><span class="muted">fsi</span></td></tr>
+    
     <tr id="e723"><td>723</td>
       <td><span class="badge strong">driver</span> <span class="badge seg-workflow">Workflow</span>
         <strong>Autonomous intake, classification, and resolution of constituent service inquiries</strong> <em class="small">(Nearly 90% resolved on first call; resolution time cut to under 2.5 days)</em>
@@ -3914,6 +3985,33 @@
         <span class="muted">Salesforce &middot; 2024-04 &middot; vendor</span>
          <span class="badge moderate">vendor</span></td>
       <td class="small"><span class="badge rc">Cost &amp; ROI Clarity</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <br><span class="muted">cross_industry</span></td></tr>
+    
+    <tr id="e735"><td>735</td>
+      <td><span class="badge new">inhibitor</span> <span class="badge seg-workflow">Workflow</span>
+        <strong>Unresolved accountability and trust gap for autonomous actions</strong> <em class="small">(Only 22% of enterprises comfortable authorizing domain-level or broad autonomy)</em>
+        <blockquote class="small">Only 22% of enterprises are comfortable authorizing domain‑level or broad autonomy, reflecting unresolved accountability when AI actions have real consequences.</blockquote></td>
+      <td class="small"><a href="https://www.genpact.com/insight/autonomy-requires-trust-in-ai" target="_blank" rel="noopener">Four leadership decisions that determine whether AI scales (Autonomy requires trust in AI)</a><br>
+        <span class="muted">Genpact &amp; HFS Research &middot; 2026-04 &middot; consultancy</span>
+        </td>
+      <td class="small"><span class="badge rc">Risk &amp; Auditability</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <br><span class="muted">cross_industry</span></td></tr>
+    
+    <tr id="e736"><td>736</td>
+      <td><span class="badge new">inhibitor</span> <span class="badge seg-workflow">Workflow</span>
+        <strong>Lack of agent-native performance and execution metrics</strong> <em class="small">(67% still rely on productivity metrics designed for earlier automation)</em>
+        <blockquote class="small">71% expect it to deliver ROI faster than any previous technology wave, yet 67% still rely on productivity metrics designed for earlier automation. Without agent-native metrics, enterprises struggle to prove value, defend investments, and decide when when autonomy should expand.</blockquote></td>
+      <td class="small"><a href="https://www.genpact.com/insight/autonomy-requires-trust-in-ai" target="_blank" rel="noopener">Four leadership decisions that determine whether AI scales (Autonomy requires trust in AI)</a><br>
+        <span class="muted">Genpact &amp; HFS Research &middot; 2026-04 &middot; consultancy</span>
+        </td>
+      <td class="small"><span class="badge rc">Cost &amp; ROI Clarity</span> <span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <br><span class="muted">cross_industry</span></td></tr>
+    
+    <tr id="e737"><td>737</td>
+      <td><span class="badge new">inhibitor</span> <span class="badge seg-workflow">Workflow</span>
+        <strong>Brittle autonomy from deploying agents inside broken legacy workflows</strong>
+        <blockquote class="small">Automation inside broken workflows produces brittle autonomy, so agentic AI compounds value only when workflows are redesigned end to end. Processes need to be rebuilt so agents can own outcomes safely.</blockquote></td>
+      <td class="small"><a href="https://www.genpact.com/insight/autonomy-requires-trust-in-ai" target="_blank" rel="noopener">Four leadership decisions that determine whether AI scales (Autonomy requires trust in AI)</a><br>
+        <span class="muted">Genpact &amp; HFS Research &middot; 2026-04 &middot; consultancy</span>
+        </td>
+      <td class="small"><span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <span class="badge rc">Integration &amp; Systems Access</span> <br><span class="muted">cross_industry</span></td></tr>
     
     <tr id="e761"><td>761</td>
       <td><span class="badge new">inhibitor</span> <span class="badge seg-workflow">Workflow</span>
@@ -4005,6 +4103,42 @@
         </td>
       <td class="small"><span class="badge rc">Model Quality &amp; Reliability</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <br><span class="muted">public_sector</span></td></tr>
     
+    <tr id="e809"><td>809</td>
+      <td><span class="badge new">inhibitor</span> <span class="badge seg-workflow">Workflow</span>
+        <strong>Constitutional non-compositionality and model-risk governance gaps in multi-agent financial systems</strong>
+        <blockquote class="small">Financial institutions are beginning to deploy agentic workflows in credit, fraud, collections, compliance, and operational control. Governance remains largely component-centric: each model or agent is specified, tested, authorized, and monitored locally. That is insufficient when institutional risk arises from the joint behavior of many locally acceptable components. We call this gap constitutional non-compositionality: local compliance checks need not compose into acceptable collective outcomes such as bounded disparate impact, market integrity, or traceable accountability.</blockquote></td>
+      <td class="small"><a href="https://arxiv.org/html/2609.27994v1" target="_blank" rel="noopener">Compliant with Local Controls, Collectively Discriminatory: A Governance Architecture for Multi-Agent AI in Regulated Finance</a><br>
+        <span class="muted">arXiv (Cornell University) &middot; 2026-09 &middot; academic</span>
+        </td>
+      <td class="small"><span class="badge rc">Risk &amp; Auditability</span> <span class="badge rc">Regulatory &amp; Compliance</span> <br><span class="muted">fsi</span></td></tr>
+    
+    <tr id="e810"><td>810</td>
+      <td><span class="badge new">inhibitor</span> <span class="badge seg-workflow">Workflow</span>
+        <strong>Regulatory compliance and supervisory evidence burdens under disparate impact and EU AI Act</strong>
+        <blockquote class="small">In regulated finance, the duties that matter often attach to institutional outcomes. Disparate-impact doctrine examines lending patterns, not only component intent. EU AI Act obligations around risk management, oversight, deployer controls, and provider-side post-market monitoring... create evidence needs about system behavior.</blockquote></td>
+      <td class="small"><a href="https://arxiv.org/html/2609.27994v1" target="_blank" rel="noopener">Compliant with Local Controls, Collectively Discriminatory: A Governance Architecture for Multi-Agent AI in Regulated Finance</a><br>
+        <span class="muted">arXiv (Cornell University) &middot; 2026-09 &middot; academic</span>
+        </td>
+      <td class="small"><span class="badge rc">Regulatory &amp; Compliance</span> <span class="badge rc">Risk &amp; Auditability</span> <br><span class="muted">fsi</span></td></tr>
+    
+    <tr id="e814"><td>814</td>
+      <td><span class="badge strong">driver</span> <span class="badge seg-workflow">Workflow</span>
+        <strong>High false-positive rates and manual review overhead of keyword-based AML/KYC screening</strong>
+        <blockquote class="small">Adverse media screening is a critical component of anti-money laundering (AML) and know-your-customer (KYC) compliance processes in financial institutions. Traditional approaches rely on keyword-based searches that generate high false-positive rates or require extensive manual review.</blockquote></td>
+      <td class="small"><a href="https://arxiv.org/abs/2602.23373" target="_blank" rel="noopener">An Agentic LLM Framework for Adverse Media Screening in AML Compliance</a><br>
+        <span class="muted">arXiv (Cornell University) &middot; 2025-12 &middot; academic</span>
+        </td>
+      <td class="small"><span class="badge rc">Cost &amp; ROI Clarity</span> <span class="badge rc">Regulatory &amp; Compliance</span> <br><span class="muted">fsi</span></td></tr>
+    
+    <tr id="e815"><td>815</td>
+      <td><span class="badge strong">driver</span> <span class="badge seg-workflow">Workflow</span>
+        <strong>Autonomous multi-step document retrieval, synthesis, and risk index scoring</strong>
+        <blockquote class="small">Our system implements a multi-step approach where an LLM agent searches the web, retrieves and processes relevant documents, and computes an Adverse Media Index (AMI) score for each subject... demonstrating the system&#39;s ability to distinguish between high-risk and low-risk individuals.</blockquote></td>
+      <td class="small"><a href="https://arxiv.org/abs/2602.23373" target="_blank" rel="noopener">An Agentic LLM Framework for Adverse Media Screening in AML Compliance</a><br>
+        <span class="muted">arXiv (Cornell University) &middot; 2025-12 &middot; academic</span>
+        </td>
+      <td class="small"><span class="badge rc">Model Quality &amp; Reliability</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <br><span class="muted">fsi</span></td></tr>
+    
     <tr id="e817"><td>817</td>
       <td><span class="badge new">inhibitor</span> <span class="badge seg-workflow">Workflow</span>
         <strong>High coordination complexity and risk of emergent bullwhip effects</strong>
@@ -4014,6 +4148,15 @@
         </td>
       <td class="small"><span class="badge rc">Leadership, Ownership &amp; Operating Model</span> <span class="badge rc">Integration &amp; Systems Access</span> <br><span class="muted">manufacturing, retail_cpg</span></td></tr>
     
+    <tr id="e820"><td>820</td>
+      <td><span class="badge strong">driver</span> <span class="badge seg-copilot">Copilot</span>
+        <strong>Consistent working-week time savings and multi-million pound capacity generation at scale</strong> <em class="small">(2-3% of working week (60 mins/week) saved; £50m projected net annual productivity benefits at 50,000 licenses)</em>
+        <blockquote class="small">on average, HMRC participants self-reported saving 2-3% of their working week, equating to around 60 minutes per week for a full-time equivalent working pattern. ... analysts estimate that deploying up to 50,000 Copilot licenses until March 28, would generate around £50m of capacity generating, net productivity benefits per year.</blockquote></td>
+      <td class="small"><a href="https://www.gov.uk/government/publications/evaluation-report-phase-3-trial-of-microsoft-copilot/evaluating-the-impact-of-microsoft-copilot-in-hmrc" target="_blank" rel="noopener">Evaluating the Impact of Microsoft Copilot in HMRC</a><br>
+        <span class="muted">HM Revenue &amp; Customs (HMRC) &amp; Valuation Office Agency (VOA) &middot; 2026-07 &middot; regulator</span>
+        </td>
+      <td class="small"><span class="badge rc">Cost &amp; ROI Clarity</span> <br><span class="muted">public_sector</span></td></tr>
+    
     <tr id="e821"><td>821</td>
       <td><span class="badge strong">driver</span> <span class="badge seg-copilot">Copilot</span>
         <strong>High utility for document drafting, meeting summarisation, and documentation search</strong> <em class="small">(53% used Word drafting; 45% used Teams collaboration)</em>
@@ -4022,6 +4165,15 @@
         <span class="muted">HM Revenue &amp; Customs (HMRC) &amp; Valuation Office Agency (VOA) &middot; 2026-07 &middot; regulator</span>
         </td>
       <td class="small"><span class="badge rc">Skills, Trust &amp; Change Management</span> <span class="badge rc">Cost &amp; ROI Clarity</span> <br><span class="muted">public_sector</span></td></tr>
+    
+    <tr id="e822"><td>822</td>
+      <td><span class="badge new">inhibitor</span> <span class="badge seg-copilot">Copilot</span>
+        <strong>Security and data privacy concerns preventing active license utilization in public sector</strong> <em class="small">(46% of non-users cited security and privacy concerns)</em>
+        <blockquote class="small">survey responses showed that 46% of non-users selected security and data privacy concerns as the main reason for not using their license. at the time of the trial, participants could only use Copilot on material below Official Sensitive classification.</blockquote></td>
+      <td class="small"><a href="https://www.gov.uk/government/publications/evaluation-report-phase-3-trial-of-microsoft-copilot/evaluating-the-impact-of-microsoft-copilot-in-hmrc" target="_blank" rel="noopener">Evaluating the Impact of Microsoft Copilot in HMRC</a><br>
+        <span class="muted">HM Revenue &amp; Customs (HMRC) &amp; Valuation Office Agency (VOA) &middot; 2026-07 &middot; regulator</span>
+        </td>
+      <td class="small"><span class="badge rc">Data Governance &amp; Privacy</span> <span class="badge rc">Security &amp; Identity</span> <br><span class="muted">public_sector</span></td></tr>
     
     <tr id="e873"><td>873</td>
       <td><span class="badge new">inhibitor</span> <span class="badge seg-workflow">Workflow</span>
@@ -4129,17 +4281,32 @@
 </main>
 <footer>Generated by the Enterprise Agentic AI Adoption Research Agent &middot; public sources only &middot; machine-generated; verify against cited evidence.</footer>
 <script>
+  function selectIndustry(id) {
+    var btn = null;
+    document.querySelectorAll('.picker button').forEach(function (b) {
+      var on = b.dataset.ind === id;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+      if (on) { btn = b; }
+    });
+    if (!btn) { return null; }
+    document.querySelectorAll('.ind-panel').forEach(function (p) {
+      p.classList.toggle('active', p.id === 'ind-' + id);
+    });
+    return btn;
+  }
   document.querySelectorAll('.picker button').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      document.querySelectorAll('.picker button').forEach(function (b) { b.classList.remove('active'); });
-      document.querySelectorAll('.ind-panel').forEach(function (p) { p.classList.remove('active'); });
-      btn.classList.add('active');
-      document.getElementById('ind-' + btn.dataset.ind).classList.add('active');
+      selectIndustry(btn.dataset.ind);
       try { history.replaceState(null, '', '#industry-' + btn.dataset.ind); } catch (e) { /* sandboxed hosts (e.g. x20) */ }
     });
   });
-  var m = location.hash.match(/^#industry-(.+)$/);
-  if (m) { var b = document.querySelector('.picker button[data-ind="' + m[1] + '"]'); if (b) { b.click(); b.scrollIntoView(); } }
+  function fromHash() {
+    var m = location.hash.match(/^#industry-([a-z0-9_]+)$/);
+    if (m) { var b = selectIndustry(m[1]); if (b) { b.scrollIntoView(); } }
+  }
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
 </script>
 </body>
 </html>
