@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from collections import Counter
 from types import SimpleNamespace
 
 import httpx
@@ -10,7 +11,13 @@ from google.genai import types
 
 from adoption_agent import config
 from adoption_agent.guardrails import PiiRedactionPlugin
-from adoption_agent.privacy import count_placeholders, redact, redact_obj, redact_regex
+from adoption_agent.privacy import (
+    count_placeholders,
+    normalise_dlp_placeholders,
+    redact,
+    redact_obj,
+    redact_regex,
+)
 from adoption_agent.store import EvidenceStore
 from adoption_agent.tools import web
 from adoption_agent.tools.evidence import record_evidence
@@ -78,6 +85,28 @@ def test_dlp_backend_failure_never_fails_open(monkeypatch):
     monkeypatch.setattr("adoption_agent.privacy.redact_dlp", boom)
     masked, counts = redact("email x@y.com")
     assert masked == "email [REDACTED_EMAIL]" and counts["EMAIL"] == 1
+
+
+def test_dlp_placeholders_do_not_double_prefix_regex_placeholders():
+    text = "[REDACTED_EMAIL] met [PERSON_NAME] at [STREET_ADDRESS]"
+    once = normalise_dlp_placeholders(text)
+    assert once == "[REDACTED_EMAIL] met [REDACTED_PERSON_NAME] at [REDACTED_STREET_ADDRESS]"
+    assert normalise_dlp_placeholders(once) == once
+
+
+def test_redact_obj_uses_configured_dlp_backend(monkeypatch):
+    """Tool results and model requests get DLP info types (e.g. names) too."""
+    monkeypatch.setenv("ADOPTION_AGENT_PII_BACKEND", "dlp")
+
+    def fake_dlp(text, project):
+        return text.replace("Jane Doe", "[REDACTED_PERSON_NAME]"), Counter(
+            {"PERSON_NAME": int("Jane Doe" in text)}
+        )
+
+    monkeypatch.setattr("adoption_agent.privacy.redact_dlp", fake_dlp)
+    masked, counts = redact_obj({"items": ["Jane Doe (jane@corp.com) said 40% adopt"]})
+    assert masked["items"][0] == "[REDACTED_PERSON_NAME] ([REDACTED_EMAIL]) said 40% adopt"
+    assert counts["PERSON_NAME"] == 1 and counts["EMAIL"] == 1
 
 
 # ------------------------------------------------------- enforcement points

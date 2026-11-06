@@ -22,7 +22,7 @@ from typing import Any
 from google.adk.plugins.base_plugin import BasePlugin
 
 from . import config
-from .privacy import redact_obj, redact_regex
+from .privacy import redact, redact_obj
 
 logger = logging.getLogger("adoption_agent.privacy")
 
@@ -75,7 +75,7 @@ class PiiRedactionPlugin(BasePlugin):
         for content in llm_request.contents or []:
             for part in content.parts or []:
                 if part.text:
-                    part.text, c = redact_regex(part.text)
+                    part.text, c = redact(part.text)
                     counts.update(c)
                 if part.function_response and part.function_response.response:
                     part.function_response.response, c = redact_obj(part.function_response.response)

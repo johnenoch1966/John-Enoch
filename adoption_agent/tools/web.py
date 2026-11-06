@@ -7,10 +7,12 @@ the primary source. Output is truncated to keep the context window small.
 
 from __future__ import annotations
 
+import asyncio
 import io
 import ipaddress
 import logging
 import re
+import socket
 from urllib.parse import urlsplit
 
 import httpx
@@ -26,9 +28,22 @@ _USER_AGENT = (
     "+https://github.com/johnenoch1966/John-Enoch)"
 )
 _cache: dict[str, dict] = {}
+_MAX_REDIRECTS = 5
+
+
+def _ip_is_public(ip: ipaddress.IPv4Address | ipaddress.IPv6Address) -> bool:
+    return not (
+        ip.is_private
+        or ip.is_loopback
+        or ip.is_link_local
+        or ip.is_reserved
+        or ip.is_multicast
+        or ip.is_unspecified
+    )
 
 
 def _is_public_http_url(url: str) -> bool:
+    """Syntactic check: http(s) scheme, a host, and no literal non-public IP."""
     parts = urlsplit(url)
     if parts.scheme not in ("http", "https") or not parts.hostname:
         return False
@@ -36,10 +51,35 @@ def _is_public_http_url(url: str) -> bool:
     if host in ("localhost",) or host.endswith(".local") or host.endswith(".internal"):
         return False
     try:
-        ip = ipaddress.ip_address(host)
-        return not (ip.is_private or ip.is_loopback or ip.is_link_local)
+        return _ip_is_public(ipaddress.ip_address(host))
     except ValueError:
         return True
+
+
+async def _resolve_host(host: str) -> list[str]:
+    """IP addresses a hostname resolves to (empty if it does not resolve)."""
+    try:
+        infos = await asyncio.get_running_loop().getaddrinfo(host, None)
+    except (socket.gaierror, UnicodeError):
+        return []
+    return [info[4][0] for info in infos]
+
+
+async def _is_safe_target(url: str) -> bool:
+    """Public URL whose hostname does not resolve to a non-public address.
+
+    An unresolvable host is allowed here: the HTTP client cannot connect to it
+    either, so the request fails safely on its own.
+    """
+    if not _is_public_http_url(url):
+        return False
+    for addr in await _resolve_host(urlsplit(url).hostname or ""):
+        try:
+            if not _ip_is_public(ipaddress.ip_address(addr.split("%")[0])):
+                return False
+        except ValueError:
+            return False
+    return True
 
 
 def _html_to_text(html: str) -> tuple[str, str]:
@@ -85,17 +125,32 @@ async def fetch_page(url: str) -> dict:
       (truncated to a few thousand characters), truncated (bool), and
       error_message on failure.
     """
-    if not _is_public_http_url(url):
+    if not await _is_safe_target(url):
         return {"status": "error", "error_message": f"Refusing non-public URL: {url}"}
     if url in _cache:
         return _cache[url]
     try:
+        # Redirects are followed manually so every hop is checked; otherwise a
+        # public URL could redirect the fetcher to an internal address.
         async with httpx.AsyncClient(
-            follow_redirects=True,
+            follow_redirects=False,
             timeout=config.FETCH_TIMEOUT_S,
             headers={"User-Agent": _USER_AGENT},
         ) as client:
-            resp = await client.get(url)
+            current = url
+            for _ in range(_MAX_REDIRECTS + 1):
+                resp = await client.get(current)
+                location = resp.headers.get("location")
+                if not (resp.is_redirect and location):
+                    break
+                current = str(resp.url.join(location))
+                if not await _is_safe_target(current):
+                    return {
+                        "status": "error",
+                        "error_message": f"Refusing redirect to non-public URL: {current}",
+                    }
+            else:
+                return {"status": "error", "error_message": "Too many redirects"}
         if resp.status_code >= 400:
             return {
                 "status": "error",

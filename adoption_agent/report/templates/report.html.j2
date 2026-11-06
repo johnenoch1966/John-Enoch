@@ -38,6 +38,10 @@
   table { width: 100%; border-collapse: collapse; font-size: 14px; }
   th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: middle; }
   th { background: #f1f3f4; font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; color: var(--muted); }
+  table.uc { table-layout: fixed; }
+  table.uc td { overflow-wrap: anywhere; }
+  .uc col.c-rank { width: 44px; } .uc col.c-name { width: 22%; } .uc col.c-score { width: 150px; }
+  .uc col.c-stage { width: 110px; } .uc col.c-ev { width: 15%; }
   .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
   .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
@@ -103,7 +107,14 @@
 {% macro score_tip(d) -%}
 {%- if d and d.claims -%}{{ d.claims }} claims from {{ d.sources }} sources; evidence {{ (d.evidence * 100)|round|int }}% of segment best; drivers {{ (d.positivity * 100)|round|int }}% of weighted evidence; vendor share {{ (d.vendor_share * 100)|round|int }}%{%- else -%}No direct evidence{%- endif -%}
 {%- endmacro %}
-{% macro fscore(f) -%}<span class="badge {{ f.strength }}" title="{{ f.evidence_claims }} claims from {{ f.evidence_sources }} sources (weighted by source quality, recency and mapping confidence)">{{ f.score|round|int }} &middot; {{ f.strength }}</span>{%- endmacro %}
+{% macro fscore(f) -%}
+{%- if f.shared_theme -%}{%- set tip = "Shares the " ~ r.taxonomy.get(f.root_cause_id, f.root_cause_id) ~ " theme (theme score " ~ (f.theme_score|round|int) ~ "; " ~ f.evidence_claims ~ " claims from " ~ f.evidence_sources ~ " sources) with other factors here; this factor's cited evidence carries " ~ ((f.theme_share * 100)|round|int) ~ "% of it" -%}
+{%- else -%}{%- set tip = f.evidence_claims ~ " claims from " ~ f.evidence_sources ~ " sources (weighted by source quality, recency and mapping confidence)" -%}{%- endif -%}
+<span class="badge {{ f.strength }}" title="{{ tip }}">{{ f.score|round|int }} &middot; {{ f.strength }}</span>{%- endmacro %}
+{% macro uc_head() -%}
+<colgroup><col class="c-rank"><col class="c-name"><col class="c-score"><col class="c-stage"><col><col><col class="c-ev"></colgroup>
+<tr><th>#</th><th>Use case</th><th title="0-100, computed from weighted evidence; see How scores are calculated">Score</th><th>Adoption stage</th><th>Main value</th><th>Main blocker</th><th>Evidence</th></tr>
+{%- endmacro %}
 {% macro segbadge(seg) -%}<span class="badge seg-{{ seg }}">{{ "Copilot" if seg == "copilot" else "Workflow" }}</span>{%- endmacro %}
 
 <header>
@@ -148,13 +159,13 @@
 <!-- (ii) Use cases by industry -->
 <section id="by-industry">
   <h2>Top AI use cases by industry</h2>
-  <p class="sub">Most widely deployed agentic AI use cases per industry. {{ segbadge("copilot") }} = desktop assistant use &middot; {{ segbadge("workflow") }} = process-embedded agent.</p>
+  <p class="sub">Most widely deployed agentic AI use cases per industry, ranked by industry-specific weighted evidence. {{ segbadge("copilot") }} = desktop assistant use &middot; {{ segbadge("workflow") }} = process-embedded agent.</p>
   <div class="cards">
   {% for ind in r.industry_views %}
     <div class="card">
       <h4>{{ ind.name }}</h4>
       <div class="meta">{{ ind.claim_count }} industry-specific claims</div>
-      <ol>{% for u in ind.top_use_cases %}<li>{{ u.name }} {{ segbadge(u.segment) }}</li>{% else %}<li class="muted">No data yet</li>{% endfor %}</ol>
+      <ol>{% for u in ind.top_use_cases %}<li>{{ u.name }} {{ segbadge(u.segment) }}{% if u.claims %} <span class="small muted" title="Industry-specific claims about this use case">({{ u.claims }})</span>{% endif %}</li>{% else %}<li class="muted">No data yet</li>{% endfor %}</ol>
     </div>
   {% endfor %}
   </div>
@@ -166,11 +177,11 @@
   <h2>{{ seg_titles.get(seg.segment, seg.segment) }} {{ segbadge(seg.segment) }}</h2>
   <p class="sub">{{ seg_subs.get(seg.segment, "") }}</p>
   <p class="headline"><strong>{{ seg.headline }}</strong></p>
-  <table>
-    <tr><th>#</th><th>Use case</th><th title="0-100, computed from weighted evidence; see How scores are calculated">Score</th><th>Adoption stage</th><th>Main value</th><th>Main blocker</th><th>Evidence</th></tr>
+  <table class="uc">
+    {{ uc_head() }}
     {% for u in view.ranked %}
-    {% if loop.index == 13 %}</table><details><summary>Show {{ view.ranked|length - 12 }} more use cases</summary><table>
-    <tr><th>#</th><th>Use case</th><th title="0-100, computed from weighted evidence; see How scores are calculated">Score</th><th>Adoption stage</th><th>Main value</th><th>Main blocker</th><th>Evidence</th></tr>{% endif %}
+    {% if loop.index == 13 %}</table><details><summary>Show {{ view.ranked|length - 12 }} more use cases</summary><table class="uc">
+    {{ uc_head() }}{% endif %}
     <tr>
       <td class="rank">{{ loop.index }}</td>
       <td><strong>{{ u.name }}</strong></td>
@@ -211,7 +222,7 @@
   <h2>Industry deep-dive</h2>
   <p class="sub">Pick an industry to see its top 5 adoption drivers, top 5 blockers and the 5 actions most associated with success.</p>
   <div class="picker" role="tablist">
-    {% for ind in r.industry_views %}<button type="button" data-ind="{{ ind.id }}" class="{{ 'active' if loop.first }}" role="tab">{{ ind.name.split(' (')[0] if '(' not in ind.name else ind.name.split('(')[1].rstrip(')') }}</button>{% endfor %}
+    {% for ind in r.industry_views %}<button type="button" data-ind="{{ ind.id }}" class="{{ 'active' if loop.first }}" role="tab" aria-selected="{{ 'true' if loop.first else 'false' }}" aria-controls="ind-{{ ind.id }}" title="{{ ind.name }}">{{ ind.name.split(' (')[0] if '(' not in ind.name else ind.name.split('(')[1].rstrip(')') }}</button>{% endfor %}
   </div>
   {% for ind in r.industry_views %}{% set p = ind.profile %}
   <div class="ind-panel {{ 'active' if loop.first }}" id="ind-{{ ind.id }}" role="tabpanel">
@@ -284,12 +295,12 @@
         {% for t, w in r.scoring.source_weights.items()|sort(attribute=1, reverse=True) %}<tr><td>{{ t|replace("_", " ") }}</td><td>{{ w }}</td></tr>{% endfor %}
         <tr><td>vendor-affiliated (any type)</td><td>max {{ r.scoring.vendor_affiliated_cap }}</td></tr>
       </table>
-      <p class="small muted">Recency: {% for b in r.scoring.recency %}{{ "&le;" if b.max_age_years < 99 else "&gt;" }}{{ b.max_age_years if b.max_age_years < 99 else r.scoring.recency[-2].max_age_years }} yr &rarr; {{ b.weight }}{{ "; " if not loop.last }}{% endfor %}.</p>
+      <p class="small muted">Recency: {% for b in r.scoring.recency %}{{ "≤" if b.max_age_years < 99 else ">" }}{{ b.max_age_years if b.max_age_years < 99 else r.scoring.recency[-2].max_age_years }} yr → {{ b.weight }}{{ "; " if not loop.last }}{% endfor %}.</p>
     </div>
     <div>
       <h3>2. Weights are combined into scores (0&ndash;100)</h3>
       <p class="small"><b>Weighted evidence</b> = sum over <em>distinct sources</em> of each source's strongest claim, so one report counts once.</p>
-      <p class="small"><b>Drivers &amp; blockers:</b> weighted evidence of the root-cause group, as a % of the strongest group in the same segment or industry. Labels: strong &ge; {{ r.scoring.strength_bands.strong }}, moderate &ge; {{ r.scoring.strength_bands.moderate }}, else weak.</p>
+      <p class="small"><b>Drivers &amp; blockers:</b> weighted evidence of the root-cause group, as a % of the strongest group in the same segment or industry. If several listed factors share one root cause, that score is split between them in proportion to the evidence each cites, so it is never counted twice. Labels: strong &ge; {{ r.scoring.strength_bands.strong }}, moderate &ge; {{ r.scoring.strength_bands.moderate }}, else weak.</p>
       <p class="small"><b>Use cases:</b> score = 100 &times; evidence<sup>{{ r.scoring.evidence_exponent }}</sup> &times; ({{ r.scoring.balance_floor }} + {{ (1 - r.scoring.balance_floor)|round(2) }} &times; positivity), where <em>evidence</em> is weighted evidence as a share of the best-covered use case in the segment and <em>positivity</em> is the drivers' share of weighted evidence. The square root dampens heavily covered topics; well-evidenced use cases with mostly positive evidence rank highest.</p>
       <p class="small muted">Hover any score for its breakdown. The "AI rating" (1&ndash;5) is the analyst's qualitative view, shown for context only.</p>
     </div>
@@ -330,17 +341,32 @@
 </main>
 <footer>Generated by the Enterprise Agentic AI Adoption Research Agent &middot; public sources only &middot; machine-generated; verify against cited evidence.</footer>
 <script>
+  function selectIndustry(id) {
+    var btn = null;
+    document.querySelectorAll('.picker button').forEach(function (b) {
+      var on = b.dataset.ind === id;
+      b.classList.toggle('active', on);
+      b.setAttribute('aria-selected', on ? 'true' : 'false');
+      if (on) { btn = b; }
+    });
+    if (!btn) { return null; }
+    document.querySelectorAll('.ind-panel').forEach(function (p) {
+      p.classList.toggle('active', p.id === 'ind-' + id);
+    });
+    return btn;
+  }
   document.querySelectorAll('.picker button').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      document.querySelectorAll('.picker button').forEach(function (b) { b.classList.remove('active'); });
-      document.querySelectorAll('.ind-panel').forEach(function (p) { p.classList.remove('active'); });
-      btn.classList.add('active');
-      document.getElementById('ind-' + btn.dataset.ind).classList.add('active');
+      selectIndustry(btn.dataset.ind);
       try { history.replaceState(null, '', '#industry-' + btn.dataset.ind); } catch (e) { /* sandboxed hosts (e.g. x20) */ }
     });
   });
-  var m = location.hash.match(/^#industry-(.+)$/);
-  if (m) { var b = document.querySelector('.picker button[data-ind="' + m[1] + '"]'); if (b) { b.click(); b.scrollIntoView(); } }
+  function fromHash() {
+    var m = location.hash.match(/^#industry-([a-z0-9_]+)$/);
+    if (m) { var b = selectIndustry(m[1]); if (b) { b.scrollIntoView(); } }
+  }
+  window.addEventListener('hashchange', fromHash);
+  fromHash();
 </script>
 </body>
 </html>

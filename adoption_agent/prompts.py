@@ -192,7 +192,9 @@ For EACH segment produce:
   one per catalog id above; never skip a use case. Base scores on
   use_case_evidence and related groups; where a use case has little direct
   evidence, still include it and score it conservatively (1-2).
-- 5 top drivers and 5 top inhibitors (strongest first)
+- 5 top drivers and 5 top inhibitors (strongest first), each from a DIFFERENT
+  root_cause_id where the evidence allows (the page scores factors by root
+  cause, so two factors with the same root cause would share one score)
 - 3-4 approaches associated with HIGH adoption, 3-4 patterns behind LOW adoption
 Then: 4-6 semantic-bias insights (stated framing vs underlying issue), 2-4
 source-bias notes, change_since_last_run (max 3 sentences), 3 open questions.
@@ -225,7 +227,9 @@ For EACH industry: headline (one sentence), evidence_strength, up to 8
 top_use_case_ids ranked by how widely they are deployed in that industry
 (use catalog ids only; informed by use_case_mentions and catalog industries),
 EXACTLY 5 drivers, EXACTLY 5 blockers, and EXACTLY 5 concrete actions
-(advice) that drive successful adoption in that industry.
+(advice) that drive successful adoption in that industry. Give each driver
+and each blocker a DIFFERENT root_cause_id where the evidence allows (the page
+scores factors by root cause, so duplicates would share one score).
 """
 
 CRITIC = """
@@ -247,6 +251,8 @@ Check:
 2. Both segments are present, each with use_case_impact covering its
    catalog use cases, drivers, inhibitors, high- and low-adoption approaches.
 3. Every industry profile has exactly 5 drivers, 5 blockers and 5 advice items.
+   Within each driver or blocker list, root_cause_ids should not repeat unless
+   the digest has fewer distinct root causes than items.
 4. No unsupported statistics; semantic-bias insights genuinely contrast the
    stated framing with an underlying cause.
 

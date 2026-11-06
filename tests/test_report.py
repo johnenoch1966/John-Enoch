@@ -83,10 +83,86 @@ def test_industry_views_filter_unknown_ids_and_fall_back(tmp_home):
     assert list(views) == list(config.INDUSTRIES)
     fsi = views["fsi"]
     top_ids = [u["id"] for u in fsi["top_use_cases"]]
-    assert top_ids[:2] == ["uc-10", "uc-0"] and "not-a-use-case" not in top_ids
+    # Ranked by FSI-specific evidence: uc-0 has 3 FSI claims, the AI's first pick
+    # (uc-10) has none, so it follows; unknown ids are dropped.
+    assert top_ids[:2] == ["uc-0", "uc-10"] and "not-a-use-case" not in top_ids
+    assert fsi["top_use_cases"][0]["claims"] == 3
     assert len(top_ids) >= 5  # topped up from catalog industry tags
     assert fsi["claim_count"] == 3 and fsi["profile"]["advice"][0]["action"] == "FSI action 1"
     assert views["hcls"]["profile"] is None and views["hcls"]["top_use_cases"]
+
+
+def test_factors_sharing_a_root_cause_split_its_score(tmp_home):
+    store = EvidenceStore(config.EVIDENCE_DB)
+    a_ids = _seed(store)  # source 1: 3 risk_auditability copilot inhibitors
+    sid2, _ = store.add_source(sample_source(2), "r1")
+    b_id, _ = store.add_claim(sid2, sample_claim("Audit gaps"), "r1")
+    store.add_mapping(
+        RootCauseMappingInput(
+            claim_id=b_id, root_cause_ids=["risk_auditability"], inference="i", industries=["fsi"]
+        ),
+        "r1",
+    )
+    syn = sample_synthesis(a_ids + [b_id])
+    first = syn.segments[0].top_inhibitors[0]
+    second = first.model_copy(update={"factor": "No audit trail", "evidence_ids": [b_id]})
+    first.evidence_ids = [a_ids[0], b_id]  # cites both sources
+    syn.segments[0].top_inhibitors.append(second)
+
+    report = build_report(
+        syn, store, run_id="r1", catalog=sample_catalog().model_dump(), previous=None
+    )
+    blockers = report["segment_views"]["copilot"]["blockers"]
+    assert [b["factor"] for b in blockers] == ["Connectors disabled", "No audit trail"]
+    # Theme score 100 split 2:1 by each factor's cited (distinct-source) evidence.
+    assert [b["score"] for b in blockers] == [66.7, 33.3]
+    assert all(b["shared_theme"] and b["theme_score"] == 100.0 for b in blockers)
+    assert [b["strength"] for b in blockers] == ["strong", "moderate"]
+    # Unshared themes keep their full score.
+    workflow = report["segment_views"]["workflow"]["blockers"][0]
+    assert workflow["shared_theme"] is False
+    html = render_html(report)
+    assert "theme score 100" in html and "carries 67% of it" in html
+
+
+def test_use_case_citations_match_tagged_claims(tmp_home):
+    store = EvidenceStore(config.EVIDENCE_DB)
+    ids = _seed(store)  # 3 claims tagged uc-0
+    sid, _ = store.add_source(sample_source(3), "r1")
+    uc2_id, _ = store.add_claim(sid, sample_claim("Slides", use_case_ids=["uc-2"]), "r1")
+    # The AI cites all claims for uc-0 and uc-1, and never assesses uc-2.
+    report = build_report(
+        sample_synthesis(ids + [uc2_id]),
+        store,
+        run_id="r1",
+        catalog=sample_catalog().model_dump(),
+        previous=None,
+    )
+    rows = {r["use_case_id"]: r for r in report["segment_views"]["copilot"]["ranked"]}
+    assert rows["uc-0"]["evidence_ids"] == ids and rows["uc-0"]["evidence_count"] == 3
+    assert rows["uc-1"]["evidence_ids"] == [] and rows["uc-1"]["low_evidence"]
+    assert rows["uc-2"]["evidence_ids"] == [uc2_id] and not rows["uc-2"]["assessed"]
+    # Every cited link resolves to an appendix row.
+    appendix = {e["id"] for e in report["evidence"]}
+    assert all(i in appendix for r in rows.values() for i in r["evidence_ids"])
+
+
+def test_render_scoring_text_and_picker_accessibility(tmp_home):
+    store = EvidenceStore(config.EVIDENCE_DB)
+    ids = _seed(store)
+    report = build_report(
+        sample_synthesis(ids),
+        store,
+        run_id="r1",
+        catalog=sample_catalog().model_dump(),
+        previous=None,
+    )
+    html = render_html(report)
+    assert "≤1 yr → 1.0" in html and "&amp;le;" not in html and "&amp;gt;" not in html
+    assert 'aria-selected="true" aria-controls="ind-fsi"' in html
+    # Both halves of a long use-case table share one column layout
+    # (copilot: 10 rows, 1 table; workflow: 40 rows, split into 2 tables).
+    assert html.count('<table class="uc">') == 3 and html.count('<col class="c-rank">') == 3
 
 
 def test_diff_detects_new_and_dropped_factors():

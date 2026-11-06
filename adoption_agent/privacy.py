@@ -150,11 +150,14 @@ def redact_dlp(text: str, project: str) -> tuple[str, Counter[str]]:
         counts[t.get("infoType", {}).get("name", "UNKNOWN")] += int(
             t.get("transformedBytes", 0) > 0
         )
-    # DLP emits [INFO_TYPE]; normalise to our placeholder style.
-    masked = re.sub(
-        r"\[([A-Z_]+)\]", lambda m: PLACEHOLDER.format(m.group(1)), data["item"]["value"]
-    )
-    return masked, counts
+    # DLP emits [INFO_TYPE]; normalise to our placeholder style without
+    # touching placeholders the regex pass already wrote ([REDACTED_...]).
+    return normalise_dlp_placeholders(data["item"]["value"]), counts
+
+
+def normalise_dlp_placeholders(text: str) -> str:
+    """Rewrite DLP's `[INFO_TYPE]` markers as `[REDACTED_INFO_TYPE]` (idempotent)."""
+    return re.sub(r"\[(?!REDACTED_)([A-Z_]+)\]", lambda m: PLACEHOLDER.format(m.group(1)), text)
 
 
 def redact(text: str) -> tuple[str, Counter[str]]:
@@ -176,10 +179,14 @@ def mask(text: str) -> str:
 
 
 def redact_obj(obj: Any, counts: Counter[str] | None = None) -> tuple[Any, Counter[str]]:
-    """Recursively mask all strings inside dicts/lists (e.g. tool results)."""
+    """Recursively mask all strings inside dicts/lists (e.g. tool results).
+
+    Uses the configured backend (`redact`), so the DLP info types also apply
+    to tool results and model requests when `ADOPTION_AGENT_PII_BACKEND=dlp`.
+    """
     counts = counts if counts is not None else Counter()
     if isinstance(obj, str):
-        masked, c = redact_regex(obj)
+        masked, c = redact(obj)
         counts.update(c)
         return masked, counts
     if isinstance(obj, dict):

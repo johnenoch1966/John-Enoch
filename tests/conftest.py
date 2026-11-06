@@ -38,3 +38,17 @@ def tmp_home(tmp_path, monkeypatch):
 @pytest.fixture
 def tool_context():
     return FakeToolContext()
+
+
+@pytest.fixture(autouse=True)
+def public_dns(monkeypatch):
+    """Keep tests hermetic: every hostname 'resolves' to a public address.
+
+    Tests that exercise DNS-based SSRF checks override `web._resolve_host`.
+    """
+    from adoption_agent.tools import web
+
+    async def resolve(host: str) -> list[str]:
+        return ["93.184.215.14"]
+
+    monkeypatch.setattr(web, "_resolve_host", resolve)

@@ -58,3 +58,39 @@ async def test_fetch_page_reports_http_errors(mock_http):
 async def test_fetch_page_refuses_non_public_urls(url):
     res = await web.fetch_page(url)
     assert res["status"] == "error" and "non-public" in res["error_message"]
+
+
+async def test_fetch_page_follows_public_redirects(mock_http):
+    mock_http["https://example.org/old"] = httpx.Response(301, headers={"location": "/new"})
+    mock_http["https://example.org/new"] = httpx.Response(
+        200, headers={"content-type": "text/html"}, text="<article>moved here</article>"
+    )
+    res = await web.fetch_page("https://example.org/old")
+    assert res["status"] == "ok" and res["final_url"] == "https://example.org/new"
+    assert "moved here" in res["text"]
+
+
+@pytest.mark.parametrize(
+    "target", ["http://127.0.0.1/admin", "http://169.254.169.254/latest/meta-data/"]
+)
+async def test_fetch_page_refuses_redirect_to_internal_address(mock_http, target):
+    mock_http["https://example.org/redir"] = httpx.Response(302, headers={"location": target})
+    res = await web.fetch_page("https://example.org/redir")
+    assert res["status"] == "error" and "non-public" in res["error_message"]
+
+
+async def test_fetch_page_refuses_host_resolving_to_private_ip(mock_http, monkeypatch):
+    async def resolve(host: str) -> list[str]:
+        return ["10.1.2.3"] if host == "intranet.example.com" else ["93.184.215.14"]
+
+    monkeypatch.setattr(web, "_resolve_host", resolve)
+    res = await web.fetch_page("https://intranet.example.com/wiki")
+    assert res["status"] == "error" and "non-public" in res["error_message"]
+
+
+async def test_fetch_page_limits_redirect_chains(mock_http):
+    mock_http["https://example.org/loop"] = httpx.Response(
+        302, headers={"location": "https://example.org/loop"}
+    )
+    res = await web.fetch_page("https://example.org/loop")
+    assert res["status"] == "error" and "redirects" in res["error_message"]
