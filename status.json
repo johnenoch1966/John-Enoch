@@ -1,6 +1,5 @@
 {
-  "state": "published",
-  "finished_at": "2026-11-03T17:08:33+00:00",
-  "execution": "adoption-agent-refresh-g96kn",
+  "state": "queued",
+  "requested_at": "2026-11-09T14:45:47+00:00",
   "issues": []
 }
