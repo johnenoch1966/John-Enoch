@@ -1,6 +1,6 @@
 {
-  "state": "running",
-  "started_at": "2026-11-09T14:51:38+00:00",
+  "state": "published",
+  "finished_at": "2026-11-09T16:59:34+00:00",
   "execution": "adoption-agent-refresh-mdwk8",
   "issues": []
 }
