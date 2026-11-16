@@ -1,5 +1,6 @@
 {
-  "state": "queued",
-  "requested_at": "2026-11-16T14:21:43+00:00",
+  "state": "running",
+  "started_at": "2026-11-16T14:30:53+00:00",
+  "execution": "adoption-agent-refresh-55lj4",
   "issues": []
 }
