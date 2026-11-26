@@ -1,6 +1,6 @@
 {
-  "state": "running",
-  "started_at": "2026-11-26T17:31:56+00:00",
+  "state": "published",
+  "finished_at": "2026-11-26T19:17:26+00:00",
   "execution": "adoption-agent-refresh-nx64v",
   "issues": [
     14,
